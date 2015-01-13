@@ -1,0 +1,45 @@
+<ion-view>
+	
+  <div class="bar bar-header" ng-class="bar_color">
+
+ <button class="button" style="width:38px;height:23px;" ng-click="navrss();" ng-class="bar_button_color"><img src="img/list_add.png"/></button>
+	   <h1 class="title" style="padding:0% 21% 0% 5%;">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homerss();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+			<button class="button icon ion-ios7-arrow-back" ng-click="backrss();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </div>
+ 
+ <br/>
+ <div class="bar bar-subheader" style="margin-top:1%;">
+	<h2 class="title" style="font-size:16px;">New Contact Form</h2>
+ </div>
+
+ <ion-content > 
+  <div style="padding:38% 0% 0% 0%;">
+   <div class="card">
+    <label class="item item-input" style="padding:5px 0px 5px 0px;">
+		  <label class="item item-input" style="width:100%;">
+             <input type="text" id="rssname" ng-model="createrss.rssname" placeholder="Type RSS Feed Name">
+		  </label>
+    </label>
+    
+     <label class="item item-input" style="padding:5px 0px 5px 0px;">
+		  <label class="item item-input" style="width:100%;">
+             <input type="text" id="rssdesc" ng-model="createrss.rssdesc" placeholder="Type Web Page Description">
+		  </label>
+    </label>
+    
+     <label class="item item-input" style="padding:5px 0px 5px 0px;">
+		  <label class="item item-input" style="width:100%;">
+             <input type="url" id="rssurl" ng-model="createrss.rssurl" placeholder="Type Web Page URL">
+		  </label>
+    </label>
+    </div>
+            
+   <button style="margin-top:12%;" ng-class="button_color" class="button button-full" ng-click="createrssform();" >Create</button>
+
+</div>
+   </ion-content>
+</ion-view>

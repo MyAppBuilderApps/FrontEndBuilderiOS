@@ -1,0 +1,59 @@
+<ion-view>
+ <div class="bar bar-header" ng-class="bar_color">
+
+	  <button class="button icon ion-ios7-arrow-back" ng-click="backprevvideo();" ng-class="bar_button_color"></button>
+	   <h1 class="title" style="padding:0% 21% 0% 5%;">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homeprevvideo();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+            <button class="button icon ion-edit" ng-click="logprevvideo();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </div>
+         
+
+  <ion-content > 
+
+   <div style="padding:40% 0% 0% 0%;">
+  
+  <p>
+  <button class="button-clear" onClick="sharePhoto2()"><img src="img/ic_fb.png" alt="" style="width:32px;height:32px;"/></button>
+  <button class="button-clear" onClick="sharePhoto1()"><img src="img/ic_twitter.png" alt="" style="width:32px;height:32px;"/></button>
+  <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail1.png" alt="" style="width:32px;height:32px;"/></button>
+  </p>
+	 
+      <div class="list card">
+          
+          <div class="item item-avatar">
+              <img src="{{contentvideothumb}}">
+                  <h2>{{elementtitle}}</h2>
+
+          </div>
+          
+          <div class="item item-body">
+                <img src="img/play.png" ng-style="{ 'background-image': 'url(' + contentvideoframe + ')' }" style="padding-left:0px;padding-right:0px; background-size: cover; background-repeat: no-repeat; background-position: center center;" ng-click="videoclick();"/>
+               <p ng-bind-html="elementtext"></p>
+                 
+         </div>
+          
+      </div>
+      
+			<div class="item item-divider">
+				Custom values
+			</div>
+			<ul class="list" >          
+				<li ng-repeat="item in disvideopage" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+                    </div>						 
+	           </li>   
+            </ul>
+            	
+       </div>
+	</div>
+ </ion-content>
+</ion-view>
+
+
+      
+    

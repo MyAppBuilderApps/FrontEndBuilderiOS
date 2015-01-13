@@ -1,0 +1,108 @@
+<ion-view>
+ <div  class="bar bar-header" ng-class="bar_color">
+
+	  <button class="button icon ion-ios7-arrow-back" ng-click="backdispic();" ng-class="bar_button_color"></button>
+	   <h1 class="title" style="padding:0% 21% 0% 5%;">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homedispic();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+              <button class="button icon ion-ios7-chatbubble" ng-click="elementAppwallgoFun();" ng-show='elementAppWall'  ng-class="bar_button_color"></button>
+		</div>
+		
+ </div>
+ 
+ <br/>
+ <div class="bar bar-subheader" style="margin-top:1%;">
+		<div style="margin-left:5%;font-size:16px;">
+		   <input type="text" style="color:black;" id="dispicTitle" class="doubleline" ng-model="textCreatedis.distitle">
+        </div>
+</div>
+
+         
+
+  <ion-content > 
+
+   <div style="padding:40% 0% 0% 0%;">
+      
+      <p>
+      <button class="button-clear" onClick="sharePhoto2()"><img src="img/ic_fb.png" alt="" style="width:32px;height:32px;"/></button>
+      <button class="button-clear" onClick="sharePhoto1()"><img src="img/ic_twitter.png" alt="" style="width:32px;height:32px;"/></button>
+      <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail1.png" alt="" style="width:32px;height:32px;"/></button>
+      </p>
+
+		    <div class="item item-text-wrap" style="padding:4px 0px 4px 0px;">
+				<textarea style="height:30%;" ng-model="textCreatedis.distext" ui-tinymce="tinymceOptions" >{{description}}</textarea>        
+				<input type="file" id="imageSelect2" ng-hide="true" />
+	        </div>  	
+      
+       <button style="margin-top:5%;" ng-class="button_color" class="button button-full" ng-click="updatedistext();" >Update</button>
+		
+			
+			<ul class="list" >          
+			<li ng-repeat="item in dispicpage" type="item-text-wrap" >				    
+				<div class="item item-button-right">
+					<img ng-src="{{item.url}}" style="width:50px;height:50px;">
+					<button class="button button-clear button-assertive" ng-click="removepicdisCustom(item.id)"><i class="icon ion-close-round"></i></button>
+				</div>			
+			 
+			</li>   
+		</ul>  
+
+		<div class="row" style="padding:1px 7px 0px 0px;">
+				 <div style="width:55%;"><span class="input-label">New Image</span></div>          
+				 <div style="width:20%;"><img id="dispictext" style="width:50px;heigth:50px;" src="img/no_image.png" alt="your image" /></div>
+				<div style="width:25%;"><button id="textdis" ng-click="picdisplayselect();">Choose</button></div> 
+			</div>   
+		  
+			<button class="button button-full" ng-class="button_color" ng-click="uploaddisplay();" >Upload</button>
+	  
+      <br/>
+      
+      <tags-input placeholder="Add a tag" ng-model="contenteditCreate.elementeditTag" ></tags-input>
+      <button class="button button-full" ng-class="button_color" ng-click="ok();">Update</button>
+      <br/>
+      
+      
+			<div class="item item-divider">
+				Custom values
+			</div>
+			<ul class="list" >          
+				<li ng-repeat="item in distxtpage" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+						  <button class="button button-clear button-assertive" ng-click="removedistxtCustomValue(item.id)"><i class="icon ion-close-round"></i></button>
+                    </div>						 
+	           </li>   
+            </ul>
+            
+			  <label class="item item-input" style="padding:5px 0px 5px 0px;">
+				  <span  class="input-label" style="width:20%;">Title</span>
+				  <label class="item item-input" style="width:80%;">
+					  <input type="text" id="distitle" ng-model="dispic.customdisTitle" >
+				  </label>
+			   </label>
+       
+			   <label class="item item-input" style="padding:5px 0px 5px 0px;">
+				  <span  class="input-label" style="width:20%;">Value</span>
+				  <label class="item item-input" style="width:80%;">
+					   <input type="text" id="disvalue" ng-model="dispic.customedisvalue" >
+				  </label>
+			   </label>
+	
+			<button class="button button-full" ng-class="button_color" ng-click="createpicdis();" >Create</button>
+
+<br/>
+<br/>
+<br/><br/>
+<br/>
+<br/><br/>
+<br/>
+<br/>
+<br/><br/><br/><br/><br/><br/><br/>
+	</div>
+ </ion-content>
+</ion-view>
+
+
+      
+    

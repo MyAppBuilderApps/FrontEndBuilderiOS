@@ -1,0 +1,103 @@
+<ion-view>
+  <div class="bar bar-header" ng-class="bar_color">
+
+  <button class="button icon ion-ios7-arrow-back" ng-click="backdismap();" ng-class="bar_button_color"></button>
+	   <h1 class="title" style="padding:0% 21% 0% 5%;">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homedismap();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+              <button class="button icon ion-ios7-chatbubble" ng-click="elementAppwallgoFun();" ng-show='elementAppWall' ng-class="bar_button_color"></button>
+		</div>
+		
+ </div>
+  <br/>
+  <div class="bar bar-subheader" style="margin-top:1%;">
+	<h2 class="title" style="font-size:16px;">Map and Location</h2>
+ </div>
+
+ <ion-content > 
+  <div style="padding:40% 0% 0% 0%;">
+  
+  <div class="card">
+		    <div class="item item-divider">
+				Addresses
+			  </div>
+	<div class="item item-button-right row" ng-repeat="addressdisplay in addressess">
+        <div class="col col-75">
+          <input type="text" ng-model="addressdisplay.address">
+        </div>
+        
+        <div class="col col-25">
+          <button class="button button-calm button-small" ng-click="updatedisplayAddress(addressdisplay.id,addressdisplay.address)" title="Save updates">
+            <i class="icon ion-checkmark-round"></i>
+          </button>
+          <button class="button button-assertive button-small" ng-click="deletedisplayAddress(addressdisplay.id)">
+            <i class="icon ion-trash-a"></i>
+          </button>
+        </div>
+        
+    </div>
+      
+      <div class="item item-button-right row">
+        <div class="col col-70">
+			<input type="text" id="mapdistitle" ng-model="createdisplaymap.title" placeholder="Type New Address"></div>
+        <div class="col col-30">
+          <button class="button" ng-class="button_color" ng-click="adddisAddress()">Add Address</button>
+        </div>
+      </div>
+      
+    </div>	
+    
+
+	
+      <div class="card" >
+			<div class="item item-divider">
+				Custom values
+			</div>  
+			      
+       <ul class="list" >          
+				<li ng-repeat="item in dismappage" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+						  <button class="button button-clear button-assertive" ng-click="removedismapCustomValue(item.id)"><i class="icon ion-close-round"></i></button>
+                    </div>						 
+	           </li>   
+            </ul>
+            
+			  <label class="item item-input" style="padding:3px 0px 3px 0px;">
+				  <span  class="input-label" style="width:20%;">Title</span>
+				  <label class="item item-input" style="width:80%;">
+					  <input type="text" id="dismapcustitle" ng-model="dismap.discustommaptitle" >
+				  </label>
+			   </label>
+       
+			   <label class="item item-input" style="padding:3px 0px 3px 0px;">
+				  <span  class="input-label" style="width:20%;">Value</span>
+				  <label class="item item-input" style="width:80%;">
+					   <input type="text" id="dismapcusvalue" ng-model="dismap.discustommapvalue" >
+				  </label>
+			   </label>
+	   </div>
+			<button class="button button-full" ng-class="button_color" ng-click="mapdiscustom();">Create</button>
+<br/>
+<br/>
+<br/><br/>
+<br/>
+<br/><br/>
+<br/>
+<br/>
+<br/><br/><br/><br/><br/><br/><br/>
+</div>
+ </ion-content>
+
+<p class="pos_fixed">
+
+<button class="button-clear" onClick="sharePhoto2()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396343749_facebook_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
+<button class="button-clear" onClick="sharePhoto1()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396344405_twitter_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
+
+<button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail.png" alt="" style="width:32px;height:32px;"/></button>
+</p>
+
+
+
+</ion-view>

@@ -1,0 +1,37 @@
+<ion-view>
+ <div  class="bar bar-header" ng-class="bar_color">
+
+	 <button class="button" style="width:38px;height:23px;" ng-click="navtext();" ng-class="bar_button_color"><img src="img/list_add.png" /></button>
+	   <h1 class="title" style="padding:0% 21% 0% 5%;">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="hometext();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+			<button class="button icon ion-ios7-arrow-back" ng-click="backtext();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </div>
+ <br/>
+ <div class="bar bar-subheader" style="margin-top:1%;">
+	<h2 class="title" style="font-size:16px;">New Pictures and Text</h2>
+ </div>        
+
+  <ion-content > 
+
+   <div style="padding:40% 0% 0% 0%;">
+    
+    <div class="list list-inset">
+          <label class="item item-input">
+            <input type="text" name="title" placeholder="Type Title" ng-model="para.title" required>
+          </label>
+  
+   </div>  
+       
+        <div class="item item-text-wrap" style="padding:4px 7px 4px 7px;">
+          	<textarea style="height:30%;" ng-model="textCreate.textpic" placeholder="Type Text" ui-tinymce="tinymceOptions"></textarea>        
+           <input name="image" type="file" id="imageSelect1" ng-hide="true" />
+	     </div>		    	
+
+       <button style="margin-top:5%;" ng-class="button_color" class="button button-full" ng-click="createtext();" >Create</button>
+	  
+	</div>
+ </ion-content>
+</ion-view>

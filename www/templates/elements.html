@@ -1,0 +1,47 @@
+<ion-view>
+  <div  class="bar bar-header" ng-class="bar_color">
+
+ <button class="button" style="width:38px;height:23px;" ng-click="navelement();" ng-class="bar_button_color"><img src="img/list_add.png"/></button>
+	   <h1 class="title" style="padding:0% 21% 0% 5%;">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homeelement();" ng-class="bar_button_color" ></button>&nbsp;&nbsp;
+			<button class="button icon ion-ios7-arrow-back" ng-click="backelement();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </div>
+  <br/>
+  <div class="bar bar-subheader" style="margin-top:1%;">
+      <h2 class="title" style="font-size:16px;">New Element</h2>
+ </div>
+  <ion-content > 
+  <div style="padding:42% 0% 0% 0%;"> 
+
+	  <div class="card">
+        <div class="item item-text-wrap" style="background-image:url(img/nav_bar.png);background-size:100% 100%;color:black;">
+          Select type:
+        </div>
+      </div>
+      
+      <div class="button-bar">
+      <button class="button icon ion-document" ng-click="createText();" style="text-align:left;"><font size="2px;"> Picture and Text</font></button>
+      <button class="button button-left icon ion-videocamera" ng-click="createVideo();" style="text-align:left;"><font size="2px;"> Video</font></button>
+      </div>
+
+      <div class="button-bar">
+      <button class="button icon ion-music-note" ng-click="createAudio();" style="text-align:left;" disabled><font size="2px;"> Audio</font></button>
+      <button class="button icon ion-social-rss" ng-click="createRss();" style="text-align:left;"><font size="2px;"> RSS Feed</font></button>
+      </div>
+
+      <div class="button-bar">
+      <button class="button icon ion-earth" ng-click="createWeb();" style="text-align:left;"><font size="2px;"> Live Web Page</font></button>
+      <button class="button icon ion-android-social-user" ng-click="createContact();"style="text-align:left;"><font size="2px;"> Contact Form Page</font></button>
+      </div>
+
+      <div class="button-bar">
+      <button class="button icon ion-map" ng-click="createMap();" style="text-align:left;"><font size="2px;"> Map and Location</font></button>
+      <button class="button icon ion-compose" ng-click="createtask();" style="text-align:left;"><font size="2px;"> Task List</font></button>
+      </div>
+   
+   </div>   
+   </ion-content>
+</ion-view>

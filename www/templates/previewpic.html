@@ -1,0 +1,82 @@
+<ion-view>
+ <div  class="bar bar-header" ng-class="bar_color">
+
+	<button class="button icon ion-ios7-arrow-back" ng-click="backprevtext();" ng-class="bar_button_color"></button>
+	   <h1 class="title" style="padding:0% 21% 0% 5%;">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homeprevtext();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+            <button class="button icon ion-edit" ng-click="logprevtext();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </div>
+ 
+ <br/>
+ <div class="bar bar-subheader" style="margin-top:1%;">
+		<div style="margin-left:5%;font-size:16px;" class="doubleline">
+		   {{elementTitle}}
+        </div>
+	</div>
+         
+
+  <ion-content > 
+
+   <div style="padding:39% 0% 0% 0%;">
+       <p>
+       <button class="button-clear" onClick="sharePhoto2()"><img src="img/ic_fb.png" alt="" style="width:32px;height:32px;"/></button>
+       <button class="button-clear" onClick="sharePhoto1()"><img src="img/ic_twitter.png" alt="" style="width:32px;height:32px;"/></button>
+       <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail1.png" alt="" style="width:32px;height:32px;"/></button>
+       </p>
+
+		   <div class="item item-text-wrap" ng-bind-html="description" style="padding:8px 2px 8px 2px;">
+	        </div>    	
+      
+  
+  <ul class="list" >
+      
+      
+      <ion-slide-box on-slide-changed="slideChanged(index)" style="padding:2% 0 0 0">
+          
+          <ion-slide ng-repeat="item in editpicpage" style="padding:0">
+              
+              <img src={{item.url}} width="100%"/>
+              
+              
+          </ion-slide>
+          
+  
+      </ion-slide-box>
+      
+ <ul>
+          
+          
+          
+  <br/>
+  <label ng-repeat="tag in tags" >
+      <button class="button button-positive" style="margin-left:2%;">{{tag}}</button>
+  </label>
+  
+  <br/><br/>
+  
+		<div class="card">
+			
+			<div class="item item-divider">
+				Custom values
+			</div>
+			<ul class="list" >          
+				<li ng-repeat="item in edittxtpage" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+                    </div>						 
+	           </li>   
+            </ul>
+            
+		
+       </div>
+	</div>
+ </ion-content>
+</ion-view>
+
+
+      
+    

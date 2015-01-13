@@ -1,0 +1,87 @@
+<ion-view>
+ <div  class="bar bar-header" ng-class="bar_color">
+
+  <button class="button icon ion-ios7-arrow-back" ng-click="backdisweb();" ng-class="bar_button_color"></button>
+	   <h1 class="title" style="padding:0% 21% 0% 5%;">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homedisweb();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+              <button class="button icon ion-ios7-chatbubble" ng-click="elementAppwallgoFun();" ng-show='elementAppWall' ng-class="bar_button_color"></button>
+		</div>
+		
+ </div>
+ 
+ <br/>
+ <div class="bar bar-subheader" style="margin-top:1%;">
+		 <div style="margin-left:5%;font-size:16px;">
+			<input type="text" name="title" class="doubleline" ng-model="creatediswebedit.diswebname" required>
+		</div>
+		
+	</div>
+         
+
+  <ion-content > 
+
+   <div style="padding:38% 0% 0% 0%;">
+  
+       <div class="list list-inset">
+        
+		    <div class="item item-text-wrap" style="padding:4px 2px 4px 2px;">
+				<textarea style="height:30%;" ng-model="creatediswebedit.diswebdesc" ui-tinymce="tinymceOptions" ></textarea>        
+				<!--<input type="file" id="imageSelect2" ng-hide="true" />-->
+	        </div>
+	        
+	 <label class="item item-input" style="padding:5px 0px 5px 0px;">
+		  <label class="item item-input" style="width:100%;">
+             <input type="text" id="webdisname" ng-model="creatediswebedit.disweburl" >
+		  </label>
+    </label>
+    
+	   </div>     	
+      
+       <button style="margin-top:5%;" ng-class="button_color" class="button button-full" ng-click="updatedisweb();" >Update</button>  
+	  
+	  
+			<div class="item item-divider">
+				Custom values
+			</div>
+			<ul class="list" >          
+				<li ng-repeat="item in diswebpage" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+						  <button class="button button-clear button-assertive" ng-click="removediswebCustomValue(item.id)"><i class="icon ion-close-round"></i></button>
+                    </div>						 
+	           </li>   
+            </ul>
+            
+			  <label class="item item-input" style="padding:5px 0px 5px 0px;">
+				  <span  class="input-label" style="width:20%;">Title</span>
+				  <label class="item item-input" style="width:80%;">
+					  <input type="text" id="diswebtitle" ng-model="discusweb.cusdiswebtitle" >
+				  </label>
+			   </label>
+       
+			   <label class="item item-input" style="padding:5px 0px 5px 0px;">
+				  <span  class="input-label" style="width:20%;">Value</span>
+				  <label class="item item-input" style="width:80%;">
+					   <input type="text" id="diswebvalue" ng-model="discusweb.cusdiswebvalue" >
+				  </label>
+			   </label>
+	
+			<button class="button button-full" ng-class="button_color" ng-click="creatediscusweb();" >Create</button>
+			
+<br/>
+<br/>
+<br/><br/>
+<br/>
+<br/><br/>
+<br/>
+<br/>
+<br/><br/><br/><br/><br/><br/><br/>
+	</div>
+ </ion-content>
+</ion-view>
+
+
+      
+    

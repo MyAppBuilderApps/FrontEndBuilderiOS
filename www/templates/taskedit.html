@@ -1,0 +1,97 @@
+<ion-view>
+  <div class="bar bar-header" ng-class="bar_color">
+
+ <button class="button" style="width:38px;height:23px;" ng-click="navedittask();" ng-class="bar_button_color"><img src="img/list_add.png"/></button>
+	   <h1 class="title" style="padding:0% 21% 0% 5%;">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homeedittask();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+			<button class="button icon ion-ios7-arrow-back" ng-click="backedittask();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </div>
+  <br/>
+  <div class="bar bar-subheader" style="margin-top:1%;">
+	<h2 class="title" style="font-size:16px;">Task List</h2>
+ </div>
+
+ <ion-content > 
+  <div style="padding:38% 0% 0% 0%;">
+  
+  <div class="card">
+		    <div class="item item-divider">
+				Tasks
+			  </div>
+	 <div class="item item-button-right row" ng-repeat="task in tasks">
+        <div class="col col-75">
+
+          <input type="text" ng-model="task.title">
+          <p><input type="text" ng-model="task.description"></p>
+
+        </div>
+        <div class="col col-25">
+          <button class="button button-calm button-small" ng-click="updateTask(task.id,task.title,task.description)" title="Save updates">
+            <i class="icon ion-checkmark-round"></i>
+          </button>
+          <button class="button button-assertive button-small" ng-click="deleteTask(task.id)">
+            <i class="icon ion-trash-a"></i>
+          </button>
+        </div>
+      </div>
+      <div class="item item-button-right row">
+        <div class="col col-75">
+		<label class="item item-input" style="width:100%;">
+			<input type="text" id="tasktitle" ng-model="createedittask.taskTitle" placeholder="Type new task title" name="new_title">
+         </label>
+         <label class="item item-input" style="width:100%;">
+          <input type="text" id="taskdesc" ng-model="createedittask.taskDescription" placeholder="Type new task description" name="new_description">
+        </label>
+        </div>
+        <div class="col col-25">
+          <button class="button" ng-class="button_color" ng-click="addeditTask(taskTitle,taskDescription)">Add Task</button>
+        </div>
+      </div>
+    </div>
+
+
+	
+      <div class="card" >
+			<div class="item item-divider">
+				Custom values
+			</div>  
+			      
+       <ul class="list" >          
+				<li ng-repeat="item in taskpage" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+						  <button class="button button-clear button-assertive" ng-click="removetaskCustomValue(item.id)"><i class="icon ion-close-round"></i></button>
+                    </div>						 
+	           </li>   
+            </ul>
+            
+			  <label class="item item-input" style="padding:3px 0px 3px 0px;">
+				  <span  class="input-label" style="width:20%;">Title</span>
+				  <label class="item item-input" style="width:80%;">
+					  <input type="text" id="taskcustitle" ng-model="editcustask.customtasktitle" >
+				  </label>
+			   </label>
+       
+			   <label class="item item-input" style="padding:3px 0px 3px 0px;">
+				  <span  class="input-label" style="width:20%;">Value</span>
+				  <label class="item item-input" style="width:80%;">
+					   <input type="text" id="taskcusvalue" ng-model="editcustask.customtaskvalue" >
+				  </label>
+			   </label>
+	   </div>
+			<button class="button button-full" ng-class="button_color" ng-click="createtaskcustom();">Create</button>
+<br/>
+<br/>
+<br/><br/>
+<br/>
+<br/><br/>
+<br/>
+<br/>
+<br/><br/><br/><br/><br/><br/><br/>
+</div>
+ </ion-content>
+</ion-view>

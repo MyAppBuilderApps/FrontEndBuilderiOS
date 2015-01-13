@@ -1,0 +1,46 @@
+<ion-view>
+ <div  class="bar bar-header bar-positive" >
+        
+        <button class="button icon ion-ios7-arrow-back button-positive" ng-click="backsublist();"></button>
+        <h1 class="title" style="padding:0% 7% 0% 6%;">{{appTitle}}</h1>
+    </div>
+
+<ion-content >
+    
+<div style="padding:26% 0% 0% 0%;">
+	
+      <div class="list" ng-repeat="item in subscriber" style="padding:0px;margin:0px;">
+
+          
+          <div class="item item-button-right" style="padding:0px;">
+              
+              
+              <div class="row" style="padding-top:22px;">
+                  
+                  <div class="col" style="font-size:16px;padding:0px;">
+                      
+                      <img id='checkavatar2' ng-src="{{avatar123(item.avatar)}}" style="width:60px; height:60px;"/>
+                      
+                  </div>
+                  
+                  <div class="col col-75" style="font-size:16px;padding:0px;">
+                      
+                      <div style="font-size:16px;padding:5px;">
+                          
+                         {{item.fullname}} <p>@{{item.username}}</p>
+                          
+                      </div>
+                      
+                  </div>
+                  
+              </div>
+              
+          </div>
+          
+      </div>
+     
+   </div>
+  </ion-content >
+</ion-view>
+
+  

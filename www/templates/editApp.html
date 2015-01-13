@@ -1,0 +1,105 @@
+<ion-view>
+  <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+		<button class="button icon ion-home" ng-click="homeappedit();" ng-class="bar_button_color"></button>
+    
+    <div style="margin-left:6%;width:75%;">
+		<input type="text" id="editgridAppTitle" ng-model="editappcreate.editgridAppTitle" >
+    </div>
+	
+    
+ </ion-header-bar>
+ 
+   <ion-content > 
+
+    <div class="card" style="padding:12px 0px 0px 0px;">
+		    <label class="item item-divider">
+        General Settings
+			</label>
+			
+        <div class="item item-text-wrap" style="padding:2px 0px 0px 0px;">
+          <span class="input-label">Description</span>
+			<textarea style="height:30%;" ng-model="editappcreate.editmypost" ui-tinymce="tinymceOptions"></textarea>   
+	        <input name="editimage" type="file" id="editimageSelect" ng-hide="true" />
+	     </div>
+
+        <div class="item url-edit" style="padding:2px 0px 0px 0px;">
+          <span class="item item-divider">Url</span>
+			<div class="row">
+			  <div style="width:15%;"><span class="input-label">http://</span></div>
+              <div style="width:5%;"></div>
+				<div style="width:80%;"><label class="item item-input" style="width:100%;">
+					<input type="text" placeholder="Type subdomain. Only lower case letters, digits and -" ng-model="editbook.subdomain">
+				</label></div>
+            </div>
+<br/>
+             <div class="row" >
+			   <div style="width:13%;"></div>
+                <div style="width:3%;"><span class="input-label">.</span></div>
+                <div style="width:2%;"></div>
+                <div style="width:83%;"><select style="width:100%;" ng-model="editbook.editdomain">
+					  <option>buildap.ps</option>
+					  <option>cloudap.ps</option>
+					  <option>raindrop.co</option>
+					  <option>dealershi.ps</option>
+              </select></div>
+            </div>          
+        </div>
+        
+          <label class="item item-input">
+		 <div class="row" style="padding:4px 4px 4px 0px;">
+          <div style="width:55%;"><span class="input-label">Bar color</span></div>
+          <div style="width:20%;"><img id="editbarimg" src="img/positive.png" style="width:50px;heigth:50px;" alt="your image" /></div>
+          <div style="width:25%;"><button ng-click="editbar();" ng-model="editbook.bar_color">Choose</button></div>
+         </div>
+      </label>
+
+        <label class="item item-input">
+		 <div class="row" style="padding:4px 4px 4px 0px;">
+          <div style="width:55%;"><span class="input-label">Bar button color</span></div>
+          <div style="width:20%;"><img id="editbarbuttonimg" src="img/positive.png" style="width:50px;heigth:50px;" alt="your image" /></div>
+          <div style="width:25%;"><button ng-click="editbarbutton();" ng-model="editbook.bar_button_color">Choose</button></div>
+         </div>
+      </label>
+      
+     <label class="item item-input">
+		<div class="row" style="padding:4px 4px 4px 0px;">
+        <div style="width:55%;"><span class="input-label">Button color</span></div>
+        <div style="width:20%;"><img id="editbuttonimg" src="img/positive.png" style="width:50px;heigth:50px;" alt="your image" /></div>
+        <div style="width:25%;"><button ng-click="editbutton();" ng-model="editbook.button_color">Choose</button></div>
+        </div>
+     </label>  
+      
+      
+     <label class="item item-input">
+		 <div class="row" style="padding:1px 0px 0px 0px;">
+           <div style="width:55%;"><span class="input-label">Splash Image 320x460</span></div>
+           <div style="width:20%;"><img id="editsplash" src="img/no_image.png" style="width:50px;heigth:50px;" alt="your image" /></div>
+           <div style="width:25%;"><button id="editsplashimage" ng-click="editsplashselect();">Choose</button></div> 
+		  </div>	  	
+	 </label>
+        
+       <label class="item item-input">
+		   <div class="row" style="padding:1px 0px 0px 0px;">
+           <div style="width:55%;"><span class="input-label">App Image 114x114</span></div>
+            <div style="width:20%;"><img id="editapp" src="img/no_image.png" style="width:50px;heigth:50px;" alt="your image" /></div>
+	       <div style="width:25%;"><button id="editappimage" ng-click="editappselect();">Choose</button></div> 
+		</div>	  	
+	   </label> 
+       
+         
+       <label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;">
+             <div style="width:55%;"><span class="input-label">AppStore Image 512x512</span></div>
+             <div style="width:20%;"><img id="editstore" style="width:50px;heigth:50px;" src="img/no_image.png" alt="your image" /></div>
+             <div style="width:25%;"><button id="editstoreimage" ng-click="editstoreselect();">Choose</button></div> 
+		  </div>    
+       </label> 
+       
+        
+           <button class="button button-full" ng-class="button_color" ng-click="editupdatesettings();" >Update General Settings</button>
+
+	</div>
+
+           
+ </ion-content>
+</ion-view>

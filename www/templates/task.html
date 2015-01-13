@@ -1,0 +1,42 @@
+<ion-view>
+  <div class="bar bar-header" ng-class="bar_color">
+
+ <button class="button" style="width:38px;height:23px;" ng-click="navtask();" ng-class="bar_button_color"><img src="img/list_add.png" /></button>
+	   <h1 class="title" style="padding:0% 21% 0% 5%;">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="hometask();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+			<button class="button icon ion-ios7-arrow-back" ng-click="backtask();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </div>
+  <br/>
+  <div class="bar bar-subheader" style="margin-top:1%;">
+	<h2 class="title" style="font-size:16px;">Task List</h2>
+ </div>
+
+ <ion-content > 
+  <div style="padding:40% 0% 0% 0%;">
+  
+  <div class="card">
+		    <div class="item item-divider">
+				Tasks
+			  </div>
+
+      <div class="item item-button-right row">
+        <div class="col col-75">
+		<label class="item item-input" style="width:100%;">
+			<input type="text" ng-model="createtask.taskTitle" placeholder="Type new task title" name="new_title">
+         </label>
+         <label class="item item-input" style="width:100%;">
+          <input type="text" ng-model="createtask.taskDescription" placeholder="Type new task description" name="new_description">
+        </label>
+        </div>
+        <div class="col col-25">
+          <button class="button" ng-class="button_color" ng-click="addTask()">Add Task</button>
+        </div>
+      </div>
+    </div>
+
+</div>
+ </ion-content>
+</ion-view>

@@ -1,0 +1,32 @@
+<ion-view >
+   <ion-header-bar  class="bar bar-header bar-positive">
+        
+        <button class="button button-positive icon ion-ios7-arrow-back" ng-click="backpreventry();"></button>
+        <h1 class="title" style="padding:0% 25% 0% 5%;">"{{entry.title}}"</h1>
+        
+   </ion-header-bar>
+	<ion-content class="padding">
+
+<div style="margin-top:12%;">
+
+		<h2>{{entry.title}}</h2>
+		<p><b>Published:</b> {{entry.publishedDate}}</p>
+		
+		<div ng-bind-html="entry.content"></div>
+		
+		<button class="button button-block button-positive" ng-click="readEntry(entry)">
+			Read Entry on Site
+		</button>
+</div>
+	</ion-content>
+	
+    <p class="pos_fixed">
+    
+    <button class="button-clear" onClick="sharePhoto2()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396343749_facebook_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
+    <button class="button-clear" onClick="sharePhoto1()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396344405_twitter_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
+    
+    <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail.png" alt="" style="width:32px;height:32px;"/></button>
+    </p>
+
+
+</ion-view>

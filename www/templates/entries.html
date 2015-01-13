@@ -1,0 +1,55 @@
+<ion-view>
+<div  class="bar bar-header bar-positive">
+    
+    <button class="button button-positive icon ion-ios7-arrow-back" ng-click="backprevfeed();"></button>
+    <h1 class="title" style="padding:0% 21% 0% 5%;">RSS FEEDS</h1>
+    <button class="button button-positive icon ion-eye" ng-click="eyefeed();"></button>
+
+</div>
+
+
+	<ion-content class="padding">
+ <div style="margin-top:20%;" ng-hide="AppEditor">
+     <p>
+     <button class="button-clear" onClick="sharePhoto2()"><img src="img/ic_fb.png" alt="" style="width:32px;height:32px;"/></button>
+     <button class="button-clear" onClick="sharePhoto1()"><img src="img/ic_twitter.png" alt="" style="width:32px;height:32px;"/></button>
+     <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail1.png" alt="" style="width:32px;height:32px;"/></button>
+     </p>
+
+		<ion-list class="list list-inset">
+
+			<ion-item ng-repeat="entry in entries" href="#/entry/{{$index}}">
+				{{entry.title}}
+			</ion-item>
+           
+   </div>
+            <div ng-show="AppEditor">
+
+            <div style="margin-top:25%;" ng-show="AppEditor">
+        
+            <div class="row">
+                 <div style="width:85%;"></div>
+                 <div style="width:15%;"><button class="button button-right" ng-click="editrss();">
+                  
+                  <i class="icon ion-edit"></i>
+                  
+                 </button></div>
+            </div>
+
+
+                <label class="item item-input" style="padding-top:22px;height:15%;">
+                    {{elementtext}}
+                </label>
+                
+                <label class="item item-input" style="padding-top:22px;height:15%;">
+                    {{elementrssurl}}
+                </label>
+
+            </div>
+            </div>
+
+		</ion-list>
+
+	</ion-content>
+	
+</ion-view>
