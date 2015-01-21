@@ -1,0 +1,63 @@
+<ion-view>
+  <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+
+
+   <button class="button icon ion-chevron-left" ng-click="backchapterlist();"  ng-class="bar_button_color"></button>
+   <h1 class="title" > {{appTitle}}</h1>
+   <div class="buttons">
+        <button class="button icon ion-home" ng-click="homechapterlist();"  ng-class="bar_button_color"></button>&nbsp;&nbsp;
+        <button class="button icon ion-edit" ng-click="logtextlist();"  ng-class="bar_button_color"></button>
+   </div>
+   
+ </ion-header-bar>
+
+  	<ion-content >
+      <div style="padding:5% 0% 0% 0%;">
+	  	
+    	  <ul class="list" ng-hide="AppEditor">
+            <div class="item item-divider item-button-right" align="center">
+              {{buttonTitle}}
+              <button class="button button-assertive button-clear" ng-click="buttonAppwallgoFun();" ng-show='buttonAppWall'><i class="icon"><img src="img/coments.png" style="width:25px;height:25px;"/></i></button>
+            </div>
+    		    <li ng-repeat="item in elementArray" type="item-text-wrap" class="item item-button-right" ng-click="subTitClickFtn(item.id,item.title,item.content_type,item.email,item.text,item.live_url,item.rss_url,item.audio.thumbnail,item.audio.url,item.video.thumbnail,item.video.url);">
+             <img ng-src="{{item.image}}">
+              <h2 style="color:black;margin-left:7%;">{{item.title}}</h2>
+             
+              
+              <div class="buttons" ng-show="AppEditor">
+                <button class="button button-assertive button-outline" ng-click="deleteButton(item.id)"><i class="icon ion-trash-a"></i></button>            
+              </div>
+
+            </li>
+        </ul>
+        
+        <div ng-show="AppEditor">
+        <ul class="list" >
+            <div class="item item-divider item-button-right" align="center">
+              {{buttonTitle}}
+            </div>
+            
+            <li ng-repeat="item in elementArray" type="item-text-wrap" class="item item-button-right" >         
+             <img ng-src="{{item.image}}">
+              <h2 style="color:black;">{{item.title}}</h2>
+             
+              
+              <div class="buttons" ng-show="AppEditor">
+                <button class="button button-assertive button-outline" ng-click="deleteContent(item.id)"><i class="icon ion-trash-a"></i></button>
+              </div>
+            </li>
+        </ul>
+        <div class="row" >
+             <div style="width:45%;"></div>
+             <div style="width:10%;"></div>
+             <div style="width:45%;">
+            <button class="button" ng-class="button_color" ng-click="newContentGo();">+New Element</button>
+          </div>
+        </div>
+      </div>
+      </div>
+
+
+	</ion-content>
+    
+</ion-view>

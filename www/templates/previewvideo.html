@@ -9,6 +9,13 @@
 		</div>
 		
  </div>
+ 
+ <br/>
+ <div class="bar bar-subheader" style="margin-top:1%;">
+		 <div style="margin-left:5%;font-size:16px;" class="doubleline">
+				{{elementtitle}}
+	      </div>
+	</div>
          
 
   <ion-content > 
@@ -20,23 +27,29 @@
   <button class="button-clear" onClick="sharePhoto1()"><img src="img/ic_twitter.png" alt="" style="width:32px;height:32px;"/></button>
   <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail1.png" alt="" style="width:32px;height:32px;"/></button>
   </p>
-	 
-      <div class="list card">
-          
-          <div class="item item-avatar">
-              <img src="{{contentvideothumb}}">
-                  <h2>{{elementtitle}}</h2>
 
-          </div>
-          
-          <div class="item item-body">
-                <img src="img/play.png" ng-style="{ 'background-image': 'url(' + contentvideoframe + ')' }" style="padding-left:0px;padding-right:0px; background-size: cover; background-repeat: no-repeat; background-position: center center;" ng-click="videoclick();"/>
-               <p ng-bind-html="elementtext"></p>
-                 
-         </div>
-          
-      </div>
-      
+
+       <div class="list list-inset">
+        
+		   <div class="item item-text-wrap" ng-bind-html="elementtext" style="padding:8px 2px 8px 2px;">
+	        </div>  
+	        
+	   </div>
+	        	
+	    <label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:70%;"><span class="input-label">Video upload</span></div> 
+            <div style="width:30%;"><img id="videoprevurlimg" style="width:50px;heigth:50px;" src="img/no_video.png" alt="your image" ng-click="videoclick();"/></div>
+		  </div>    
+       </label> 
+       
+	<label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:70%;"><span class="input-label">Video thumbnail upload</span></div>          
+            <div style="width:30%;"><img id="videoprevimg" style="width:50px;heigth:50px;" src="img/no_image.png" alt="your image" /></div>
+		  </div>    
+       </label> 	  	  
+	  
 			<div class="item item-divider">
 				Custom values
 			</div>

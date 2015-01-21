@@ -10,21 +10,20 @@
  </div>
 
   	<ion-content >
-      <div style="padding:28% 0% 0% 0%;">
+      <div style="padding:30% 0% 0% 0%;">
 	  	
-      <p>
-      <button class="button-clear" onClick="sharePhoto2()"><img src="img/ic_fb.png" alt="" style="width:32px;height:32px;"/></button>
-      <button class="button-clear" onClick="sharePhoto1()"><img src="img/ic_twitter.png" alt="" style="width:32px;height:32px;"/></button>
-      <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail1.png" alt="" style="width:32px;height:32px;"/></button>
-</p>
-
+        <p>
+        <button class="button-clear" onClick="sharePhoto2()"><img src="img/ic_fb.png" alt="" style="width:32px;height:32px;"/></button>
+        <button class="button-clear" onClick="sharePhoto1()"><img src="img/ic_twitter.png" alt="" style="width:32px;height:32px;"/></button>
+        <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail1.png" alt="" style="width:32px;height:32px;"/></button>
+        </p>
 
     	  <ul class="list" ng-hide="AppEditor">
             <div class="item item-divider item-button-right" align="center">
               {{buttonTitle}}
               <button class="button button-assertive button-clear" ng-click="buttonAppwallgoFun();" ng-show='buttonAppWall'><i class="icon"><img src="img/coments.png" style="width:25px;height:25px;"/></i></button>
             </div>
-    		    <li ng-repeat="item in elementArray" type="item-text-wrap" class="item item-button-right" ng-click="subTitClickFtn(item.id,item.title,item.content_type,item.email,item.text,item.live_url,item.rss_url,item.audio.thumbnail,item.audio.url,item.video.thumbnail,item.video.url,item.tag_list,item.video.video_frame);">
+    		    <li ng-repeat="item in elementArray" type="item-text-wrap" class="item item-button-right" ng-click="subTitClickFtn(item.id,item.title,item.content_type,item.email,item.text,item.live_url,item.rss_url,item.audio.thumbnail,item.audio.url,item.video.thumbnail,item.video.url,item.tag_list);">
              <img ng-src="{{item.image}}">
               <h2 style="color:black;margin-left:7%;">{{item.title}}</h2>
              

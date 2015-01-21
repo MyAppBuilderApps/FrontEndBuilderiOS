@@ -1,0 +1,53 @@
+<ion-view>
+ <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+
+		 <button class="button icon ion-chevron-left" ng-click="backprevrss();" ng-class="bar_button_color"></button>
+	   <h1 class="title">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homeprevrss();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+            <button class="button icon ion-edit" ng-click="logprevrss();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </ion-header-bar>
+ 
+    <div class="bar bar-subheader">
+		  <div style="margin-left:45%;width:20%;">
+			{{elementtitle}}
+		</div>
+	</div>
+         
+
+  <ion-content > 
+
+   <div style="padding:18% 0% 0% 0%;">
+  
+       <div class="list list-inset">
+        
+         <div class="item item-text-wrap" ng-bind-html="elementtext" style="padding:8px 2px 8px 2px;">
+	      </div>  
+	        
+			 <label class="item item-input" style="padding:9px 0px 9px 0px;">
+					 {{elementrssurl}}
+			</label>
+    
+	   </div>     		  
+	<br/>  
+			<div class="item item-divider">
+				Custom values
+			</div>
+			<ul class="list" >          
+				<li ng-repeat="item in disrsspage" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+                    </div>						 
+	           </li>   
+            </ul>
+            
+	</div>
+ </ion-content>
+</ion-view>
+
+
+      
+    

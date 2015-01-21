@@ -1,0 +1,70 @@
+<ion-view>
+ <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+
+	 <button class="button icon ion-chevron-left" ng-click="backdisform();" ng-class="bar_button_color"></button>
+	   <h1 class="title">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homedisform();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+              <button class="button icon ion-ios7-chatbubble" ng-click="elementAppwallgoFun();" ng-show='elementAppWall' ng-class="bar_button_color"></button>
+		</div>
+		
+ </ion-header-bar>
+ 
+<div class="bar bar-subheader">
+	<h2 class="title">Contact Form</h2>
+</div>
+         
+
+  <ion-content > 
+
+   <div style="padding:22% 0% 0% 0%;">
+  
+       <div class="list list-inset">
+          <label class="item item-input">
+            <input type="email" ng-model="formdis.disemail" required>
+          </label>
+       </div>  
+       
+     <button style="margin-top:5%;" ng-class="button_color" class="button button-full" ng-click="updatedisform();" >Update</button>
+	  
+   <div class="card" >
+			<div class="item item-divider">
+				Custom values
+			</div>
+			<ul class="list" >          
+				<li ng-repeat="item in disformtype" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+						  <button class="button button-clear button-assertive" ng-click="removeformdisCustomValue(item.id)"><i class="icon ion-close-round"></i></button>
+                    </div>						 
+	           </li>   
+            </ul>
+            
+			  <label class="item item-input" style="padding:3px 0px 3px 0px;">
+				  <span  class="input-label" style="width:20%;">Title</span>
+				  <label class="item item-input" style="width:80%;">
+					  <input type="text" id="disformcustitle"  placeholder="Type Title" ng-model="displayform.customdisTitle" >
+				  </label>
+			   </label>
+       
+			   <label class="item item-input" style="padding:3px 0px 3px 0px;">
+				  <span  class="input-label" style="width:20%;">Value</span>
+				  <label class="item item-input" style="width:80%;">
+					   <input type="text" id="disformcusvalue" placeholder="Value" ng-model="displayform.customdisvalue" >
+				  </label>
+			   </label>
+	   </div>
+			<button class="button button-full" ng-class="button_color" ng-click="createdisformcustom();" >Create</button>
+
+<br/>
+<br/>
+<br/><br/>
+<br/>
+<br/><br/>
+<br/>
+<br/>
+<br/><br/><br/><br/><br/><br/><br/>
+</div>
+ </ion-content>
+</ion-view>

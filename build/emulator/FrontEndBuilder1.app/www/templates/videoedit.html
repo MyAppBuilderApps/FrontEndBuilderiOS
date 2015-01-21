@@ -1,0 +1,93 @@
+<ion-view>
+ <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+
+  <button class="button" style="width:38px;height:23px;" ng-click="naveditvideo();" ng-class="bar_button_color"><img src="img/list_add.png" /></button>
+	   <h1 class="title" > {{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homeeditvideo();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+			<button class="button icon ion-chevron-left" ng-click="backeditvideo();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </ion-header-bar>
+ 
+    <div class="bar bar-subheader">
+		 <div style="margin-left:45%;width:20%;">
+		   <input type="text" id="editvideotitle" ng-model="createeditvideo.editvideotitle">
+        </div>
+	</div>
+         
+  <ion-content > 
+
+   <div style="padding:20% 0% 0% 0%;">
+  
+       <div class="list list-inset">
+        
+		    <div class="item item-text-wrap" style="padding:4px 0px 4px 0px;">
+				<textarea style="height:30%;" ng-model="createeditvideo.editvideotext" ui-tinymce="tinymceOptions" ></textarea>        
+				<input type="file" id="imageSelect2" ng-hide="true" />
+	        </div>
+	   </div>
+	        	
+	    <label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:50%;"><span class="input-label">Video upload</span></div>     
+            <div style="width:20%;"><img id="videoediturlimg" style="width:50px;heigth:50px;" src="img/no_image.png" alt="your image" /></div>      
+		    <div style="width:30%;"><input type="file" name="videoedit" accept="video/*" id="editvideo" style="width:100%;"/></div> 
+		  </div>    
+       </label> 
+       
+	<label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:50%;"><span class="input-label">Video thumbnail upload</span></div>          
+            <div style="width:20%;"><img id="videoeditimg" style="width:50px;heigth:50px;" src="img/no_image.png" alt="your image" /></div>
+            <div style="width:30%;"><button id="editvideothumb" ng-click="editvideoselect();">Choose</button></div> 
+		  </div>    
+       </label> 
+       
+       <button style="margin-top:5%;" ng-class="button_color" class="button button-full" ng-click="updatevideo();" >Update</button>
+	  	  
+	  
+			<div class="item item-divider">
+				Custom values
+			</div>
+			<ul class="list" >          
+				<li ng-repeat="item in editvideopage" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+						  <button class="button button-clear button-assertive" ng-click="removevideoCustomValue(item.id)"><i class="icon ion-close-round"></i></button>
+                    </div>						 
+	           </li>   
+            </ul>
+            
+			  <label class="item item-input" style="padding:5px 0px 5px 0px;">
+				  <span  class="input-label" style="width:20%;">Title</span>
+				  <label class="item item-input" style="width:80%;">
+					  <input type="text" id="editcusvideotitle"  placeholder="Type Title" ng-model="cuseditvideo.customeditvideoTitle" >
+				  </label>
+			   </label>
+       
+			   <label class="item item-input" style="padding:5px 0px 5px 0px;">
+				  <span  class="input-label" style="width:20%;">Value</span>
+				  <label class="item item-input" style="width:80%;">
+					   <input type="text" id="editcusvideovalue"  placeholder="Value" ng-model="cuseditvideo.customeditvideovalue" >
+				  </label>
+			   </label>
+	
+			<button class="button button-full" ng-class="button_color" ng-click="createvideoedit();" >Create</button>
+       </div>
+       <br/>
+<br/>
+<br/><br/>
+<br/>
+<br/><br/>
+<br/>
+<br/>
+<br/><br/><br/><br/><br/><br/><br/>
+	</div>
+ </ion-content>
+</ion-view>
+
+
+      
+    

@@ -1,0 +1,32 @@
+ <ion-view>
+
+ <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+	 	<button class="button icon ion-chevron-left" ng-click="backappwall();" ng-class="bar_button_color"></button>
+       <h1 class="title" >{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homeappwall();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+            <button class="button icon ion-android-settings" ng-click="appwallSettings();" ng-class="bar_button_color"></button>
+		</div>
+</ion-header-bar>
+
+<ion-content  has-header="true" >
+                                                      
+     <div class="bar bar-header item-input-inset" >
+          <label class="item-input-wrapper">
+              <input type="text" id="postmessage" placeholder="Your message goes here....">
+          </label>
+          <button id="textPostMgs" class="button button-clear button-positive" onclick="javascript:postmessageFun();" >
+                     <img src="img/btn_post.png" style="width:70px;height:auto;margin-top:10%;"/>
+          </button>
+      </div>    
+                            
+                              
+      <div id="appwallListview">
+      </div>
+        <br/>
+      <br/>
+       <br/>                     
+                            
+ </ion-content>
+
+</ion-view>

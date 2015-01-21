@@ -1,0 +1,30 @@
+<ion-view>
+  <ion-header-bar class="bar bar-header" ng-class="bar_color">
+
+ <button class="button" style="width:38px;height:23px;" ng-click="navmap();" ng-class="bar_button_color"><img src="img/list_add.png" /></button>
+	   <h1 class="title" > {{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homemap();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+			<button class="button icon ion-chevron-left" ng-click="backmap();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </ion-header-bar>
+ <div class="bar bar-subheader">
+	<h2 class="title">New Map</h2>
+ </div>
+
+ <ion-content > 
+  <div style="padding:20% 0% 0% 0%;">
+  
+    <label class="item item-input" style="padding:5px 0px 5px 0px;">
+		  <label class="item item-input" style="width:100%;">
+             <input type="text" id="maptitle" ng-model="createmapaddr.maptitle" placeholder="Type Address">
+		  </label>
+    </label>
+    
+            
+   <button style="margin-top:12%;" ng-class="button_color" class="button button-full" ng-click="createmap();" >Create</button>
+
+</div>
+   </ion-content>
+</ion-view>

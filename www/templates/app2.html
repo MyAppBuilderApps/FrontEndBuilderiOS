@@ -12,14 +12,14 @@
         <button class="button button-balanced" style="height:32px;" ng-click="subs();">Subscriber</button>
     </div>
 	<ion-content >
-        <div style="padding:37% 0% 0% 0%;">
+        <div style="padding:40% 0% 0% 0%;">
 
         <ion-list ng-show='AppEditor' show-reorder='AppEditor' show-delete="AppEditor" >
           <div class="item item-divider item-button-right" align="center">
              <h2>{{appTitle}}</h2>
              
             </div>
-          <ion-item ng-repeat="item in items | filter:position" class="item-avatar item-button-right" >
+          <ion-item  ng-repeat="item in items | filter:position" class="item-avatar item-button-right" >
 
             <img ng-src="{{item.image}}" >
    
@@ -61,13 +61,12 @@
 
 	</ion-content>
     
-       <p class="pos_fixed">
-       
-   <button class="button-clear" onClick="sharePhoto2()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396343749_facebook_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
+     <p class="pos_fixed">
+     
+      <button class="button-clear" onClick="sharePhoto2()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396343749_facebook_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
+   
   <button class="button-clear" onClick="sharePhoto1()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396344405_twitter_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
- 
-   <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail.png" alt="" style="width:32px;height:32px;"/></button>
+ <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail.png" alt="" style="width:32px;height:32px;"/></button>
 </p>
-
 </ion-view>
 

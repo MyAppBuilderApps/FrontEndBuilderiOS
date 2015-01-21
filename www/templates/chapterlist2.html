@@ -17,7 +17,7 @@
               {{buttonTitle}}
               <button class="button button-assertive button-clear" ng-click="buttonAppwallgoFun();" ng-show='buttonAppWall'><i class="icon"><img src="img/coments.png" style="width:25px;height:25px;"/></i></button>
             </div>
-    		    <li ng-repeat="item in elementArray" type="item-text-wrap" class="item item-button-right" ng-click="subTitClickFtn(item.id,item.title,item.content_type,item.email,item.text,item.live_url,item.rss_url,item.audio.thumbnail,item.audio.url,item.video.thumbnail,item.video.url,item.tag_list,item.video.video_frame);">
+    		    <li ng-repeat="item in elementArray" type="item-text-wrap" class="item item-button-right" ng-click="subTitClickFtn(item.id,item.title,item.content_type,item.email,item.text,item.live_url,item.rss_url,item.audio.thumbnail,item.audio.url,item.video.thumbnail,item.video.url,item.tag_list);">
              <img ng-src="{{item.image}}">
               <h2 style="color:black;margin-left:7%;">{{item.title}}</h2>
              
@@ -58,14 +58,13 @@
 
 	</ion-content>
     
+    
     <p class="pos_fixed">
     
     <button class="button-clear" onClick="sharePhoto2()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396343749_facebook_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
-    <button class="button-clear" onClick="sharePhoto1()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396344405_twitter_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
     
+    <button class="button-clear" onClick="sharePhoto1()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396344405_twitter_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
     <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail.png" alt="" style="width:32px;height:32px;"/></button>
     </p>
-
-
 
 </ion-view>

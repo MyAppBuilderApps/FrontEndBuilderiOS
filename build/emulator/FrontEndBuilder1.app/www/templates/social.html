@@ -1,0 +1,127 @@
+<ion-view>
+  <ion-header-bar class="bar bar-header" ng-class="bar_color">
+    	  
+     <button class="button" style="width:38px;height:23px;" ng-click="navsocial();" ng-class="bar_button_color"><img src="img/list_add.png" /></button>
+       <h1 class="title" > {{appTitle}}</h1>
+	   <div class="buttons" style="margin-left:6%;" >
+			<button class="button icon ion-home" ng-click="homesocial();" ng-class="bar_button_color" ></button>&nbsp;&nbsp;
+			<button class="button icon ion-chevron-left" ng-click="backsocial();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </ion-header-bar>
+ 
+   <ion-content > 
+
+    <div class="card" style="padding:14px 0px 0px 0px;">
+		
+		 <label class="item item-divider">
+            Social Settings
+	     </label>
+	     
+    <div class="item addresses_edit" style="padding:2px 0px 0px 0px;">     
+     <div class="row" style="padding:8px 0px 6px 0px;">
+		<span class="input-label" style="width:35%;"><img src="img/tw.png" style="width:12px;heigth:12px;"/> Twitter</span>
+		<label class="item item-input" style="width:65%;"> 
+            <input type="text" placeholder="Type your Twitter name" ng-model="book.twitter_username">
+        </label> 
+     </div>   
+
+    <div class="row" style="padding:8px 0px 6px 0px;">
+         <span class="input-label"  style="width:35%;">App Key</span>             
+		 <label class="item item-input" style="width:65%;"> 
+            <input type="text" placeholder="Type your Twitter Consumer Key" ng-model="book.twitter_key">
+         </label>          
+    </div>
+
+
+    <div class="row" style="padding:8px 0px 6px 0px;">           
+        <span class="input-label"  style="width:35%;">App Secret</span>
+        <label class="item item-input" style="width:65%;"> 
+            <input type="text" placeholder="Type your Twitter Consumer Secret" ng-model="book.twitter_secret">
+        </label>
+    </div>
+   </div>
+  
+    
+   <div class="item addresses_edit" style="padding:2px 0px 0px 0px;">
+     <div class="row" style="padding:8px 0px 6px 0px;">
+       <span class="input-label" style="width:35%;"><img src="img/fb.png" style="width:12px;heigth:12px;"/> Facebook</span>
+       <label class="item item-input" style="width:65%;">           
+           <input type="text" placeholder="Type your Facebook profile url" ng-model="book.facebook_link">
+       </label>
+     </div> 
+     
+    <div class="row" style="padding:8px 0px 6px 0px;">
+        <span class="input-label" style="width:35%;">App ID</span>
+        <label class="item item-input" style="width:65%;">  
+            <input type="text" placeholder="Type your Facebook App ID" ng-model="book.facebook_key">
+        </label>
+    </div>
+    
+    <div class="row" style="padding:8px 0px 6px 0px;">
+        <span class="input-label" style="width:35%;">App Secret</span>
+        <label class="item item-input" style="width:65%;">  
+            <input type="text" placeholder="Type your Facebook App Secret" ng-model="book.facebook_secret">
+        </label>
+    </div>
+   </div> 
+   
+   <div class="item addresses_edit" style="padding:2px 0px 0px 0px;">
+    <div class="row" style="padding:8px 0px 6px 0px;">
+       <span class="input-label" style="width:35%;"><img src="img/g+.png" style="width:12px;heigth:12px;"/> Google+</span>            
+       <label class="item item-input" style="width:65%;">  
+           <input type="text" placeholder="Type your Google+ profile url" ng-model="book.gplus_link">
+       </label>
+    </div>
+
+    <div class="row" style="padding:8px 0px 6px 0px;">
+       <span class="input-label" style="width:35%;">Client ID</span>
+       <label class="item item-input" style="width:65%;">  
+          <input type="text" placeholder="Type your Google+ Client ID" ng-model="book.gplus_key">
+       </label>
+    </div>
+
+    <div class="row" style="padding:8px 0px 6px 0px;">
+       <span class="input-label" style="width:35%;">Client Secret</span>
+       <label class="item item-input" style="width:65%;">  
+           <input type="text" placeholder="Type your Google+ Client Secret" ng-model="book.gplus_secret">
+       </label>
+    </div>
+    </div>
+		  
+    <div class="item addresses_edit" style="padding:2px 0px 0px 0px;">      
+    <div class="row" style="padding:8px 0px 6px 0px;">
+       <span class="input-label" style="width:35%;"><i class="icon ion-social-youtube"></i> Youtube</span>
+       <label class="item item-input" style="width:65%;"> 
+            <input type="text" placeholder="Type your Youtube profile url" ng-model="book.youtube_link">
+       </label>
+    </div>
+    
+   <div class="row" style="padding:8px 0px 6px 0px;">
+      <span class="input-label" style="width:35%;"><i class="icon ion-social-flickr"></i> Flickr</span>
+      <label class="item item-input" style="width:65%;"> 
+          <input type="text" placeholder="Type your Flickr profile url" ng-model="book.flickr_link">
+      </label>
+   </div>
+
+   <div class="row" style="padding:8px 0px 6px 0px;">
+     <span class="input-label" style="width:35%;"><i class="icon ion-social-pinterest"></i> Pinterest</span>
+     <label class="item item-input" style="width:65%;"> 
+        <input type="text" placeholder="Type your Pinterest profile url" ng-model="book.pinterest_link">
+     </label>
+   </div>
+   </div>
+
+   <button class="button  button-full" ng-class="button_color" ng-click="updateSocialSettings()">Update Social Settings</button>
+<br/>
+<br/>
+<br/><br/>
+<br/>
+<br/><br/>
+<br/>
+<br/>
+<br/><br/><br/><br/><br/><br/><br/>
+   </div>
+           
+ </ion-content>
+</ion-view>

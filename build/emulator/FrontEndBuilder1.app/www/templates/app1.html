@@ -1,0 +1,84 @@
+<ion-view>
+ <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+  <button class="button button-icon icon ion-navicon" ng-click="toggleLeft()"></button>
+	   <h1 class="title" > {{appTitle}}</h1>
+ </ion-header-bar>
+ 
+  <div class="bar bar-subheader">
+	<h2 class="title">Buttons List</h2>
+ </div>
+	<ion-content >
+      <div style="padding:17% 0% 0% 0%;">
+
+        <ion-list ng-show='AppEditor' show-reorder='AppEditor' show-delete="AppEditor" >
+          <div class="item item-divider item-button-right" align="center">
+             <h2>{{appTitle}}</h2>
+          </div>
+          <ion-item  ng-repeat="item in items | filter:position" class="item-avatar item-button-right" >
+            <img ng-src="{{item.image}}">
+   
+            <h2 >{{item.title}}</h2>
+          
+          </ion-item>
+        </ion-list>
+        
+
+        <ion-list ng-hide="AppEditor">
+            <div class="item item-divider item-button-right" align="center" >
+             <h2>{{appTitle}}</h2>             
+              <button class="button button-assertive button-clear" ng-click="appwallgoFun();"><i class="icon"><img src="img/coments.png" style="width:25px;height:25px;"/></i></button>
+            </div>
+            <li ng-repeat="item in items" type="item-text-wrap" class="item item-avatar item-button-right" ng-click="chapterClick(item.id,item.title);">
+            
+              <img src="{{item.image}}" >
+              <h2 style="color:black;">{{item.title}}</h2>
+
+            </li>
+        </ion-list>
+        
+
+      </div>
+
+
+	</ion-content>
+    </ion-side-menu-content>
+        
+        <ion-side-menu side="left">
+            <ion-view >
+                <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+                  
+                    <h1 class="title">FrontEndBuilder</h1>
+                    
+                </ion-header-bar >
+                <ion-content  >
+                    
+                    <div style="padding:8% 0% 0% 0%;">
+    <ion-list ng-hide="AppEditor">
+        
+        <ion-item ng-repeat="item in appKey" type="item-text-wrap" class="item item-avatar-left" style="color:white;" ng-click="listViewClickFtn(item.api_key,item.title,item.description,item.app_image);">      
+
+            <img src="{{item.app_image}}" >
+          <h2 style="color:black;">{{item.title}}</h2>
+
+          
+        </ion-item>
+
+    </ion-list>  
+     </div>
+                    
+                </ion-content>
+                <ion-footer-bar  class="bar bar-footer" ng-click="listViewBack();">
+                    <h1 class="title">Admin</h1>
+                    </ion-footer-bar >
+            </ion-view>
+            
+            
+
+        </ion-side-menu>
+        
+    </ion-side-menus>
+    
+
+ 
+</ion-view>
+

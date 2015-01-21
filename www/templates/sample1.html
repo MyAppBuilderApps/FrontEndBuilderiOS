@@ -1,10 +1,8 @@
 <ion-view>
 	
  <ion-header-bar  class="bar bar-header bar-positive">
-	 
-	   <button class="button button-clear" ng-click="logout1();"><i class="icon ion-log-out"style="width:22px;height:22px;"></i></button>
-         <h1 class="title" style="font-size:20px;">Apps</h1>
-	   
+         <h1 class="title" style="font-size:20px;">FrontEndBuilder</h1>
+	
  </ion-header-bar>
    
  <ion-content  >  
@@ -13,16 +11,22 @@
         
         <ion-item ng-repeat="item in appKey" type="item-text-wrap" class="item item-avatar-left" style="color:white;" ng-click="listViewClickFtn(item.api_key,item.title,item.description,item.app_image);">      
 
-   <img src="{{item.app_image}}" >
+            <img src="{{item.app_image}}" >
           <h2 style="color:black;" class="sampletitle">{{item.title}}</h2>
 
-         
+          
         </ion-item>
 
-    </ion-list>  
-  
-      </div>
-  </ion-content>
+    </ion-list>
+    
+    
+   </div>
+ </ion-content>
  
+ <div class="tabs tabs-positive">
+     <a class="tab-item" ng-click="listViewBack();" style="font-size:20px;">
+         Admin
+     </a>
+ </div>
 </ion-view>
 

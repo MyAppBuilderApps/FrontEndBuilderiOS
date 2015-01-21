@@ -20,13 +20,15 @@
 
   <ion-content > 
 
-   <div style="padding:38% 0% 0% 0%;">
+   <div style="padding:40% 0% 0% 0%;">
   
   <p>
   <button class="button-clear" onClick="sharePhoto2()"><img src="img/ic_fb.png" alt="" style="width:32px;height:32px;"/></button>
   <button class="button-clear" onClick="sharePhoto1()"><img src="img/ic_twitter.png" alt="" style="width:32px;height:32px;"/></button>
   <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail1.png" alt="" style="width:32px;height:32px;"/></button>
   </p>
+
+
        <div class="list list-inset">
         
 		    <div class="item item-text-wrap" style="padding:4px 0px 4px 0px;">
@@ -39,13 +41,13 @@
 		  <div class="row" style="padding:1px 0px 0px 0px;" >
             <div style="width:50%;"><span class="input-label">Video upload</span></div> 
             <div style="width:20%;"><img id="videodisurlimg" style="width:50px;heigth:50px;" src="img/no_video.png" alt="your image" /></div>               
-		    <div style="width:30%;"><button id="videodisplay" ng-click="videodisplugin();">Choose</button></div>
+		    <div style="width:30%;"><input type="file" name="disvideo" accept="video/*" id="videodisplay" style="width:100%;"/></div> 
 		  </div>    
        </label> 
        
 	<label class="item item-input">
 		  <div class="row" style="padding:1px 0px 0px 0px;" >
-            <div style="width:50%;"><span class="input-label">Video thumbnail image</span></div>          
+            <div style="width:50%;"><span class="input-label">Video thumbnail upload</span></div>          
             <div style="width:20%;"><img id="videodisplayimg" style="width:50px;heigth:50px;" src="img/no_image.png" alt="your image" /></div>
             <div style="width:30%;"><button id="video_thumbdisplay" ng-click="disvideoselect();">Choose</button></div> 
 		  </div>    

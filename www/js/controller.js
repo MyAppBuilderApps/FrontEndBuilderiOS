@@ -1,5 +1,27 @@
-var control = angular.module('starter.controllers', ['ngTagsInput']);
+var control = angular.module('starter.controllers',['ngTagsInput','checklist-model']);
+localStorage.clear();
+var v = 0;
+var barcolor = 'bar-positive';
+var defaultkey;
+var image;
 
+var app = angular.module('app', ['ngTagsInput'])
+.config(function(tagsInputConfigProvider) {
+        tagsInputConfigProvider
+        .setDefaults('tagsInput', {
+                     placeholder: 'New tag',
+                     addOnEnter: false
+                     })
+        .setDefaults('autoComplete', {
+                     maxResultsToShow: 20,
+                     debounceDelay: 1000
+                     })
+        .setActiveInterpolation('tagsInput', {
+                                placeholder: true,
+                                addOnEnter: true,
+                                removeTagSymbol: true
+                                });
+        });
 
 document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -15,9 +37,9 @@ function onDeviceReady() {
   opacity:0.5,
   color: "#fff"
  };
-
- function sharePhoto() {
-    
+ 
+  function sharePhoto() {
+     // alert(float1);
      var imageLink;
             console.log('Calling from CapturePhoto');
             navigator.screenshot.save(function(error,res){
@@ -31,16 +53,16 @@ function onDeviceReady() {
                                                                    'FrontEndBuilder'
                                                                    );
             }else{
-            console.log('ok',res.filePath);
+            console.log('ok',res.filePath); //should be path/to/myScreenshot.jpg
             imageLink= res.filePath;
-           
+            //alert(imageLink);
             window.plugins.socialsharing.shareViaEmail(
               'To Download This App <font color="blue"><a href="'+float1+'" >Click Here</a></font>',
               'MAB FrontEndBuilder',
-              ['', ''],
-              [''],
-              null,
-              ["file:///"+imageLink],
+              ['', ''], // TO: must be null or an array
+              [''], // CC: must be null or an array
+              null, // BCC: must be null or an array
+              ["file:///"+imageLink], // FILES: null, a string, or an array
                                                        function(){console.log('share ok')}, function(msg) { function alertDismissed() {
                                                        }
                                                        
@@ -69,7 +91,7 @@ function onDeviceReady() {
                                                                    'FrontEndBuilder'
                                                                    );
             }else{
-            console.log('ok',res.filePath);
+            console.log('ok',res.filePath); //should be path/to/myScreenshot.jpg
             imageLink= res.filePath;
                                       window.plugins.socialsharing.shareViaTwitter('To Download This App Click This Link '+float1, 'file:///'+imageLink , null , function() {alert('share ok')}, function(errormsg){function alertDismissed() {
                                                                                    }
@@ -98,9 +120,10 @@ function onDeviceReady() {
                                                                    );
 
             }else{
-            console.log('ok',res.filePath);
+            console.log('ok',res.filePath); //should be path/to/myScreenshot.jpg
             imageLink= res.filePath;
-                                               window.plugins.socialsharing.shareViaFacebook('To Download This App Click This Link '+float1, 'file:///'+imageLink , null , function() {alert('share ok')}, function(errormsg){function alertDismissed() {
+          //  alert(imageLink);
+                                      window.plugins.socialsharing.shareViaFacebook('To Download This App Click This Link '+float1, 'file:///'+imageLink , null , function() {alert('share ok')}, function(errormsg){function alertDismissed() {
                                                        }
                                                        
                                                        navigator.notification.alert(
@@ -209,26 +232,24 @@ var buttonTitle='';
 var elementDesc = '';
 var element='';
 var formEmail='';
-var floatarray='';
 
 function exitout(button) {
-                    if (button == 1) {
-                        navigator.app.exitApp();
-                    }else{
-					
-                    }
-                    
-                }
-
-
-
+    if (button == 1) {
+        navigator.app.exitApp();
+    }else{
+        
+    }
+    
+}
 
 var marker1,marker5,marker6,marker;
 var mapAddress = '';
 
 function initialize1(saving2) {
-         var mapAddress1=saving2;
-    
+      //alert('s1');
+    var mapAddress1=saving2;
+    //alert(mapAddress1);
+  
     geocoder = new google.maps.Geocoder();
     var latlng = new google.maps.LatLng(-34.397, 150.644);
     var mapOptions = {
@@ -238,7 +259,7 @@ function initialize1(saving2) {
     map = new google.maps.Map(document.getElementById('specificmap-canvas'), mapOptions);
     geocoder.geocode( { 'address': mapAddress1}, function(results, status) {
                      if (status == google.maps.GeocoderStatus.OK) {
-                     
+                     //map.setCenter(results[0].geometry.location);
                      marker5 = new google.maps.Marker({
                                                       map: map,
                                                       position: results[0].geometry.location,
@@ -252,7 +273,7 @@ function initialize1(saving2) {
                                                    infowindow.open(map,marker5);
                                                    });
                      } else {
-                     function alertDismissed() {
+                   function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -267,7 +288,7 @@ navigator.notification.alert(
 }
 
 function codeAddress1() {
- 
+  //  alert('s');
     var address = document.getElementById('address').value;
     geocoder.geocode( { 'address': address}, function(results, status) {
                      if (status == google.maps.GeocoderStatus.OK) {
@@ -298,7 +319,7 @@ var saving1='';
 var saving2=[];
 
 control.controller('showmapCtrl',function($scope,$state,$ionicLoading,$ionicPlatform){
-                
+                 //  alert('s3');
                    $scope.backprevmap=function(){
                    $state.go('chapterlist');
                    }
@@ -306,7 +327,7 @@ control.controller('showmapCtrl',function($scope,$state,$ionicLoading,$ionicPlat
                    $scope.editmap=function(){
                    $state.go('mapdisplay');
                    }
-                   
+       
                    $ionicLoading.show({
                                       content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
                                       animation: 'fade-in',
@@ -314,7 +335,6 @@ control.controller('showmapCtrl',function($scope,$state,$ionicLoading,$ionicPlat
                                       maxWidth: 200,
                                       showDelay: 0
                                       });
-                   
                    $.ajax({
                           type: "GET",
                           url: "http://build.myappbuilder.com/api/elements/addresses.json",
@@ -323,11 +343,11 @@ control.controller('showmapCtrl',function($scope,$state,$ionicLoading,$ionicPlat
                           success:function(response){
                           $ionicLoading.hide();
                           saving =response;
-                       
+                         // alert(JSON.stringify(saving.length));
                           for(var i=0;i<saving.length;i++){                   
                           saving=response[i].address;
                           saving2.push(saving[i].address);
-                      
+                       //   alert(saving2);
                            initialize1(saving);
                           }
                          
@@ -348,17 +368,16 @@ navigator.notification.alert(
                           });    
                    
                    });               
-
 control.controller('showmap1Ctrl',function($scope,$state,$ionicLoading,$ionicPlatform){
-                  
+                   //  alert('s3');
+                   $scope.backprevmap=function(){
+                   $state.go('chapterlist1');
+                   }
                    
                    $scope.elementAppwallgoFun=function(){
                    $state.go('elementAppWall1');
                    }
                    
-                   $scope.backprevmap=function(){
-                   $state.go('chapterlist1');
-                   }
                    $ionicLoading.show({
                                       content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
                                       animation: 'fade-in',
@@ -375,11 +394,11 @@ control.controller('showmap1Ctrl',function($scope,$state,$ionicLoading,$ionicPla
                           success:function(response){
                           $ionicLoading.hide();
                           saving =response;
-                          
+                          // alert(JSON.stringify(saving.length));
                           for(var i=0;i<saving.length;i++){
                           saving=response[i].address;
                           saving2.push(saving[i].address);
-                         
+                          //   alert(saving2);
                           initialize1(saving);
                           }
                           
@@ -387,7 +406,57 @@ control.controller('showmap1Ctrl',function($scope,$state,$ionicLoading,$ionicPla
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                          }
+                          });
+                   
+                   });
+control.controller('showmap2Ctrl',function($scope,$state,$ionicLoading,$ionicPlatform){
+                   //  alert('s3');
+                   $scope.backprevmap=function(){
+                   $state.go('chapterlist2');
+                   }
+                   
+                   $scope.editmap=function(){
+                   $state.go('mapdisplay2');
+                   }
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/elements/addresses.json",
+                          data:{'api_key':appKey,'id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          saving =response;
+                          // alert(JSON.stringify(saving.length));
+                          for(var i=0;i<saving.length;i++){
+                          saving=response[i].address;
+                          saving2.push(saving[i].address);
+                          //   alert(saving2);
+                          initialize1(saving);
+                          }
+                          
+                          
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                         var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -401,15 +470,37 @@ navigator.notification.alert(
                    
                    });
 
-control.controller('showmap2Ctrl',function($scope,$state,$ionicLoading,$ionicPlatform){
+control.controller('editcontentCtrl',function($scope,$state,$ionicLoading,$http,$ionicActionSheet,$ionicPlatform){
+                   $scope.key='';
                   
-                   $scope.backprevmap=function(){
-                   $state.go('chapterlist2');
-                   }
+                 //  $scope.bar_color=barcolor;
                    
-                   $scope.editmap=function(){
-                   $state.go('mapdisplay2');
+                   $ionicPlatform.registerBackButtonAction(function () {
+                                                           navigator.notification.confirm(
+                                                                                          'Are you sure you want to Exit?',
+                                                                                          exitout,
+                                                                                          'Please Confirm',
+                                                                                          ["OK","CANCEL"]
+                                                                                          );
+                                                           
+                                                           }, 100);
+                   
+                   document.addEventListener("deviceready", onConnectionCheck, false);
+                   function onConnectionCheck(){
+                   
+                   var networkState = navigator.network.connection.type;
+                   var states = {};
+                   states[Connection.UNKNOWN]  = 'Unknown connection';
+                   states[Connection.ETHERNET] = 'Ethernet connection';
+                   states[Connection.WIFI]     = 'WiFi connection';
+                   states[Connection.CELL_2G]  = 'Cell 2G connection';
+                   states[Connection.CELL_3G]  = 'Cell 3G connection';
+                   states[Connection.CELL_4G]  = 'Cell 4G connection';
+                   states[Connection.NONE]     = 'No network connection';
+                   if (states[networkState] == 'No network connection') {
+                   offline();
                    }
+                   else{
                    $ionicLoading.show({
                                       content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
                                       animation: 'fade-in',
@@ -417,209 +508,657 @@ control.controller('showmap2Ctrl',function($scope,$state,$ionicLoading,$ionicPla
                                       maxWidth: 200,
                                       showDelay: 0
                                       });
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/elements/addresses.json",
-                          data:{'api_key':appKey,'id':elementId},
-                          cache: false,
-                          success:function(response){
-                          $ionicLoading.hide();
-                          saving =response;
-                         
-                          for(var i=0;i<saving.length;i++){
-                          saving=response[i].address;
-                          saving2.push(saving[i].address);
-                         
-                          initialize1(saving);
-                          }
-                          
-                          
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
- var total = JSON.parse(error.responseText);
+                   $http({method: "GET", url:'key.txt', cache: false, params:{}})
+                   .success(function(data){
+                            defaultkey = data.trim();
+                            appList=[];
+                            $http({method: "GET", url:'http://build.myappbuilder.com/api/apps/general.json', cache: false, params:{'api_key':defaultkey}})
+                            .success(function(data, status){
+                                    // alert(data.title);
+                                     appId=defaultkey;
+                                     appTit=data.title;
+                                     appList.push(data);
+                                     
+                                     $http({method: "GET", url:'http://build.myappbuilder.com/api/book_custom_fields.json', cache: false, params:{'api_key':defaultkey}})
+                                     .success(function(reskey){
+                                              
+                                              for(var j=0;j<reskey.length;j++){
+                                              if(reskey[j].key=="keys"){
+                                              $http({method: "GET", url:'http://build.myappbuilder.com/api/apps/general.json', cache: false, params:{'api_key':reskey[j].value}})
+                                              .success(function(data, status){
+                                                       
+                                                       appList.push(data);
+                                                       
+                                                       })
+                                              .error(function(data, status) {
+                                                     var total = JSON.parse(data);
                   function alertDismissed() {
 }
 
 navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Map and Location'                     
-); 
-                          }
-                          });    
-                   
-                   });
-
-
-control.controller('loginCtrl',function($scope,$state,$ionicLoading,$ionicPlatform){
-
- $ionicPlatform.registerBackButtonAction(function () {
-  navigator.notification.confirm(
-                    'Are you sure you want to Exit?',
-                    exitout,
-                    'Please Confirm',
-                    ["OK","CANCEL"]
-            ); 
-  
-}, 100);
-            
- if(localStorage["login"]){
-    appkeyResult = JSON.parse(localStorage["login"]);
-         
-    $ionicLoading.show({
-       content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-       animation: 'fade-in',
-       showBackdrop: true,
-       maxWidth: 200,
-       showDelay: 0
-     });
-        $.ajax({
-                  type: "GET",
-                  url: "http://build.myappbuilder.com/api/users.json",
-                  data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                  cache: false,
-                  success:function(response){
-                    $ionicLoading.hide();
-                    localStorage.sender_id = appkeyResult.id;
-                    if(appkeyResult.username){
-                      localStorage.appwallLoginData = appkeyResult.username;
-                    }else{
-                      localStorage.appwallLoginData = appkeyResult.name;
-                    }
-                    appList = response;
-                    if(listGrid == ''){
-          						$state.go('sample');
-          					}else if(listGrid == 'list'){
-          						$state.go('sample');
-          					}else{
-          						$state.go('sample');
-          					}
-                  },
-                  error:function(error,status){
-                    $ionicLoading.hide();
-                    var error = JSON.parse(error.responseText);
-                    if(error.error == "Unauthorized"){
-                        function alertDismissed() {
-}
-
-navigator.notification.alert(
-    'Please Login',  
-    alertDismissed,        
-   'FrontEndBuilder'                    
-);
-                    }else {
-                     function alertDismissed() {
-}
-
-navigator.notification.alert(
-    'Login Error!',  
-    alertDismissed,        
-   'FrontEndBuilder'                    
-);
-                    }
-                  }
-            });
-  }
-    
-  
-
-  $scope.loginFtn = function(){
-
-    $ionicLoading.show({
-			    content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-			    animation: 'fade-in',
-			    showBackdrop: true,
-			    maxWidth: 200,
-			    showDelay: 0
-			  });
-    var userId = $('#userId').val();
-    var password = $('#password').val();
-    
-    $.ajax({
-          type: "POST",
-          url: "http://build.myappbuilder.com/api/login.json",
-          data:{'login':userId,'password':password},
-          success:function(response){
-           if(JSON.stringify(response).indexOf("incentive_programs") > -1){
-         
-           appList = response;
-           localStorage.sender_id = appList.id;
-           if(appList.username){
-           localStorage.appwallLoginData = appList.username;
-           }else{
-           localStorage.appwallLoginData = appList.name;
-           }
-        
-           $ionicLoading.hide();
-           $state.go('sample1');
-           
-           }
-           else{
-            appkeyResult = response;
-            localStorage.sender_id = appkeyResult.id;
-            if(appkeyResult.username){
-                localStorage.appwallLoginData = appkeyResult.username;
-            }else{
-                localStorage.appwallLoginData = appkeyResult.name;
-            }
-
-            $.ajax({
-                  type: "GET",
-                  url: "http://build.myappbuilder.com/api/users.json",
-                  data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                  cache: false,
-                  success:function(response){
-					
-                    $ionicLoading.hide();
-                    appList = response;
-                    localStorage["login"] = JSON.stringify(appkeyResult);
-                    $state.go('sample');
-          				},
-                  error:function(error,status){
-                    $ionicLoading.hide();
-                   var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
+    total.error,
     alertDismissed,        
      'FrontEndBuilder'                     
 ); 
-                  }
-            });
-           }
-            
-          },
-          error:function(error,status){
-            $ionicLoading.hide();
-            var error = JSON.parse(error.responseText);
-            if(error.error == "Unauthorized"){
-              function alertDismissed() {
+                                                     $ionicLoading.hide();
+                                                     });
+                                              }
+                                              }
+                                              $ionicLoading.hide();
+                                              
+                                              $state.go('sample1');
+                                              
+                                              
+                                              
+                                              })
+                                     .error(function(data, status) {
+                                            $ionicLoading.hide();
+                                             var total = JSON.parse(data);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+     'FrontEndBuilder'                     
+); 
+                                            
+                                            });
+                                     
+                                     })
+                            .error(function(data, status) {
+                                    var total = JSON.parse(data);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+   total.error,
+    alertDismissed,        
+     'FrontEndBuilder'                     
+); 
+                                   $ionicLoading.hide();
+                                   });
+                            
+                            
+                            })
+                   .error(function(data, status) {
+                          $ionicLoading.hide();
+                           var total = JSON.parse(data);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+     'FrontEndBuilder'                     
+); 
+                          
+                          });
+                   
+                   
+                   }
+                   }
+                   
+                   
+                   function goOnline(){
+                   $state.go('login');
+                   }
+                   
+                   function offline(){
+                function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Please Connect Your 3G or Wifi Connection',  
+    alertDismissed,        
+   'FrontEndBuilder'                    
+);
+                   }
+                   });
+
+
+control.controller('login1Ctrl',function($scope,$state,$ionicLoading,$http,$ionicActionSheet){
+                   $scope.bar_color=barcolor;
+                   localStorage.clear();
+                   $('#userId').val('newuser');
+                   $('#password').val('passkey123');
+                   $scope.count = function(){
+                   //   navigator.notification.alert(val);
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   $http({method: "GET", url:'key.txt', cache: false, params:{}})
+                   .success(function(data){
+                            defaultkey = data.trim();
+                            appList=[];
+                            $http({method: "GET", url:'http://build.myappbuilder.com/api/apps/general.json', cache: false, params:{'api_key':defaultkey}})
+                            .success(function(data, status){
+                                     
+                                     //alert(data.title);
+                                     appId=defaultkey;
+                                     appTit=data.title;
+                                     appList.push(data);
+                                   //  alert(JSON.stringify(appList));
+                                     $http({method: "GET", url:'http://build.myappbuilder.com/api/book_custom_fields.json', cache: false, params:{'api_key':defaultkey}})
+                                     .success(function(reskey){
+                                            //  alert(JSON.stringify(reskey));
+                                              for(var j=0;j<reskey.length;j++){
+                                              if(reskey[j].key=="keys"){
+                                              $http({method: "GET", url:'http://build.myappbuilder.com/api/apps/general.json', cache: false, params:{'api_key':reskey[j].value}})
+                                              .success(function(data, status){
+                                                       
+                                                       appList.push(data);
+                                                       
+                                                       })
+                                              .error(function(data, status) {
+                                                      var total = JSON.parse(data);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+     'FrontEndBuilder'  );        
+                                                     $ionicLoading.hide();
+                                                     });
+                                              }
+                                              }
+                                              $ionicLoading.hide();
+                                              
+                                              $state.go('sample');
+                                              
+                                              
+                                              
+                                              })
+                                     .error(function(data, status) {
+                                            $ionicLoading.hide();
+                                             var total = JSON.parse(data);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+     'FrontEndBuilder' );         
+                                            
+                                            });
+                                     
+                                     })
+                            .error(function(data, status) {
+                                 var total = JSON.parse(data);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+   total.error,
+    alertDismissed,        
+     'FrontEndBuilder'   );       
+                                   $ionicLoading.hide();
+                                   });
+                            
+                            
+                            })
+                   .error(function(data, status) {
+                          $ionicLoading.hide();
+                           var total = JSON.parse(data);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+   total.error,
+    alertDismissed,        
+     'FrontEndBuilder' );         
+                          
+                          });
+                   };
+                   
+                   
+                   
+                   
+                   
+                   
+                   $scope.loginFtn = function(){
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   var userId = $('#userId').val();
+                   var password = $('#password').val();
+                   
+                   
+                   $http({method: "POST", url:'http://build.myappbuilder.com/api/login.json', cache: false, params:{'login':userId,'password':password}})
+                   .success(function(response){
+                            
+                            appkeyResult = response;
+                            //                            appkeyResult = response;
+                            localStorage.sender_id = appkeyResult.id;
+                            if(appkeyResult.username){
+                            localStorage.appwallLoginData = appkeyResult.username;
+                            }else{
+                            localStorage.appwallLoginData = appkeyResult.name;
+                            }
+                            //                            appKey = response.api_key;
+                            
+                            $http({method: "GET", url:'http://build.myappbuilder.com/api/apps.json', cache: false, params:{'api_key':response.api_key}})
+                            .success(function(data, status){
+                                     var logkey;
+                                     for(var j=0;j<data.length;j++){
+                                     if(data[j].api_key==defaultkey){
+                                     logkey=data[j].api_key;
+                                     }
+                                     }
+                                     if(logkey==defaultkey){
+                                     $scope.count();
+                                     $ionicLoading.hide();
+                                     }
+                                     else{
+                                     $ionicLoading.hide();
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'You are not authorised for this app!',  
+    alertDismissed,        
+     'FrontEndBuilder'  );        
+                                     }
+                                     })
+                            .error(function(data, status) {
+                                   var total = JSON.parse(data);
+                                   function alertDismissed() {
+                                   }
+                                   
+                                   navigator.notification.alert(
+                                                                total.error,
+                                                                alertDismissed,        
+                                                                'FrontEndBuilder' );
+                                   $ionicLoading.hide();
+                                   });
+                            
+                            
+                            })
+                   .error(function(error, status) {
+                          $ionicLoading.hide();
+                          var error = JSON.parse(error.responseText);
+                          if(error.error == "Unauthorized"){
+                function alertDismissed() {
 }
 
 navigator.notification.alert(
     'Please Check Your UserId or Password!',  
     alertDismissed,        
-   'FrontEndBuilder'                    
-);
-            }else {
-              function alertDismissed() {
+     'FrontEndBuilder'  );  
+                          }else {
+                           function alertDismissed() {
 }
 
 navigator.notification.alert(
     'Login Error!',  
     alertDismissed,        
-   'FrontEndBuilder'
-   );
-            }
-          }
-    });
-  };
+     'FrontEndBuilder'  ); 
+                          }
+                          });
+                   
+                   
+                   };
+                   
+                   $scope.cancelFtn =function(){
+                   $state.go('editcontent');
+                   };
+                   
+                   
+                   });
 
 
+
+control.controller('sample1Ctrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicScrollDelegate){
+                   
+                   
+                   $scope.listViewBack = function(){
+                   
+                   localStorage["login"] = [];
+                   openFB.revokePermissions(function() {console.log('Permissions revoked');},function(error){console.log(error.message);});
+                   window.localStorage.removeItem(twitterKey);
+                   $state.go('login1');
+                   };
+                   
+                   
+                   $ionicScrollDelegate.scrollTop();
+                   
+                   $scope.AppEditor =false;
+                   for(var i =0;i<appList.length;i++){
+                   if(appList[i].app_image == null){
+                   appList[i].app_image = "img/no_image.png";
+                   }
+                   }
+                   
+                   $scope.appKey = appList;
+                   
+                   
+                   $scope.listViewClickFtn = function(appId,appTit){
+                   
+                   buttonArray = [];
+                   Appwall = [];
+                   appKey = appId;
+                   appTitle = appTit;
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   console.log('**************1234567890*************');
+                   console.log('**************123456*************'+appId);
+                   
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/buttons.json",
+                          data:{'api_key':appId},
+                          cache: false,
+                          success:function(response){
+                          
+                          console.log(JSON.stringify(response))
+                          buttonArray = response;
+                          
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/apps/general.json",
+                                 data:{'api_key':appId},
+                                 cache: false,
+                                 success:function(response1){
+                                 console.log('**************123456*************'+response1.bar_color);
+                                 console.log(JSON.stringify(response1));
+                                 
+                                 barcolor = response1.bar_color;
+                                 buttoncolor= response1.button_color;
+                                 barbuttoncolor= response1.bar_button_color;
+                                 
+                                 $scope.bar_color=barcolor;
+                                 $scope.button_color=buttoncolor;
+                                 $scope.bar_button_color=barbuttoncolor;
+                                 
+            
+                                 
+                                 $.ajax({url:'http://build.myappbuilder.com/api/app_wall_settings.json', type:"GET",data:{'api_key':appKey},
+                                        success:function(response){
+                                        bookAppwall = response;
+                                        $ionicLoading.hide();
+                                        $state.go('app1');
+                                        },
+                                        error:function(){
+                                        $ionicLoading.hide();
+                                         function alertDismissed() {
+}
+
+navigator.notification.alert(
+   'Failure',  
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                                        }
+                                        });
+                                 
+                                 },
+                                 error:function(error,status){
+                                 
+                                 var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                                 }
+                                 });
+                          
+                          
+                          
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                            var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                          }
+                          });
+                   }
+                   
+                   
+                   });
+
+control.controller('loginCtrl',function($scope,$state,$ionicLoading,$ionicPlatform){
+
+    $('#userId').val('newuser');
+                  $('#password').val('passkey123');
+                   $scope.count = function(val){
+                //     alert(val);
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   if(v < val){
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/book_custom_fields.json",
+                          data:{'api_key':data.apps[v].api_key},
+                          cache: false,
+                          success:function(response1){
+                         // alert(response1.length);
+                         // alert(JSON.stringify(response1));
+                         // alert(v);
+                          for(var j=0;j<response1.length;j++){
+                          
+                          if(response1[j].key=="AppType" && response1[j].value=="FrontEndBuilder"){
+                          
+                          appList.push(data.apps[v]);
+                          }
+                          
+                          }
+                          v++;
+                          $scope.count(data.apps.length);
+                        //  alert(JSON.stringify(appList));
+                          
+                          },
+                          error:function(error,status){
+                          
+                          var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                          }
+                          });
+                   }
+                   else{
+                   $ionicLoading.hide();
+                   v = 0;
+                   localStorage["login"] = JSON.stringify(appkeyResult);
+                   if(listGrid == ''){
+                   $state.go('sample');
+                   }else if(listGrid == 'list'){
+                   $state.go('sample');
+                   }else{
+                   $state.go('sample');
+                   }
+                   }
+                   };
+                   
+                   if(localStorage["login"]){
+                   appkeyResult = JSON.parse(localStorage["login"]);
+                   //alert(appkeyResult.api_key+" : "+appkeyResult.id);
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/users.json",
+                          data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
+                          cache: false,
+                          success:function(response){
+                          data = response;
+                          $ionicLoading.hide();
+                          localStorage.sender_id = appkeyResult.id;
+                          if(appkeyResult.username){
+                          localStorage.appwallLoginData = appkeyResult.username;
+                          }else{
+                          localStorage.appwallLoginData = appkeyResult.name;
+                          }
+                          appList=[];
+                          //                for(var i=0;i<response.apps.length;i++){
+                          //                 if(response.apps[i].description=="News"){
+                          //                 appList.push(response.apps[i]);
+                          //                 }
+                          //
+                          //                 }
+                          //                    $state.go('listView');
+                          $scope.count(response.apps.length);
+                          
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var error = JSON.parse(error.responseText);
+                          if(error.error == "Unauthorized"){
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Please Login',  
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                          }else {
+                           function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Login Error!',  
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                          }
+                          }
+                          });
+                   }
+                   
+                   
+                   
+                   
+                   $scope.loginFtn = function(){
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   var userId = $('#userId').val();
+                   var password = $('#password').val();
+                   
+                   $.ajax({
+                          type: "POST",
+                          url: "http://build.myappbuilder.com/api/login.json",
+                          data:{'login':userId,'password':password},
+                          success:function(response){
+                          
+                          appkeyResult = response;
+                          localStorage.sender_id = appkeyResult.id;
+                          if(appkeyResult.username){
+                          localStorage.appwallLoginData = appkeyResult.username;
+                          }else{
+                          localStorage.appwallLoginData = appkeyResult.name;
+                          }
+                          
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/users.json",
+                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
+                                 cache: false,
+                                 success:function(response){
+                                 data = response;
+                                 $ionicLoading.hide();
+                                 appList=[];
+                                 //                   for(var i=0;i<response.apps.length;i++){
+                                 //                   if(response.apps[i].description=="News"){
+                                 //                   appList.push(response.apps[i]);
+                                 //                   }
+                                 //
+                                 //                   }
+                                 localStorage["login"] = JSON.stringify(appkeyResult);
+                                 $scope.count(response.apps.length);
+                                 //                    $state.go('listView');
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                               var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                                 }
+                                 });
+                          
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var error = JSON.parse(error.responseText);
+                          if(error.error == "Unauthorized"){
+                function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Please Check Your UserId or Password!',  
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                          }else {
+                         function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Login Error!',  
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                          }
+                          }
+                          });
+                   };
+                   
   $scope.registerPageCallFtn =function(){
     $state.go('register');
   };
@@ -630,7 +1169,7 @@ navigator.notification.alert(
             openFB.api({
               path: '/me',
               success: function(responcedata) {
-               
+                //  alert(JSON.stringify(responcedata));
                   $ionicLoading.show({
                                     content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
                                     animation: 'fade-in',
@@ -643,10 +1182,10 @@ navigator.notification.alert(
                         url: "http://build.myappbuilder.com/api/login.json",
                         data:{'uid':responcedata.id,'provider':"facebook"},
                         success:function(response){
-							
+              // alert(JSON.stringify(response));
                           appkeyResult = response;
                           localStorage.sender_id = appkeyResult.id;
-							
+              //alert(JSON.stringify( localStorage.sender_i));
                           if(appkeyResult.username){
                             localStorage.appwallLoginData = appkeyResult.username;
                           }else{
@@ -659,7 +1198,7 @@ navigator.notification.alert(
                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
                                 cache: false,
                                 success:function(response){
-									
+                  //alert(JSON.stringify(response));
                                   $ionicLoading.hide();
                                   appList = response;
                                   localStorage["login"] = JSON.stringify(appkeyResult);
@@ -673,15 +1212,7 @@ navigator.notification.alert(
                                 },
                                 error:function(error,status){
                                   $ionicLoading.hide();
-                                    var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                                  navigator.notification.alert(error.responseText)
                                 }
                           });
                           
@@ -695,7 +1226,7 @@ navigator.notification.alert(
                                     showDelay: 0
                                   });
                           var error = JSON.parse(error.responseText);
-                        
+                         // alert(JSON.stringify(error));
                           $.ajax({
                               type: "POST",
                               url: "http://build.myappbuilder.com/api/users.json",
@@ -721,39 +1252,23 @@ navigator.notification.alert(
                                         appList = response;
                                         localStorage["login"] = JSON.stringify(appkeyResult);
                                         if(listGrid == ''){
-                    											$state.go('sample');
-                    										}else if(listGrid == 'list'){
-                    											$state.go('sample');
-                    										}else{
-                    											$state.go('sample');
-                    										}
+                                          $state.go('sample');
+                                        }else if(listGrid == 'list'){
+                                          $state.go('sample');
+                                        }else{
+                                          $state.go('sample');
+                                        }
                                       },
                                       error:function(error,status){
                                         $ionicLoading.hide();
-                                        var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                                        navigator.notification.alert(error.responseText)
                                       }
                                 });
                               },
                               error:function(error){
                                 $ionicLoading.hide();
-                                  var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
-                     }
+                                navigator.notification.alert(error.responseText)
+                              }
                             });
                          
                         }
@@ -770,27 +1285,30 @@ navigator.notification.alert(
           console.log('Facebook login failed: ' + error.error_description);
         });
   }
-  
+
   $scope.twitterLogin = function(){
-            var oauth;
-            var requestParams;
+            var oauth; // It Holds the oAuth data request
+            var requestParams; // Specific param related to request
             var options = {
-               consumerKey: 'cwDbygLqumFkxZ9pfUXSm6pqc',
-                consumerSecret: '9VVKkraN3oA6ipDJtwJ5KbLwySd1lm4AIPm48JIrwAp2OAkluf',                 callbackUrl: "http://nuatransmedia.com/" };
-            twitterKey = "tTWnGny5Oydp0Zo3BVYg03BDl";
+               consumerKey: 'cwDbygLqumFkxZ9pfUXSm6pqc', // YOUR Twitter CONSUMER_KEY
+                consumerSecret: '9VVKkraN3oA6ipDJtwJ5KbLwySd1lm4AIPm48JIrwAp2OAkluf', // YOUR Twitter CONSUMER_SECRET
+                callbackUrl: "http://nuatransmedia.com/" }; // YOU have to replace it on one more Place                   
+            twitterKey = "tTWnGny5Oydp0Zo3BVYg03BDl"; // This key is used for storing Information related
             var ref;              
                      
             var Twitter = {
                 init:function(){
                       var storedAccessData, rawData = localStorage.getItem(twitterKey);
                       if(localStorage.getItem(twitterKey) !== null){
-                      storedAccessData = JSON.parse(rawData);
-                      options.accessTokenKey = storedAccessData.accessTokenKey;
-                      options.accessTokenSecret = storedAccessData.accessTokenSecret;                           oauth = OAuth(options);
+                      storedAccessData = JSON.parse(rawData); //JSON parsing
+                      options.accessTokenKey = storedAccessData.accessTokenKey; // data will be saved when user first time signin
+                      options.accessTokenSecret = storedAccessData.accessTokenSecret; // data will be saved when user first first signin
+                          oauth = OAuth(options);
                           oauth.get('https://api.twitter.com/1.1/account/verify_credentials.json?skip_status=true',
                               function(data) {
                                   var entry = JSON.parse(data.text);
-                                    
+                                  //console.log("USERNAME: " + JSON.stringify(entry));
+                                  
                                   $ionicLoading.show({
                                     content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
                                     animation: 'fade-in',
@@ -821,32 +1339,24 @@ navigator.notification.alert(
                                               $ionicLoading.hide();
                                               appList = response;
                                               localStorage["login"] = JSON.stringify(appkeyResult);
-                                              	if(listGrid == ''){
-                        													$state.go('sample');
-                        												}else if(listGrid == 'list'){
-                        													$state.go('sample');
-                        												}else{
-                        													$state.go('sample');
-                        												}
+                                                if(listGrid == ''){
+                                                  $state.go('sample');
+                                                }else if(listGrid == 'list'){
+                                                  $state.go('sample');
+                                                }else{
+                                                  $state.go('sample');
+                                                }
                                             },
                                             error:function(error,status){
                                               $ionicLoading.hide();
-                                              var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                                              navigator.notification.alert(error.responseText)
                                             }
                                       });
                                     },
                                     error:function(error){
                                         var error = JSON.parse(error.responseText);
                                         if(error.error == "Unauthorized"){
-                                         
+                                          //navigator.notification.alert("Please Check Your UserId or Password!")
                                           $.ajax({
                                             type: "POST",
                                             url: "http://build.myappbuilder.com/api/users.json",
@@ -870,51 +1380,28 @@ navigator.notification.alert(
                                                       $ionicLoading.hide();
                                                       appList = response;
                                                       localStorage["login"] = JSON.stringify(appkeyResult);
-                                                      	if(listGrid == ''){
-                            														    $state.go('sample');
-                            														}else if(listGrid == 'list'){
-                            														    $state.go('sample');
-                            														}else{
-                            														    $state.go('sample');
-                            														}
+                                                        if(listGrid == ''){
+                                                            $state.go('sample');
+                                                        }else if(listGrid == 'list'){
+                                                            $state.go('sample');
+                                                        }else{
+                                                            $state.go('sample');
+                                                        }
                                                     },
                                                     error:function(error,status){
                                                       $ionicLoading.hide();
-                                                      var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                                                      navigator.notification.alert(error.responseText)
                                                     }
                                               });
                                             },
                                             error:function(error){
                                               $ionicLoading.hide();
-                                              var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                                              navigator.notification.alert(error.responseText)
                                             }
                                           });
                                         }else {
                                           $ionicLoading.hide();
-                                         function alertDismissed() {
-}
-
-navigator.notification.alert(
-    'Login Error!',  
-    alertDismissed,        
-   'FrontEndBuilder'
-   );
+                                          navigator.notification.alert("Login Error!");
                                         }
                                     }
                                   });
@@ -967,13 +1454,13 @@ navigator.notification.alert(
                                           var accessData = {};
                                           accessData.accessTokenKey = accessParams.oauth_token;
                                           accessData.accessTokenSecret = accessParams.oauth_token_secret;
-                                        
+                                        //  console.log("TWITTER: Storing token key/secret in localStorage");
                                           localStorage.setItem(twitterKey, JSON.stringify(accessData));
                                            
                                           oauth.get('https://api.twitter.com/1.1/account/verify_credentials.json?skip_status=true',
                                                   function(data) {
                                                     var entry = JSON.parse(data.text);
-                                                    
+                                                    //console.log("TWITTER USER: "+JSON.stringify(entry));
                                                     $ionicLoading.show({
                                                       content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
                                                       animation: 'fade-in',
@@ -1004,25 +1491,17 @@ navigator.notification.alert(
                                                                   $ionicLoading.hide();
                                                                   appList = response;
                                                                   localStorage["login"] = JSON.stringify(appkeyResult);
-                                                                  	if(listGrid == ''){
-                            														                      $state.go('sample');
-                            														            }else if(listGrid == 'list'){
-                            														                      $state.go('sample');
-                            														            }else{
-                            														                      $state.go('sample');
-                            														            }
+                                                                    if(listGrid == ''){
+                                                                              $state.go('sample');
+                                                                    }else if(listGrid == 'list'){
+                                                                              $state.go('sample');
+                                                                    }else{
+                                                                              $state.go('sample');
+                                                                    }
                                                                 },
                                                                 error:function(error,status){
                                                                   $ionicLoading.hide();
-                                                                   var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                                                                  navigator.notification.alert(error.responseText)
                                                                 }
                                                           });
                                                         },
@@ -1054,51 +1533,28 @@ navigator.notification.alert(
                                                                           $ionicLoading.hide();
                                                                           appList = response;
                                                                           localStorage["login"] = JSON.stringify(appkeyResult);
-                                                                          	if(listGrid == ''){
-                            														                      $state.go('sample');
-                            														                    }else if(listGrid == 'list'){
-                            														                      $state.go('sample');
-                            														                    }else{
-                            														                      $state.go('sample');
-                            														                    }
+                                                                            if(listGrid == ''){
+                                                                              $state.go('sample');
+                                                                            }else if(listGrid == 'list'){
+                                                                              $state.go('sample');
+                                                                            }else{
+                                                                              $state.go('sample');
+                                                                            }
                                                                         },
                                                                         error:function(error,status){
                                                                           $ionicLoading.hide();
-                                                                           var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                                                                          navigator.notification.alert(error.responseText)
                                                                         }
                                                                   });
                                                                 },
                                                                 error:function(error){
                                                                   $ionicLoading.hide();
-                                                                  var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                                                                  navigator.notification.alert(error.responseText)
                                                                 }
                                                               });
                                                             }else {
                                                               $ionicLoading.hide();
-                                                               function alertDismissed() {
-																	}
-
-																	navigator.notification.alert(
-																		'Login Error!',  
-																		alertDismissed,        
-																	   'FrontEndBuilder'
-																	   );
+                                                              navigator.notification.alert("Login Error!");
                                                             }
                                                         }
                                                       });
@@ -1112,13 +1568,13 @@ navigator.notification.alert(
                                           ref.close();
                                           },
                                           function(data) {
-                                          
+                                            //console.log("Hello: :-"+data);
                                             ref.close();
                                           }
                                 );
                             }
                             else {
-                   
+                                //ref.close();
                             }
                         }
  
@@ -1156,7 +1612,8 @@ navigator.notification.alert(
                                      return googleapi.userInfo({ access_token: data.access_token });
                                      }).done(function(user) {
                                             var res = JSON.stringify(user);
-                                          
+                                           console.log(res);
+                                         //    alert(res);
                                               $ionicLoading.show({
                                                 content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
                                                 animation: 'fade-in',
@@ -1164,7 +1621,7 @@ navigator.notification.alert(
                                                 maxWidth: 200,
                                                 showDelay: 0
                                               });
-                                            
+                                             // alert(user.id);
                                                     $.ajax({
                                                         type: "POST",
                                                         url: "http://build.myappbuilder.com/api/login.json",
@@ -1188,26 +1645,18 @@ navigator.notification.alert(
                                                                   $ionicLoading.hide();
                                                                   appList = response;
                                                                   localStorage["login"] = JSON.stringify(appkeyResult);
-                                                                  	if(listGrid == ''){
-                            														                      $state.go('sample');
-                            														                    }else if(listGrid == 'list'){
-                            														                      $state.go('sample');
-                            														                    }else{
-                            														                      $state.go('sample');
-                            														                    }
-                            														          
+                                                                    if(listGrid == ''){
+                                                                              $state.go('sample');
+                                                                            }else if(listGrid == 'list'){
+                                                                              $state.go('sample');
+                                                                            }else{
+                                                                              $state.go('sample');
+                                                                            }
+                                                                  
                                                                 },
                                                                 error:function(error,status){
                                                                   $ionicLoading.hide();
-                                                                 var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                                                                  navigator.notification.alert(error.responseText)
                                                                 }
                                                           });
                                                         },
@@ -1240,39 +1689,23 @@ navigator.notification.alert(
                                                                           $ionicLoading.hide();
                                                                           appList = response;
                                                                           localStorage["login"] = JSON.stringify(appkeyResult);
-                                                                          	if(listGrid == ''){
-                            														                      $state.go('sample');
-                            														                    }else if(listGrid == 'list'){
-                            														                      $state.go('sample');
-                            														                    }else{
-                            														                      $state.go('sample');
-                            														                    }
+                                                                            if(listGrid == ''){
+                                                                              $state.go('sample');
+                                                                            }else if(listGrid == 'list'){
+                                                                              $state.go('sample');
+                                                                            }else{
+                                                                              $state.go('sample');
+                                                                            }
                                                                         },
                                                                         error:function(error,status){
                                                                           $ionicLoading.hide();
-                                                                         var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                                                                          navigator.notification.alert(error.responseText)
                                                                         }
                                                                   });
                                                                 },
                                                                 error:function(error){
                                                                   $ionicLoading.hide();
-                                                                 var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                                                                  navigator.notification.alert(error.responseText)
                                                                 }
                                                               });
                                                            
@@ -1288,19 +1721,22 @@ navigator.notification.alert(
   googleapp.init();
     googleapi.authorize({
                   client_id: "912532492266-10ivhj0e821bs1g3vm7egqv4unubt364.apps.googleusercontent.com",
-				  client_secret: "dljPcfIJVxpU1Tnb4GhaWBYp",
-				  redirect_uri: "http://localhost",
+          client_secret: "dljPcfIJVxpU1Tnb4GhaWBYp",
+          redirect_uri: "http://localhost",
                         scope: 'https://www.googleapis.com/auth/userinfo.profile'
                         }).done(function() {
-                               
+                                //Show the greet view if access is granted
                                 googleapp.showGreetView();
                                
                                 }).fail(function(data) {
-                                       
+                                        //Show an error message if access was denied
                                        alert(data.error);
                                         });
   }
  });
+ 
+ 
+
 control.controller('registerCtrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicModal,$ionicScrollDelegate){
   $scope.registerPageSubmitFtn = function(){
     $ionicLoading.show({
@@ -1322,7 +1758,7 @@ control.controller('registerCtrl',function($scope,$state,$ionicLoading,$ionicPop
       data:{'name':Name,'username':regUserId,'email':regEmail,'password':regPassword,'password_confirmation':regConfirmPassword},
       cache:false,
       success:function(response){
-      
+       // alert("sucee: "+JSON.stringify(response));
           appkeyResult = response;
           localStorage.sender_id = appkeyResult.id;
 
@@ -1342,39 +1778,23 @@ control.controller('registerCtrl',function($scope,$state,$ionicLoading,$ionicPop
                    appList = response;
                    localStorage["login"] = JSON.stringify(appkeyResult);
                      if(listGrid == ''){
-						$state.go('sample');
+            $state.go('sample');
                      }else if(listGrid == 'list'){
-						$state.go('sample');
+            $state.go('sample');
                      }else{
-						$state.go('sample');
+            $state.go('sample');
                      }
                      
                   },
                   error:function(error,status){
                     $ionicLoading.hide();
-                   var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+                    navigator.notification.alert(error.responseText)
                   }
           });
       },
       error:function(error,status){
           $ionicLoading.hide();
-          var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
+          navigator.notification.alert(error.responseText);
       }
     });
   }
@@ -1399,34 +1819,130 @@ var appbar='';
 var appbutton='';
 var appbuttonbar='';
 
-control.controller('sampleCtrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicScrollDelegate){
-                                                          
-     $scope.appKey = appList.apps;
-     
-  $ionicScrollDelegate.scrollTop();
+control.controller('sampleCtrl',function($scope,$state,$ionicLoading,$http,$ionicPopup,$ionicScrollDelegate){
 
- $scope.AppEditor =false;
+     $scope.bar_color=barcolor;
+                   $scope.count = function(){
+                   //                          appKey = response.api_key;
+                   $http({method: "GET", url:'key.txt', cache: false, params:{}})
+                   .success(function(data){
+                            defaultkey = data.trim();
+                            appList=[];
+                            $http({method: "GET", url:'http://build.myappbuilder.com/api/apps/general.json', cache: false, params:{'api_key':defaultkey}})
+                            .success(function(data, status){
+                                                                 //    alert(data.title);
+                                     appId=defaultkey;
+                                     appTit=data.title;
+                                     appList.push(data);
+                                     
+                                     $http({method: "GET", url:'http://build.myappbuilder.com/api/book_custom_fields.json', cache: false, params:{'api_key':defaultkey}})
+                                     .success(function(reskey){
+                                              
+                                              for(var j=0;j<reskey.length;j++){
+                                              if(reskey[j].key=="keys"){
+                                              $http({method: "GET", url:'http://build.myappbuilder.com/api/apps/general.json', cache: false, params:{'api_key':reskey[j].value}})
+                                              .success(function(data, status){
+                                                       
+                                                       appList.push(data);
+                                                       
+                                                       })
+                                              .error(function(data, status) {
+                                                        var total = JSON.parse(data);
 
-  for(var i =0;i<(appList.apps).length;i++){
-    if((appList.apps[i]).app_image == null){
-         (appList.apps[i]).app_image = "img/no_image.png";
+                  function alertDismissed() {
+}
 
-    }
-  }
-  
-                   $scope.listViewClickFtn = function(appId,appTit){
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                                                     $ionicLoading.hide();
+                                                     });
+                                              }
+                                              }
+                                              $ionicLoading.hide();
+                                              $scope.appKey = appList;
+                                              $state.reload();
+                                              
+                                              
+                                              
+                                              })
+                                     .error(function(data, status) {
+                                            $ionicLoading.hide();
+                                               var total = JSON.parse(data);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                                            
+                                            });
+                                     
+                                     })
+                            .error(function(data, status) {
+                                      var total = JSON.parse(data);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                                   $ionicLoading.hide();
+                                   });
+                            
+                            
+                            })
+                   .error(function(data, status) {
+                          $ionicLoading.hide();
+                            var total = JSON.parse(data);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+   'FrontEndBuilder'                 
+);
+                          
+                          });
                    
-                   $scope.appKey = appList.apps;
+                   };
                    
-                   appKey = appId;
-                   appTitle = appTit;
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
+                   $ionicScrollDelegate.scrollTop();
+                   
+                   $scope.AppEditor =false;
+                   for(var i =0;i<appList.length;i++){
+                   if(appList[i].app_image == null){
+                   appList[i].app_image = "img/no_image.png";
+                   }
+                   }
+                   //console.log(JSON.stringify(appList))
+                   //$scope.count();
+                   $scope.appKey = appList;
+                   console.log(appList);
+                   
+    $scope.listViewClickFtn = function(appId,appTit){
+   
+ // $scope.appKey = appList.apps;
+
+    appKey = appId;
+    appTitle = appTit;
+    $ionicLoading.show({
+              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+              animation: 'fade-in',
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0
+            });
                    $.ajax({
                           type: "GET",
                           url: "http://build.myappbuilder.com/api/buttons.json",
@@ -1434,7 +1950,7 @@ control.controller('sampleCtrl',function($scope,$state,$ionicLoading,$ionicPopup
                           cache: false,
                           success:function(response){
                           
-                          
+                          // alert(JSON.stringify(response))
                           buttonArray = response;
                           
                           $.ajax({url:'http://build.myappbuilder.com/api/app_wall_settings.json', type:"GET",data:{'api_key':appKey},
@@ -1448,7 +1964,7 @@ control.controller('sampleCtrl',function($scope,$state,$ionicLoading,$ionicPopup
                                         cache: false,
                                         success:function(response){
                                         $ionicLoading.hide();
-                                       
+                                        //alert(JSON.stringify(response));
                                         
                                         for(var i=0;i<response.length;i++){
                                         if(response[i].key == 'Floating Social Icons'){
@@ -1462,7 +1978,6 @@ control.controller('sampleCtrl',function($scope,$state,$ionicLoading,$ionicPopup
                                         floatid1=response[i].id;
                                         }
                                         if(response[i].key == 'Url'){
-                                      
                                         if(float == 'true')
                                         {$state.go('app2');}
                                         else
@@ -1474,7 +1989,7 @@ control.controller('sampleCtrl',function($scope,$state,$ionicLoading,$ionicPopup
                                         },
                                         error:function(error,status){
                                         $ionicLoading.hide();
-                                        var total = JSON.parse(error.responseText);
+                                       var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -1486,11 +2001,18 @@ navigator.notification.alert(
                                         }
                                         });
                                  
-                                 
+                                 // $state.reload();
                                  },
                                  error:function(){
                                  $ionicLoading.hide();
-                                 alert("Failure");
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Failure',  
+    alertDismissed,        
+     'FrontEndBuilder'                     
+); 
                                  }
                                  });
                           
@@ -1511,21 +2033,21 @@ navigator.notification.alert(
                    
                    $.ajax({
                           type: "GET",
-                          url: "http://build.myappbuilder.com/api/apps/general.json",      
+                          url: "http://build.myappbuilder.com/api/apps/general.json",
                           data:{'api_key':appId},
                           cache: false,
                           success:function(response){
-                         
+                          // alert(JSON.stringify(response));
                           $ionicLoading.hide();
-                          appKey = appId;						
+                          appKey = appId;
                           colour=response.bar_color;
                           buttoncolour=response.bar_button_color;
-                          button=response.button_color;						
+                          button=response.button_color;
                           
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                            var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -1538,27 +2060,22 @@ navigator.notification.alert(
                           });
                    
                    }
+                   
  $scope.newapps = function(){
-  $state.go('newapp');     
+    $state.go('newapp');
   }; 
   
    $scope.logout = function(){
-	  localStorage["login"] = [];
-	  openFB.revokePermissions(function() {console.log('Permissions revoked');},function(error){console.log(error.message);});
+                   
+    localStorage["login"] = [];
+    openFB.revokePermissions(function() {console.log('Permissions revoked');},function(error){console.log(error.message);});
     window.localStorage.removeItem(twitterKey);
-  $state.go('login');     
+  $state.go('login1');
   }; 
-  
-   $scope.editapps = function(){
-    if($scope.AppEditor == false){
-      $scope.AppEditor = true;
-    }else{
-      $scope.AppEditor =false;
-    }
-  }
-  
-   $scope.editApp = function(appId){
-	$ionicLoading.show({
+                   
+                  $scope.editApp = function(appId){
+                  
+  $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -1572,56 +2089,56 @@ navigator.notification.alert(
                   data:{'api_key':appId},
                   cache: false,
                   success:function(response){
-               
+                // alert(JSON.stringify(response));
                             $ionicLoading.hide();
                             appKey = appId;
-							appTitle = response.title;
-							appDesc = response.description;
-							appimg = response.app_image;
-							appdom=response.domain;
-							appsubdomain=response.subdomain;					
-							splash=response.splash_image;
-							store=response.app_store_image;
-							
-							colour=response.bar_color;
-							buttoncolour=response.bar_button_color; 			
-							button= response.button_color; 
-							 twitter=response.twitter_username;
-							  fb=response.facebook_link;
-							  gplus=response.gplus_link;
-							  youtube=response.youtube_link;
-							  flickr=response.flickr_link;
-							  pin=response.pinterest_link;
-							  fbkey=response.facebook_key;
-							  fbsecret=response.facebook_secret;
-							  twitterkey=response.twitter_key;
-							  twittersecret=response.twitter_secret;
-							  gpluskey=response.gplus_key;
-							  gplussecret=response.gplus_secret;
-								
+              appTitle = response.title;
+              appDesc = response.description;
+              appimg = response.app_image;
+              appdom=response.domain;
+              appsubdomain=response.subdomain;          
+              splash=response.splash_image;
+              store=response.app_store_image;
+              
+              colour=response.bar_color;
+              buttoncolour=response.bar_button_color;       
+              button= response.button_color; 
+               twitter=response.twitter_username;
+                fb=response.facebook_link;
+                gplus=response.gplus_link;
+                youtube=response.youtube_link;
+                flickr=response.flickr_link;
+                pin=response.pinterest_link;
+                fbkey=response.facebook_key;
+                fbsecret=response.facebook_secret;
+                twitterkey=response.twitter_key;
+                twittersecret=response.twitter_secret;
+                gpluskey=response.gplus_key;
+                gplussecret=response.gplus_secret;
+                
                floatarray=response.book_custom_values;
                
-              
+               console.log(JSON.stringify(floatarray));
                
                for(var i=0;i<response.book_custom_values.length;i++){
                if(response.book_custom_values[i].key == 'Floating Social Icons'){
                
-            
+               console.log(JSON.stringify(response.book_custom_values[i].key));
                
                editfloat = response.book_custom_values[i].value;
                editfloatid=response.book_custom_values[i].id;
                
-         
+               console.log(JSON.stringify(editfloat));
                
                }
                else if(response.book_custom_values[i].key == 'Url'){
                
-         
+               console.log(JSON.stringify(response.book_custom_values[i].key));
                
                editfloat1=response.book_custom_values[i].value;
                editfloatid1=response.book_custom_values[i].id;
                
-         
+               console.log(JSON.stringify(editfloat1));
                }
                
                }
@@ -1642,75 +2159,103 @@ navigator.notification.alert(
                           }
                     });
   }
-  
-    $scope.deleteApp = function(appId,item){
-    var confirmPopup = $ionicPopup.confirm({
-     title: 'App Delete!',
-     template: 'Are you sure you want to delete this App?'
-    });
-    confirmPopup.then(function(res) {
-     if(res) {
-        $ionicLoading.show({
-              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-              animation: 'fade-in',
-              showBackdrop: true,
-              maxWidth: 200,
-              showDelay: 0
-            });
-   
-        $.ajax({
-                  type: "DELETE",
-                  url: "http://build.myappbuilder.com/api/apps.json",
-                  data:{'api_key':appkeyResult.api_key,'book_api_key':appId},
-                  cache: false,
-                  success:function(response){
-                     
-               
-                     $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/users.json",
-                          data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                          cache: false,
-                          success:function(response){
-							  
-                          
-                            $ionicLoading.hide();
-                            appList = response;
-                            $scope.appKey.splice($scope.appKey.indexOf(item), 1);
-                            $state.reload();
-                          },
-                          error:function(error,status){
-                            $ionicLoading.hide();
-                            var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
-                          }
-                    });
-                  },
-                  error:function(error,status){
-                    $ionicLoading.hide();
-                    function alertDismissed() {
-}
-
-navigator.notification.alert(
-    'status',  
-    alertDismissed,        
-     'FrontEndBuilder'                     
-); 
-                  }
-        });
-
-      } else {
-         console.log('You are not sure');
-       }
-     });
+                   
+                $scope.editapps = function(){
+    if($scope.AppEditor == false){
+      $scope.AppEditor = true;
+    }else{
+      $scope.AppEditor =false;
+    }
   }
+                   
+                   $scope.deleteApp = function(appId,item){
+                   if(appId==defaultkey){
+                   alert('You cannot delete this root App!',function(){},item,'OK');
+                   }
+                   else{
+                   var confirmPopup = $ionicPopup.confirm({
+                                                          title: item,
+                                                          template: 'Are you sure you want to delete this Listing?'
+                                                          });
+                   confirmPopup.then(function(res) {
+                                     if(res) {
+//                                     alert(appId);
+                                     $ionicLoading.show({
+                                                        content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                                        animation: 'fade-in',
+                                                        showBackdrop: true,
+                                                        maxWidth: 200,
+                                                        showDelay: 0
+                                                        });
+                                     
+                                     
+                                     $.ajax({
+                                            type: "DELETE",
+                                            url: "http://build.myappbuilder.com/api/apps.json",
+                                            data:{'api_key':appkeyResult.api_key,'book_api_key':appId},
+                                            cache: false,
+                                            success:function(response){
+                                            
+                                            $http({method: "GET", url:'http://build.myappbuilder.com/api/book_custom_fields.json', cache: false, params:{'api_key':defaultkey}})
+                                            .success(function(reskey){
+                                                     $ionicLoading.hide();
+                                                     for(var j=0;j<reskey.length;j++){
+                                                     if(reskey[j].value==appId){
+//                                                     alert(reskey[j].id);
+                                                     
+                                                     $http({method: "DELETE", url:'http://build.myappbuilder.com/api/book_custom_fields.json', cache: false, params:{'api_key':defaultkey,'id':reskey[j].id}})
+                                                     .success(function(data){
+                                                             $scope.count();
+                                                              
+                                                              
+                                                              })
+                                                     .error(function(data, status) {
+                                                            $ionicLoading.hide();
+                                                            var total = JSON.parse(data);
+                                                            function alertDismissed() {
+                                                            }
+                                                            
+                                                            navigator.notification.alert(
+                                                                                         total.error,
+                                                                                         alertDismissed,        
+                                                                                         'FrontEndBuilder' );
+                                                            
+                                                            });
+                                                     
+                                                     }
+                                                     }
+                                                     
+                                                     
+                                                     })
+                                            .error(function(data, status) {
+                                                   $ionicLoading.hide();
+                                                   var total = JSON.parse(data);
+                                                   function alertDismissed() {
+                                                   }
+                                                   
+                                                   navigator.notification.alert(
+                                                                                total.error,
+                                                                                alertDismissed,        
+                                                                                'FrontEndBuilder' );
+                                                   
+                                                   });
+                                            
+                                            
+                                            },
+                                            error:function(error,status){
+                                            $ionicLoading.hide();
+                                           // navigator.notification.alert("status")
+                                            }
+                                            });
+                                     
+                                     } else {
+                                     console.log('You are not sure');
+                                     }
+                                     });
+                   }
+                   };
+                   
+                   
 });
   
 var colour = '';
@@ -1737,10 +2282,107 @@ imageappstore = '';
  $scope.home = function(){
    $state.go('sample');
   }
-  
+                   $scope.count = function(){
+                   //    navigator.notification.alert(val);
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   $http({method: "GET", url:'key.txt', cache: false, params:{}})
+                   .success(function(data){
+                            defaultkey = data.trim();
+                            appList=[];
+                            $http({method: "GET", url:'http://build.myappbuilder.com/api/apps/general.json', cache: false, params:{'api_key':defaultkey}})
+                            .success(function(data, status){
+                                     //                                  alert(data.title);
+                                     appId=defaultkey;
+                                     appTit=data.title;
+                                     appList.push(data);
+                                     
+                                     $http({method: "GET", url:'http://build.myappbuilder.com/api/book_custom_fields.json', cache: false, params:{'api_key':defaultkey}})
+                                     .success(function(reskey){
+                                              
+                                              for(var j=0;j<reskey.length;j++){
+                                              if(reskey[j].key=="keys"){
+                                              $http({method: "GET", url:'http://build.myappbuilder.com/api/apps/general.json', cache: false, params:{'api_key':reskey[j].value}})
+                                              .success(function(data, status){
+                                                       
+                                                       appList.push(data);
+                                                       
+                                                       })
+                                              .error(function(data, status) {
+                                                     var total = JSON.parse(data);
+                                                     function alertDismissed() {
+                                                     }
+                                                     
+                                                     navigator.notification.alert(
+                                                                                  total.error,
+                                                                                  alertDismissed,        
+                                                                                  'New App'                     
+                                                                                  ); 
+
+                                                     $ionicLoading.hide();
+                                                     });
+                                              }
+                                              }
+                                              $ionicLoading.hide();
+                                              
+                                              $state.go('listView');
+                                              
+                                              
+                                              
+                                              })
+                                     .error(function(data, status) {
+                                            $ionicLoading.hide();
+                                            var total = JSON.parse(data);
+                                            function alertDismissed() {
+                                            }
+                                            
+                                            navigator.notification.alert(
+                                                                         total.error,
+                                                                         alertDismissed,
+                                                                         'New App'
+                                                                         );
+                                            
+                                            });
+                                     
+                                     })
+                            .error(function(data, status) {
+                                   var total = JSON.parse(data);
+                                   function alertDismissed() {
+                                   }
+                                   
+                                   navigator.notification.alert(
+                                                                total.error,
+                                                                alertDismissed,
+                                                                'New App'
+                                                                );                   $ionicLoading.hide();
+                                   });
+                            
+                            
+                            })
+                   .error(function(data, status) {
+                          $ionicLoading.hide();
+                          var total = JSON.parse(data);
+                          function alertDismissed() {
+                          }
+                          
+                          navigator.notification.alert(
+                                                       total.error,
+                                                       alertDismissed,
+                                                       'New App'
+                                                       );
+                          
+                          });
+                   };
+                   
+ 
 $scope.bar_color = 'bar-positive';
 $scope.button_color = 'button-positive';
-$scope.bar_button_color ='button-positive'; 
+$scope.bar_button_color ='button-positive';
 
  $scope.tinymceOptions = {
         
@@ -1761,7 +2403,7 @@ $scope.bar_button_color ='button-positive';
             $('#height').attr("type","number");
             $('#imageSelect').click();
             imageField_name = field_name;
-
+//alert($('input[name="width"]').val());
             $('#width').blur(function(){
               
               if($('#width').val() == ''){
@@ -1770,7 +2412,12 @@ $scope.bar_button_color ='button-positive';
               }else if($('#width').val() <= 320){
               }else{
 
-                
+                /*navigator.notification.alert(
+                    "Image width should be less than 640MB",  // message
+                    alertDismissed,         // callback
+                    'iBooks',            // title
+                    'Done'                  // buttonName
+                );*/
 
                 $('#width').val("300");
                 $('#height').val('');
@@ -1840,12 +2487,12 @@ $scope.bar_button_color ='button-positive';
                   };
                   img.onerror = function() {
                       $ionicLoading.hide(); 
-                      
+                      //alert( "Not a valid image file: " + this.files[0].type);
                       navigator.notification.alert(
-                          'Not a valid image file: ' + this.files[0].type,
-                          alertDismissed,
-                          'iBooks',
-                          'Done'
+                          'Not a valid image file: ' + this.files[0].type,  // message
+                          alertDismissed,         // callback
+                          'iBooks',            // title
+                          'Done'                  // buttonName
                       );
 
                       
@@ -1856,7 +2503,7 @@ $scope.bar_button_color ='button-positive';
               
 
             });
-	
+  
 $scope.appcreate = {}
 $scope.book = {}
 
@@ -1894,12 +2541,13 @@ $scope.book = {}
 
                                           cancel: function() {
 
-                                       
+                                         // alert('CANCELLED');
 
                                           },
 
                                           buttonClicked: function(index) {
 
+                                        //  alert('BUTTON CLICKED', index);
 
                                           if(index==0){
 
@@ -1909,10 +2557,10 @@ $scope.book = {}
 
                                           $scope.bar_color=barcolor;
                                           
-										  $('#barimg').attr({'src':"img/light.png"});										 
-											 
+                      $('#barimg').attr({'src':"img/light.png"});                    
+                       
                                           $state.reload();
-											
+                      
                                           }
 
                                           else if(index==1){
@@ -1923,7 +2571,7 @@ $scope.book = {}
 
                                           $scope.bar_color=barcolor;
 
-										  $('#barimg').attr({'src':"img/stable.png"});
+                      $('#barimg').attr({'src':"img/stable.png"});
  
                                           $state.reload();
 
@@ -1937,7 +2585,7 @@ $scope.book = {}
 
                                           $scope.bar_color=barcolor;
 
-										  $('#barimg').attr({'src':"img/positive.png"});
+                      $('#barimg').attr({'src':"img/positive.png"});
  
                                           $state.reload();
 
@@ -1951,7 +2599,7 @@ $scope.book = {}
 
                                           $scope.bar_color=barcolor;
                                           
-										  $('#barimg').attr({'src':"img/calm.png"});
+                      $('#barimg').attr({'src':"img/calm.png"});
  
                                           $state.reload();
 
@@ -2027,8 +2675,8 @@ $scope.book = {}
 
                                           }
 
-                                          else{											  
-										  
+                                          else{                       
+                      
                                           $state.reload();
 
                                           }
@@ -2086,7 +2734,7 @@ $scope.book = {}
 
                                           cancel: function() {
 
-                                         
+                                         // alert('CANCELLED');
 
                                           },
 
@@ -2199,7 +2847,7 @@ $scope.book = {}
                                           $scope.bar_button_color=bar_button_color;
                                           
                                           $('#barbuttonimg').attr({'src':"img/royal.png"});
-		
+    
                                           $state.reload();
 
                                           }
@@ -2275,16 +2923,16 @@ $scope.book = {}
 
                                           cancel: function() {
 
-                                      
+                                        //  alert('CANCELLED');
 
                                           },
 
                                           buttonClicked: function(index1) {
 
-                                       
+                                        //  alert('BUTTON CLICKED', index1);
 
                                           if(index1==0){
-												
+                        
                                           button_color = 'button-light';
 
                                           $scope.book.button_color = 'light';
@@ -2409,7 +3057,7 @@ $scope.book = {}
 
                                           }
 
-                                          else{											 
+                                          else{                      
 
                                           $state.reload();
 
@@ -2443,11 +3091,11 @@ $scope.book = {}
 
             cancelText: 'Cancel',
              cancel: function() {
-           
+           // alert('CANCELLED');
              },
              
      buttonClicked: function(index) {
-   
+    // alert('BUTTON CLICKED', index);
 
        if(index==0){
 
@@ -2471,16 +3119,16 @@ $scope.book = {}
 
           }
 
-		});
+    });
 
        };
                  
     function onSuccess1(imageURI) {
 
          imagesplash = imageURI;
-				$('#splash').attr('src', imagesplash); 
-	    		 $('#splash').css({'width':'50px','height':'50px'});
-      
+        $('#splash').attr('src', imagesplash); 
+           $('#splash').css({'width':'50px','height':'50px'});
+      //   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
 
      }
 
@@ -2502,11 +3150,11 @@ $scope.book = {}
 
             cancelText: 'Cancel',
              cancel: function() {
-         
+           // alert('CANCELLED');
              },
              
      buttonClicked: function(index) {
-    
+    // alert('BUTTON CLICKED', index);
 
        if(index==0){
 
@@ -2530,16 +3178,16 @@ $scope.book = {}
 
           }
 
-		});
+    });
 
        };
                  
     function onSuccess2(imageURI) {
 
          imageapp = imageURI;
-				$('#app').attr('src', imageapp); 
-	    		 $('#app').css({'width':'50px','height':'50px'});
-     
+        $('#app').attr('src', imageapp); 
+           $('#app').css({'width':'50px','height':'50px'});
+      //   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
 
      }
 
@@ -2561,11 +3209,11 @@ $scope.book = {}
 
             cancelText: 'Cancel',
              cancel: function() {
-          
+           // alert('CANCELLED');
              },
              
      buttonClicked: function(index) {
-   
+    // alert('BUTTON CLICKED', index);
 
        if(index==0){
 
@@ -2589,16 +3237,16 @@ $scope.book = {}
 
           }
 
-		});
+    });
 
        };
                  
     function onSuccess3(imageURI) {
 
          imageappstore = imageURI;
-				$('#store').attr('src', imageappstore); 
-	    		 $('#store').css({'width':'50px','height':'50px'});
-     
+        $('#store').attr('src', imageappstore); 
+           $('#store').css({'width':'50px','height':'50px'});
+       //  $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
 
      }
 
@@ -2611,7 +3259,7 @@ $scope.book = {}
 $scope.updatesettings = function(){                  
             
     if(($scope.appcreate.gridAppTitle)){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -2619,35 +3267,64 @@ $scope.updatesettings = function(){
               maxWidth: 200,
               showDelay: 0
       });
-
-      $.ajax({
+                  
+     $.ajax({
           type: "POST",
           url: "http://build.myappbuilder.com/api/apps.json",
           data:{'api_key':appkeyResult.api_key,'title':$scope.appcreate.gridAppTitle,'description':$scope.appcreate.mypost},
           success:function(response){
-	 
+    //   alert(JSON.stringify(response));
             appKey = response.api_key;
             appTitle = response.title;
-            $ionicLoading.hide(); 
+            var booktype = new FormData();
+            booktype.append('api_key',appKey);
+            booktype.append('title',"AppType");
+            booktype.append('value','FrontEndBuilder');
             
-          
+            $http.post('http://build.myappbuilder.com/api/book_custom_fields.json', booktype, {
+                       transformRequest: angular.identity,
+                       headers: {'Content-Type': undefined}
+                       }).
+            success(function(data, status, headers, config) {
+                    
+                    }).
+            error(function(data, status, headers, config) {
+                  
+                  });
+            
+            var booktype1 = new FormData();
+            booktype1.append('api_key',defaultkey);
+            booktype1.append('title',"keys");
+            booktype1.append('value',appKey);
+            $http.post('http://build.myappbuilder.com/api/book_custom_fields.json', booktype1, {
+                       transformRequest: angular.identity,
+                       headers: {'Content-Type': undefined}
+                       }).
+            success(function(data, status, headers, config) {
+                    
+                    }).
+            error(function(data, status, headers, config) {
+                  
+                  });
+            
+          //   alert(document.getElementById("appimage").value);
   if(imagesplash == '' && imageapp == '' && imageappstore == ''){
-	 
-	 var formData = new FormData();  
-	   
-		 if($scope.book.domain != undefined){
-			  formData.append('domain',$scope.book.domain);	
-		   }
-		    if($scope.book.subdomain != undefined){
-			     formData.append('subdomain',$scope.book.subdomain);
-			 }
-
-            formData.append('api_key',appKey);
+   // alert('s');
+   var formData = new FormData();
+     
+     if($scope.book.domain != undefined){
+        formData.append('domain',$scope.book.domain);
+       }
+        if($scope.book.subdomain != undefined){
+           formData.append('subdomain',$scope.book.subdomain);
+       }
+            
+           formData.append('api_key',appKey);
             formData.append('title',$scope.appcreate.gridAppTitle);
-            formData.append('description',$scope.appcreate.mypost);		
+            formData.append('description',$scope.appcreate.mypost);
             formData.append('bar_color', $scope.book.bar_color);
-            formData.append('bar_button_color',$scope.book.bar_button_color);
-            formData.append('button_color', $scope.book.button_color);         
+            formData.append('bar_button_color', $scope.book.bar_button_color);
+            formData.append('button_color', $scope.book.button_color);
     
           appdomain=$scope.book.domain;
           
@@ -2659,56 +3336,49 @@ $scope.updatesettings = function(){
                   contentType: false,
                   processData: false,
                   success:function(response){
-						
-                	colour=response.bar_color;
-							buttoncolour=response.bar_button_color; 			
-							button= response.button_color; 
-	
-           appList='';       
-                   $.ajax({
-                  type: "GET",
-                  url: "http://build.myappbuilder.com/api/users.json",
-                  data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                  cache: false,
-                  success:function(response){
-					
-                    $ionicLoading.hide();
-                    appList = response;
-                    localStorage["login"] = JSON.stringify(appkeyResult);
-                   
-          				},
-                  error:function(error,status){
-                    $ionicLoading.hide();
-                    var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'New App'                     
-); 
-                  }
-            });
-            
+          //  alert(JSON.stringify(response));
+                //  $ionicLoading.hide();   
+                  colour=response.bar_color;
+              buttoncolour=response.bar_button_color;       
+              button= response.button_color; 
+  
+          // appList=[];
+//                   $.ajax({
+//                  type: "GET",
+//                  url: "http://build.myappbuilder.com/api/users.json",
+//                  data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
+//                  cache: false,
+//                  success:function(response){
+//          alert(JSON.stringify(response));
+//                    $ionicLoading.hide();
+//                    appList = response;
+//                    localStorage["login"] = JSON.stringify(appkeyResult);
+//                   
+//                  },
+//                  error:function(error,status){
+//                    $ionicLoading.hide();
+//                    navigator.notification.alert(error.responseText)
+//                  }
+//            });
+                $scope.count();
                   $state.go('newapp1');
                  
                 },error:function(error){
                   $ionicLoading.hide();
-                  var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'New App'                     
-); 
+                var total = JSON.parse(error.responseText);
+                function alertDismissed() {
                 }
-            });
-		}
-		else
-		{
+                
+                navigator.notification.alert(
+                                             total.error,
+                                             alertDismissed,        
+                                             'New App'                     
+                                             ); 
+
+                }
+            });   }
+    else
+    { // alert('s1');
          $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -2716,294 +3386,324 @@ navigator.notification.alert(
               maxWidth: 200,
               showDelay: 0
       });
-             
-             var formData = new FormData();
-             
-             if($scope.book.domain != undefined){
-             formData.append('domain',$scope.book.domain);
-             }
-             if($scope.book.subdomain != undefined){
-             formData.append('subdomain',$scope.book.subdomain);
-			 }
-             
-             formData.append('api_key',appKey);
-             formData.append('title',$scope.appcreate.gridAppTitle);
-             formData.append('description',$scope.appcreate.mypost);
-             formData.append('bar_color', $scope.book.bar_color);
-             formData.append('bar_button_color',$scope.book.bar_button_color);
-             formData.append('button_color', $scope.book.button_color);
-             
-             appdomain=$scope.book.domain;
-             
-             $.ajax({
-                    type: "PUT",
-                    url: "http://build.myappbuilder.com/api/apps/settings/general.json",
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success:function(response){
-					
-                	colour=response.bar_color;
-                    buttoncolour=response.bar_button_color;
-                    button= response.button_color;
-                    
-         
-                     Data = {api_key:appKey,title:$scope.appcreate.gridAppTitle};
-             
-		if(imagesplash != ''){
-		
-			 cordova.exec(function(response){
-                          colour=response.bar_color;
-                          buttoncolour=response.bar_button_color;
-                          button= response.button_color;
-                          
-            	  if(imageapp != ''){
-			   
-        cordova.exec(function(response){
-			
-            	 if(imageappstore != ''){
-				
-			 cordova.exec(function(response){
+    
+            var formData = new FormData();
+            
+            if($scope.book.domain != undefined){
+            formData.append('domain',$scope.book.domain);
+            }
+            if($scope.book.subdomain != undefined){
+            formData.append('subdomain',$scope.book.subdomain);
+            }
+            
+            formData.append('api_key',appKey);
+            formData.append('title',$scope.appcreate.gridAppTitle);
+            formData.append('description',$scope.appcreate.mypost);
+            formData.append('bar_color', $scope.book.bar_color);
+            formData.append('bar_button_color',$scope.book.bar_button_color);
+            formData.append('button_color', $scope.book.button_color);
+            
+            appdomain=$scope.book.domain;
+            
+            $.ajax({
+                   type: "PUT",
+                   url: "http://build.myappbuilder.com/api/apps/settings/general.json",
+                   data: formData,
+                   cache: false,
+                   contentType: false,
+                   processData: false,
+                   success:function(response){
+                   //  alert(JSON.stringify(response));
+                   //  $ionicLoading.hide();
+                   colour=response.bar_color;
+                   buttoncolour=response.bar_button_color;
+                   button= response.button_color;
+                   
+                   
+                   //       if($scope.book.subdomain  != undefined){
+                   //       if($scope.book.domain != undefined){
+                   //         Data = {api_key:appKey,title:$scope.appcreate.gridAppTitle,bar_color:$scope.book.bar_color,bar_button_color:$scope.book.bar_button_color,button_color:$scope.book.button_color,subdomain:$scope.book.subdomain,domain:$scope.book.domain};
+                   //        //formData.append('domain',$scope.book.domain);
+                   //      }
+                   //      else{
+                   //       Data = {api_key:appKey,title:$scope.appcreate.gridAppTitle,bar_color:$scope.book.bar_color,bar_button_color:$scope.book.bar_button_color,button_color:$scope.book.button_color,subdomain:$scope.book.subdomain};
+                   //          //formData.append('subdomain',$scope.book.subdomain);
+                   //      }
+                   //      }
+                   //      else{
+                   //        Data = {api_key:appKey,title:$scope.appcreate.gridAppTitle,bar_color:$scope.book.bar_color,bar_button_color:$scope.book.bar_button_color,button_color:$scope.book.button_color};
+                   //      }
+                   Data = {api_key:appKey,title:$scope.appcreate.gridAppTitle};
+                   
+    if(imagesplash != ''){
+    //   alert("splashimage");
+       cordova.exec(function(response){
         
-                  appList='';       
-                   $.ajax({
-                  type: "GET",
-                  url: "http://build.myappbuilder.com/api/users.json",
-                  data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                  cache: false,
-                  success:function(response){
-                    $ionicLoading.hide();
-                    appList = response;
-                    localStorage["login"] = JSON.stringify(appkeyResult);
-                   
-          				},
-                  error:function(error,status){
-                    $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,  
-                                                       alertDismissed,        
-                                                       'New App'                     
-                                                       ); 
-
-                  }
-            });
-         
-                $state.go('newapp1');
-             }, function(e){
-                          var total = JSON.parse(e);
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                     total.error,
-                                                       alertDismissed,        
-                                                       'New App'                     
-                                                       ); 
-
-                          $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageappstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
-          
-		 }
-            	 },function(e){
-                     var total = JSON.parse(e);
-                     function alertDismissed() {
-                     }
-                     
-                     navigator.notification.alert(
-                                                total.error,
-                                                  alertDismissed,
-                                                  'New App'
-                                                  );
-                     $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["114", "114", "app_image", imageapp, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
-           	
-		 } 
-		 else{
-			 if(imageappstore != ''){
-			 cordova.exec(function(response){
-            	
-                          colour=response.bar_color;
-                          buttoncolour=response.bar_button_color;
-                          button= response.button_color;
-
-	
-			appList='';       
-                   $.ajax({
-                  type: "GET",
-                  url: "http://build.myappbuilder.com/api/users.json",
-                  data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                  cache: false,
-                  success:function(response){
-                    $ionicLoading.hide();
-                    appList = response;
-                    localStorage["login"] = JSON.stringify(appkeyResult);
-                   
-          				},
-                  error:function(error,status){
-                    $ionicLoading.hide();
-                    navigator.notification.alert(error.responseText)
-                  }
-            });
-                         
-                 $state.go('newapp1');
-                          }, function(e){ var total = JSON.parse(e);
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                      total.error,
-                                                       alertDismissed,
-                                                       'New App'
-                                                       );  $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageappstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
-          
-		 }
-			 
-		 }appList='';       
-                   $.ajax({
-                  type: "GET",
-                  url: "http://build.myappbuilder.com/api/users.json",
-                  data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                  cache: false,
-                  success:function(response){
-                    $ionicLoading.hide();
-                    appList = response;
-                    localStorage["login"] = JSON.stringify(appkeyResult);
-                   
-          				},
-                  error:function(error,status){
-                    $ionicLoading.hide();
-                    navigator.notification.alert(error.responseText)
-                  }
-            });
-             $state.go('newapp1');
-                  
-                          },function(e){ var total = JSON.parse(e);
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,
-                                                       alertDismissed,
-                                                       'New App'
-                                                       );  $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["320", "460", "splash_image", imagesplash, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
-           
-		}
-		else{
-			if(imageapp != ''){
-			    	
+                if(imageapp != ''){
+          //  alert("appimage");
         cordova.exec(function(response){
-            	 if(imageappstore != ''){
-			 cordova.exec(function(response){
-           
+      
+               if(imageappstore != ''){
+        //   alert("storeimage");
+       cordova.exec(function(response){
+         // alert(JSON.stringify(response));     
                           colour=response.bar_color;
                           buttoncolour=response.bar_button_color;
                           button= response.button_color;
 
-                 appList='';       
-                   $.ajax({
-                  type: "GET",
-                  url: "http://build.myappbuilder.com/api/users.json",
-                  data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                  cache: false,
-                  success:function(response){
-                    $ionicLoading.hide();
-                    appList = response;
-                    localStorage["login"] = JSON.stringify(appkeyResult);
-                   
-          				},
-                  error:function(error,status){
-                    $ionicLoading.hide();
-                    navigator.notification.alert(error.responseText)
-                  }
-            });
+                         // appList=[];
+//                          $.ajax({
+//                                 type: "GET",
+//                                 url: "http://build.myappbuilder.com/api/users.json",
+//                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
+//                                 cache: false,
+//                                 success:function(response){
+//                                // alert(JSON.stringify(response));
+//                                 $ionicLoading.hide();
+//                                 appList = response;
+//                                 localStorage["login"] = JSON.stringify(appkeyResult);
+//                                 
+//                                 },
+//                                 error:function(error,status){
+//                                 $ionicLoading.hide();
+//                                 navigator.notification.alert(error.responseText)
+//                                 }
+//                                 });
+                          $scope.count();
+          
+                $state.go('newapp1');
+             }, function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,
+     'New App'                     
+);  $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageappstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+          
+     }
+               },function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+     'New App'                     
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["114", "114", "app_image", imageapp, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
             
-                  $state.go('newapp1');
-                          }, function(e){ var total = JSON.parse(e);
-                          function alertDismissed() {
+     } 
+     else{
+       if(imageappstore != ''){
+       cordova.exec(function(response){
+              //alert(JSON.stringify(response));
+                          colour=response.bar_color;
+                          buttoncolour=response.bar_button_color;
+                          button= response.button_color;
+
+  
+                         // appList=[];
+//                          $.ajax({
+//                                 type: "GET",
+//                                 url: "http://build.myappbuilder.com/api/users.json",
+//                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
+//                                 cache: false,
+//                                 success:function(response){
+//                               //  alert(JSON.stringify(response));
+//                                 $ionicLoading.hide();
+//                                 appList = response;
+//                                 localStorage["login"] = JSON.stringify(appkeyResult);
+//                                 
+//                                 },
+//                                 error:function(error,status){
+//                                 $ionicLoading.hide();
+//                                 navigator.notification.alert(error.responseText)
+//                                 }
+//                                 });
+                          $scope.count();
+                          
+                          $state.go('newapp1');
+             }, function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+   total.error,
+    alertDismissed,        
+     'New App'                     
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageappstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+          
+     }
+       
                           }
                           
-                          navigator.notification.alert(
-                                                      total.error,
-                                                       alertDismissed,
-                                                       'New App'
-                                                       );  $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageappstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
-          
-		 }appList='';       
-                   $.ajax({
-                  type: "GET",
-                  url: "http://build.myappbuilder.com/api/users.json",
-                  data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                  cache: false,
-                  success:function(response){
-                    $ionicLoading.hide();
-                    appList = response;
-                    localStorage["login"] = JSON.stringify(appkeyResult);
-                   
-          				},
-                  error:function(error,status){
-                    $ionicLoading.hide();
-                    navigator.notification.alert(error.responseText)
-                  }
-            });
-            
-                  $state.go('newapp1');
-                     },function(e){ var total = JSON.parse(e);
-                     function alertDismissed() {
-                     }
-                     
-                     navigator.notification.alert(
-                                                 total.error,
-                                                  alertDismissed,
-                                                  'New App'
-                                                  );  $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["114", "114", "app_image", imageapp, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
-           	
-		 } 
-		 else{
-			 if(imageappstore != ''){
-			 cordova.exec(function(response){
-         	
-         		         
-                  colour=response.bar_color;
-							buttoncolour=response.bar_button_color;
-							button= response.button_color;
-                 appList='';       
-                   $.ajax({
-                  type: "GET",
-                  url: "http://build.myappbuilder.com/api/users.json",
-                  data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                  cache: false,
-                  success:function(response){
-                    $ionicLoading.hide();
-                    appList = response;
-                    localStorage["login"] = JSON.stringify(appkeyResult);
-                   
-          				},
-                  error:function(error,status){
-                    $ionicLoading.hide();
-                    navigator.notification.alert(error.responseText)
-                  }
-            });
-            
-                  $state.go('newapp1');
-                          }, function(e){ var total = JSON.parse(e);
-                          function alertDismissed() {
-                          }
                           
-                          navigator.notification.alert(
-                                                     total.error,
-                                                       alertDismissed,
-                                                       'New App'
-                                                       );  $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageappstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
-          
-		 }
-		}
-         
+                        //  appList=[];
+//                          $.ajax({
+//                                 type: "GET",
+//                                 url: "http://build.myappbuilder.com/api/users.json",
+//                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
+//                                 cache: false,
+//                                 success:function(response){
+//                                // alert(JSON.stringify(response));
+//                                 $ionicLoading.hide();
+//                                 appList = response;
+//                                 localStorage["login"] = JSON.stringify(appkeyResult);
+//                                 
+//                                 },
+//                                 error:function(error,status){
+//                                 $ionicLoading.hide();
+//                                 navigator.notification.alert(error.responseText)
+//                                 }
+//                                 });
+            $scope.count();
+                  $state.go('newapp1');
+               },function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+     'New App'                     
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["320", "460", "splash_image", imagesplash, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+           
     }
-                    },error:function(error){
-                    $ionicLoading.hide();
+    else{
+      if(imageapp != ''){
+            
+        cordova.exec(function(response){
+               if(imageappstore != ''){
+       cordova.exec(function(response){
+           // alert(JSON.stringify(response));
+                          colour=response.bar_color;
+                          buttoncolour=response.bar_button_color;
+                          button= response.button_color;
+                        //  appList=[];
+//                          $.ajax({
+//                                 type: "GET",
+//                                 url: "http://build.myappbuilder.com/api/users.json",
+//                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
+//                                 cache: false,
+//                                 success:function(response){
+//                               //  alert(JSON.stringify(response));
+//                                 $ionicLoading.hide();
+//                                 appList = response;
+//                                 localStorage["login"] = JSON.stringify(appkeyResult);
+//                                 
+//                                 },
+//                                 error:function(error,status){
+//                                 $ionicLoading.hide();
+//                                 navigator.notification.alert(error.responseText)
+//                                 }
+//                                 });
+                          $scope.count();
+                  $state.go('newapp1');
+             }, function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+   total.error,
+    alertDismissed,        
+     'New App'                     
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageappstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+          
+     }
+                   //  appList=[];
+//                     $.ajax({
+//                            type: "GET",
+//                            url: "http://build.myappbuilder.com/api/users.json",
+//                            data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
+//                            cache: false,
+//                            success:function(response){
+//                          //  alert(JSON.stringify(response));
+//                            $ionicLoading.hide();
+//                            appList = response;
+//                            localStorage["login"] = JSON.stringify(appkeyResult);
+//                            
+//                            },
+//                            error:function(error,status){
+//                            $ionicLoading.hide();
+//                            navigator.notification.alert(error.responseText)
+//                            }
+//                            });
+                     $scope.count();
+            
+                  $state.go('newapp1');
+               },function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+   total.error,
+    alertDismissed,        
+     'New App'                     
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["114", "114", "app_image", imageapp, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+            
+     } 
+     else{
+       if(imageappstore != ''){
+       cordova.exec(function(response){
+          //alert(JSON.stringify(response));
+                     
+                  colour=response.bar_color;
+              buttoncolour=response.bar_button_color;
+              button= response.button_color;
+                       //   appList=[];
+//                          $.ajax({
+//                                 type: "GET",
+//                                 url: "http://build.myappbuilder.com/api/users.json",
+//                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
+//                                 cache: false,
+//                                 success:function(response){
+//                                 //alert(JSON.stringify(response));
+//                                 $ionicLoading.hide();
+//                                 appList = response;
+//                                 localStorage["login"] = JSON.stringify(appkeyResult);
+//                                 
+//                                 },
+//                                 error:function(error,status){
+//                                 $ionicLoading.hide();
+//                                 navigator.notification.alert(error.responseText)
+//                                 }
+//                                 });
+                          $scope.count();
+                  $state.go('newapp1');
+             }, function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+   total.error,
+    alertDismissed,        
+     'New App'                     
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageappstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+          
+            }
+            }
+            
+            }
+            },error:function(error){
+            $ionicLoading.hide();
+             var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'New App'                     
+); 
+            }
+            });
+                   
+                   }
+                   
+                   },
+                   error:function(error){
+                   $ionicLoading.hide();
                     var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
@@ -3013,48 +3713,31 @@ navigator.notification.alert(
     alertDismissed,        
      'New App'                     
 ); 
-                    }
-                    });
-     
-		}
-        
-	  },
-          error:function(error){
-            $ionicLoading.hide();
-            var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
+                   }
+                   });
+
+}else{
+    function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'New App'                     
-); 
-          }
-      });
-    
-      }else{
-                   function alertDismissed() {
-                  
-                   }
-                   
-                   navigator.notification.alert(
-                                                'Enter App Title',
-                                                alertDismissed,
-                                                'New App'
-                                                );
-                   }
-  }
-  
+    'Enter App Title',  // message
+    alertDismissed,         // callback
+    'New App'
+);
+}
+}
 
 });
+
 
 control.controller('naviconCtrl',function($scope,$state, $ionicLoading,$ionicScrollDelegate){ 
 
   $ionicScrollDelegate.scrollTop();
 
 $scope.appTitle = appTitle;
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -3079,7 +3762,7 @@ $scope.button_color='button-'+button;
 }
       
    $scope.homenavbutton = function(){
-	$state.go('newapp');
+  $state.go('newapp');
   } 
    $scope.addbutton = function(){
    $state.go('newbutton');
@@ -3089,15 +3772,15 @@ $scope.button_color='button-'+button;
    }
    
      $scope.levels = function(){
-		
-		  $.ajax({
+    
+      $.ajax({
                   type: "GET",
                   url: "http://build.myappbuilder.com/api/buttons.json",
                   data:{'api_key':appKey},
                   cache: false,
                   success:function(response){
                     
-                
+                 //   alert(JSON.stringify(response))
                     buttonArray = response;
 
                     $.ajax({url:'http://build.myappbuilder.com/api/app_wall_settings.json', type:"GET",data:{'api_key':appKey},
@@ -3115,7 +3798,7 @@ $scope.button_color='button-'+button;
                   },
                   error:function(error,status){
                     $ionicLoading.hide();
-                    var total = JSON.parse(error.responseText);
+                     var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -3138,7 +3821,7 @@ control.controller('newbuttonCtrl',function($scope,$state,$ionicActionSheet,$ion
 
  $scope.appTitle = appTitle;
  
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -3176,11 +3859,11 @@ $scope.buttoncreate = {}
 
             cancelText: 'Cancel',
              cancel: function() {
-          
+           // alert('CANCELLED');
              },
              
      buttonClicked: function(index) {
-  
+   //  alert('BUTTON CLICKED', index);
 
        if(index==0){
 
@@ -3204,7 +3887,7 @@ $scope.buttoncreate = {}
 
           }
 
-		});
+    });
 
        };
                  
@@ -3212,9 +3895,9 @@ $scope.buttoncreate = {}
 
          image = imageURI;
          localStorage.xxx=image;
-
-				$('#buttonimg').attr('src', image); 
-	    		 $('#buttonimg').css({'width':'50px','height':'50px'});
+//alert(localStorage.xxx);
+        $('#buttonimg').attr('src', image); 
+           $('#buttonimg').css({'width':'50px','height':'50px'});
          $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
 
      }
@@ -3227,44 +3910,43 @@ $scope.buttoncreate = {}
              
 
 $scope.create = function(){
-	
+  
     if(($scope.buttoncreate.title) && (image))
-	{	
-	 $ionicLoading.show({
+  { 
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
               maxWidth: 200,
               showDelay: 0
       });
-      	
-		cordova.exec(function(response){
-          
-            	 $ionicLoading.hide(); 
+        
+    cordova.exec(function(response){
+          //   alert(response);
+               $ionicLoading.hide(); 
             var result = response;
                
             buttonId = result.id;
             buttonTitle = result.title;
             
-            buttonArray = response;                     	
+            buttonArray = response;                       
             $state.go('elements');
-            	 },
-                     function(response){ var total = JSON.parse(response);
-                     function alertDismissed() {
-                     }
-                     
-                     navigator.notification.alert(
-                                                  total.error,
-                                                  alertDismissed,        
-                                                  'Button'                     
-                                                  );          	 
-        	 
-            	 
-            	  }, "ImageCompress", "imageCompress", ["57", "57", "image", image, "http://build.myappbuilder.com/api/buttons.json?", "post", {api_key:appKey,title:$scope.buttoncreate.title}])
-            	  
-	}
+               },
+               function(response){var total = JSON.parse(response);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+   total.error,
+    alertDismissed,        
+     'Button'                     
+);             
+               
+                }, "ImageCompress", "imageCompress", ["57", "57", "image", image, "http://build.myappbuilder.com/api/buttons.json?", "post", {api_key:appKey,title:$scope.buttoncreate.title}])
+                
+  }
    else{
-			var formData = new FormData();
+      var formData = new FormData();
         var methodData = '';
         
           methodData = 'POST';
@@ -3293,15 +3975,15 @@ $scope.create = function(){
                 processData: false,
                 success:function(response){
                     $ionicLoading.hide();
-                
+                //  alert(JSON.stringify(response));
                     buttonId = response.id;
                     buttonTitle = response.title;
                     $state.go('elements');
                 },
                 error:function(error,status){
                     $ionicLoading.hide();
-                   
-                    var total = JSON.parse(response.responseText);
+                    //alert("Successfully")
+                     var total = JSON.parse(response.responseText);
                   function alertDismissed() {
 }
 
@@ -3309,14 +3991,14 @@ navigator.notification.alert(
     total.error,  
     alertDismissed,        
      'Button'                     
-);          	 
+);             
                 }
             });          
-		}
+    }
     
-  }	
+  } 
    $scope.navbutton = function(){
-	$state.go('navicon');
+  $state.go('navicon');
   } 
    $scope.homebutton = function(){
    $state.go('newapp');
@@ -3344,15 +4026,18 @@ control.controller('appCtrl',function($scope,$state,$ionicModal,$ionicLoading,$i
   
  var chapterArray = [];
   for (var i = 0; i < buttonArray.length; i++) {
+     // if((buttonArray[i].first_paragraph_type == "default")||(buttonArray[i].first_paragraph_type == null)){
         chapterArray.push(buttonArray[i]);
-     
+     // }else{
+      //  alert("Hello : "+buttonArray[i].title)
+    //  }
     
   }
   
-	$scope.items = chapterArray;
+  $scope.items = chapterArray;
 
  $scope.appTitle = appTitle;
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -3385,6 +4070,7 @@ $scope.button_color='button-'+button;
       $scope.AppEditor =false;
     }
   }
+ //$scope.appKey = appList.apps;
  $scope.chapterClick = function(id,title){
 
     buttonId = id;
@@ -3392,8 +4078,13 @@ $scope.button_color='button-'+button;
    
     $state.go('chapterlist');
   }
+   $scope.subs=function(){
+    $state.go('sublist');
+  }
+
  $scope.editButton = function(id,title,image){
-     buttonId = id;
+      
+    buttonId = id;
     buttonTitle = title;
     chapterImage = image;
 
@@ -3404,17 +4095,13 @@ $scope.button_color='button-'+button;
     $state.go('newbutton');
   }
   
- $scope.subs=function(){
-    $state.go('sublist');
-  }
-                   
  $scope.backbuttonlist = function(){
 
     $state.go('sample');
   }
 
 $scope.moveItem = function(item, fromIndex, toIndex) {
-   
+    //Move the item in the array
      $ionicLoading.show({
                 content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
                 animation: 'fade-in',
@@ -3436,14 +4123,14 @@ $scope.moveItem = function(item, fromIndex, toIndex) {
            }
            
            navigator.notification.alert(
-                                       total.error,
+                                        total.error,
                                         alertDismissed,
                                         'Button'                     
-                                        );          	 
+                                        );             
 
          $ionicLoading.hide();
     })
-          
+          //console.log(item, fromIndex, toIndex)
   };
   
    $scope.deleteButton = function(id){
@@ -3476,13 +4163,16 @@ $scope.moveItem = function(item, fromIndex, toIndex) {
                             data:{'api_key':appKey},
                             cache: false,
                             success:function(response){
-								 
+                 
                               buttonArray= response;
                               chapterArray = [];
                               for (var i = 0; i < buttonArray.length; i++) {
-                              
+                                //  if((buttonArray[i].first_paragraph_type == "default")||(buttonArray[i].first_paragraph_type == null)){
                                     chapterArray.push(buttonArray[i]);
-                               
+                                  //  alert("Hi : "+buttonArray[i].title)
+                                //  }else{
+                                   // alert("Hello : "+buttonArray[i].title)
+                               //   }
                                 
                               }
                               $scope.items = chapterArray;
@@ -3492,7 +4182,7 @@ $scope.moveItem = function(item, fromIndex, toIndex) {
                             },
                             error:function(error,status){
                               $ionicLoading.hide();
-                              var total = JSON.parse(error.responseText);
+                               var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -3506,7 +4196,7 @@ navigator.notification.alert(
                       },
                       error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -3524,12 +4214,100 @@ navigator.notification.alert(
 
 }
 
+
+ /* $scope.chapterClickFtn = function(id,title){
+    
+    buttonId = id;
+    buttonTitle = title;
+  // $state.go('sample');
+  }*/
  });
+
+control.controller('app1Ctrl',function($scope,$state,$ionicModal,$ionicLoading,$ionicPopup,$http,$ionicSideMenuDelegate){
+                   
+                   if(Appwall.element_wall == '0'){
+                   $scope.elementAppWall = false;
+                   }else if(Appwall.element_wall == '1'){
+                   $scope.elementAppWall = true;
+                   }
+                   
+                   $scope.appwallgoFun = function(){
+                   $state.go('appWall1');
+                   }
+                   
+                   var chapterArray = [];
+                   for (var i = 0; i < buttonArray.length; i++) {
+                   // if((buttonArray[i].first_paragraph_type == "default")||(buttonArray[i].first_paragraph_type == null)){
+                   chapterArray.push(buttonArray[i]);
+                   // }else{
+                   //  alert("Hello : "+buttonArray[i].title)
+                   //  }
+                   
+                   }
+                   
+                   $scope.backbuttonlist = function(){
+                   
+                   $state.go('sample1');
+                   }
+                   
+                   $scope.items = chapterArray;
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   
+                   if(barcolor == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+barcolor;
+                   }
+                   
+                   if(barbuttoncolor == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+barbuttoncolor;
+                   }
+                   
+                   if(buttoncolor == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+buttoncolor;
+                   }
+                   
+                   $scope.AppEditor = false;
+                   
+                   $scope.logbuttonlist = function(){
+                   if($scope.AppEditor == false){
+                   $scope.AppEditor = true;
+                   }else{
+                   $scope.AppEditor =false;
+                   }
+                   }
+                  
+                   $scope.subs=function(){
+                   $state.go('sublist1');
+                   }
+                                   
+                   $scope.chapterClick = function(id,title){
+                   
+                   buttonId = id;
+                   buttonTitle = title;
+                   
+                   $state.go('chapterlist1');
+                   }
+                   
+                   });
+
 
 control.controller('elementsCtrl',function($scope,$state,$ionicLoading){ 
 
 $scope.appTitle = appTitle;
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -3554,25 +4332,25 @@ $scope.button_color='button-'+button;
 }
 
  $scope.createText = function(){
-	$state.go('pic');
+  $state.go('pic');
   } 
  $scope.createContact = function(){
-	$state.go('form');
+  $state.go('form');
   }   
  $scope.createVideo = function(){
-	$state.go('video');
+  $state.go('video');
   }  
    $scope.createAudio = function(){
-	$state.go('audio');
+  $state.go('audio');
   }  
  $scope.createMap = function(){
-	$state.go('map');
+  $state.go('map');
   }  
    $scope.createWeb = function(){
-	$state.go('web');
+  $state.go('web');
   }  
     $scope.createRss = function(){
-	$state.go('rss');
+  $state.go('rss');
   }  
     $scope.createtask = function(){
                    
@@ -3589,15 +4367,14 @@ $scope.button_color='button-'+button;
                           url: "http://build.myappbuilder.com/api/elements/create_task_list.json",
                           data:{'api_key':appKey,'button_id':buttonId},
                           success:function(response){
-                          
+                          // alert(JSON.stringify(response));
                           $ionicLoading.hide();
                           taskelement=response.id;
-                          
+                          //alert(JSON.stringify(taskelement));
                           $state.go('taskedit');
                           },
                           error:function(error){
                           $ionicLoading.hide();
-                          var error = JSON.parse(error.responseText);
                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
@@ -3612,10 +4389,10 @@ navigator.notification.alert(
 
   } 
  $scope.navelement = function(){
-	$state.go('navicon');
+  $state.go('navicon');
   }      
  $scope.homeelement = function(){
-	$state.go('newapp');
+  $state.go('newapp');
   }
   $scope.backelement= function(){
      $state.go('newbutton');
@@ -3630,7 +4407,7 @@ control.controller('picCtrl',function($scope,$state,$ionicModal, $ionicScrollDel
   $ionicScrollDelegate.scrollTop();
 
 $scope.appTitle = appTitle;
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -3660,7 +4437,7 @@ $scope.button_color='button-'+button;
 $scope.para = {}
 $scope.textCreate = {}
 
-$scope.createtext = function(){	
+$scope.createtext = function(){ 
     
   if($scope.para.title){
 
@@ -3672,6 +4449,7 @@ $scope.createtext = function(){
       var formData1 = new FormData();
            formData1.append('api_key',appKey);
            formData1.append('id',elementId);       
+        //   formData1.append('image',$("#newtext1").get(0).files[0]);
 
          $.ajax({
           type: "POST",
@@ -3679,16 +4457,28 @@ $scope.createtext = function(){
           data:{'api_key':appKey,'button_id':buttonId,'title':$scope.para.title,'additional_field':$scope.para.additional_field,'text':$scope.textCreate.textpic},
           success:function(response){
 
-			 elementId = response.id;   
-			 elementTitle = response.title;
-			 elementDesc = response.text;
-			  $ionicLoading.hide();  
+       elementId = response.id;   
+       elementTitle = response.title;
+       elementDesc = response.text;
+        $ionicLoading.hide();  
                $state.go('picedit');  
-        
+               
+      // elementAdditional = response.additional_field;       
+       
+    /*   cordova.exec(function(response){
+                 var resultpic = response;
+                   var jsonObj = JSON.parse(resultpic);         
+                   elementimg=jsonObj.url;
+                   $ionicLoading.hide();  
+                   $state.go('picedit');
+               },
+               function(e){alert(e);}, "Echo", "echo", ["57", "57", "image", document.getElementById("newtext1").value, "http://build.myappbuilder.com/api/elements/images.json?", "post", {"api_key":appKey,"id":elementId}])          
+            
+        */
           },
           error:function(error){
             $ionicLoading.hide();
-             var total = JSON.parse(error.responseText);
+           var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -3700,24 +4490,24 @@ navigator.notification.alert(
           }
       });
     }else{
-                   function alertDismissed() {
-                  
-                   }
-                   
-                   navigator.notification.alert(
-                                                'Enter The Title',
-                                                alertDismissed,
-                                                'Picture and Text'
-                                                );
+      function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter The Title',  // message
+    alertDismissed,         // callback
+    'Picture and Text'
+);
     }
   }
  
  $scope.navtext = function(){
-	$state.go('newbutton');
+  $state.go('newbutton');
   } 
  
  $scope.hometext = function(){
-	$state.go('newapp');
+  $state.go('newapp');
   } 
   $scope.backtext= function(){
      $state.go('elements');
@@ -3744,7 +4534,7 @@ navigator.notification.alert(
             $('#height').attr("type","number");
             $('#imageSelect1').click();
             imageField_name = field_name;
-         
+          // alert($('input[name="width"]').val());
             $('#width').blur(function(){
               
               if($('#width').val() == ''){
@@ -3753,6 +4543,12 @@ navigator.notification.alert(
               }else if($('#width').val() <= 320){
               }else{
 
+                /*navigator.notification.alert(
+                    "Image width should be less than 640MB",  // message
+                    alertDismissed,         // callback
+                    'iBooks',            // title
+                    'Done'                  // buttonName
+                );*/
 
                 $('#width').val("300");
                 $('#height').val('');
@@ -3822,12 +4618,12 @@ navigator.notification.alert(
                   };
                   img.onerror = function() {
                       $ionicLoading.hide(); 
-                     
+                      //alert( "Not a valid image file: " + this.files[0].type);
                       navigator.notification.alert(
-                          'Not a valid image file: ' + this.files[0].type,
-                          alertDismissed,
-                          'iBooks',
-                          'Done'
+                          'Not a valid image file: ' + this.files[0].type,  // message
+                          alertDismissed,         // callback
+                          'iBooks',            // title
+                          'Done'                  // buttonName
                       );
 
                       
@@ -3838,7 +4634,7 @@ navigator.notification.alert(
               
 
             });
-	
+  
 });
 
 var contentTitle = '';
@@ -3850,20 +4646,20 @@ var previewpic='';
 control.controller('chapterlistCtrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicScrollDelegate){ 
   
  $scope.newContentGo = function(){
-	$state.go('elements');
+  $state.go('elements');
   }  
  $scope.homechapterlist = function(){
-	$state.go('sample');
+  $state.go('sample');
   }   
  $scope.backchapterlist = function(){
      $state.go('app');
   }  
-  	
-	
+    
+  
  for (var i = 0; i < buttonArray.length; i++) {
       if(buttonId == buttonArray[i].id){
         elementArray = buttonArray[i].elements;
-    
+     // alert(JSON.stringify(buttonArray[i].elements));
       }
   }
   
@@ -3897,19 +4693,19 @@ control.controller('chapterlistCtrl',function($scope,$state,$ionicLoading,$ionic
                         success:function(response){
                           buttonArray = response;
                           $ionicLoading.hide();
-                     
+                         // $state.go('previewChapter');
                           for (var i = 0; i < buttonArray.length; i++) {
-							  if(buttonId == buttonArray[i].id){
-								elementArray = buttonArray[i].elements;
-							 
-							  }
-						  }
-						  $scope.elementArray = elementArray;
+                if(buttonId == buttonArray[i].id){
+                elementArray = buttonArray[i].elements;
+               //  alert(JSON.stringify(buttonArray[i].elements));
+                }
+              }
+              $scope.elementArray = elementArray;
                           $state.reload();  
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -3923,7 +4719,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-              var total = JSON.parse(error.responseText);
+ var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -3944,7 +4740,7 @@ navigator.notification.alert(
  $scope.elementArray = elementArray;
  
  $scope.appTitle = appTitle;
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -3979,29 +4775,28 @@ $scope.button_color='button-'+button;
     }
   }
 
- $scope.subTitClickFtn = function(id,title,type,email,text,url,rssurl,audioimg,audiourl,videoimg,videourl,tags,frame){
+ $scope.subTitClickFtn = function(id,title,type,email,text,url,rssurl,audioimg,audiourl,videoimg,videourl,tags){
 
     elementId = id;
     elementtype=type;
     elementemail = email;
-	elementurl = url;
-	elementtext= text;
-	elementtitle= title;
-	elementrssurl = rssurl;
-	contentimg = audioimg;
-	contentaudio = audiourl;
-	contentvideo = videourl;
-	contentvideothumb = videoimg;
-    contentvideoframe=frame;
-	tagging=tags;
+  elementurl = url;
+  elementtext= text;
+  elementtitle= title;
+  elementrssurl = rssurl;
+  contentimg = audioimg;
+  contentaudio = audiourl;
+  contentvideo = videourl;
+  contentvideothumb = videoimg;
+  tagging=tags;
                    
     for (var i = 0; i < elementArray.length; i++) {
       if(elementtype == "audio"){
-		$state.go('previewaudio');
+         $state.go('previewaudio');
       }
       
     if(elementtype == "rss_feed"){
-		$state.go('home');
+    $state.go('home');
       }
 
     if(elementtype == "default"){
@@ -4024,36 +4819,37 @@ $scope.button_color='button-'+button;
                           }
                           
                           navigator.notification.alert(
-                                                       total.error,  
+                                                       total.error,
                                                        alertDismissed,        
                                                        'Picture and Text'                     
                                                        ); 
                           }
-                          });
+                          });         
+                   
 
       }
       
      if(elementtype == "tasks_list"){
-		$state.go('previewtask');
+    $state.go('previewtask');
       }
       
        if(elementtype == "web_page"){
                    var ref = window.open(elementurl, '_blank', 'location=yes');
                    ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
-		
+    //$state.go('previewweb');
       }
       
       if(elementtype == "contact_form"){
-		$state.go('previewform');
+    $state.go('previewform');
       }
       
        if(elementtype == "map"){
                    $state.go('showmap');
-		
+    //$state.go('previewmap');
       }
       
        if(elementtype == "video"){
-		$state.go('previewvideo');
+    $state.go('previewvideo');
       }
    }
     }
@@ -4062,13 +4858,156 @@ $scope.button_color='button-'+button;
     $state.go('buttonAppWall');
   }
   
-  if(Appwall.button_wall == '0'){
-    $scope.buttonAppWall = false;
-  }else if(Appwall.button_wall == '1'){
-    $scope.buttonAppWall = true;
-  }
+
   
 });
+
+control.controller('chapterlist1Ctrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicScrollDelegate){
+                   
+                   $scope.homechapterlist = function(){
+                   $state.go('sample1');
+                   }
+                   $scope.backchapterlist = function(){
+                   $state.go('app1');
+                   }
+                   
+                   
+                   for (var i = 0; i < buttonArray.length; i++) {
+                   if(buttonId == buttonArray[i].id){
+                   elementArray = buttonArray[i].elements;
+                   // alert(JSON.stringify(buttonArray[i].elements));
+                   }
+                   }
+                   
+                   
+                   $scope.elementArray = elementArray;
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(barcolor == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+barcolor;
+                   }
+                   
+                   if(barbuttoncolor == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+barbuttoncolor;
+                   }
+                   
+                   if(buttoncolor == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+buttoncolor;
+                   }
+                   
+                   $scope.buttonTitle = buttonTitle;
+                   $scope.AppEditor = false;
+                   
+                   $scope.logtextlist = function(){
+                   if($scope.AppEditor == false){
+                   $scope.AppEditor = true;
+                   }else{
+                   $scope.AppEditor =false;
+                   }
+                   }
+                   
+                  $scope.subTitClickFtn = function(id,title,type,email,text,url,rssurl,audioimg,audiourl,videoimg,videourl,tags){
+
+    elementId = id;
+    elementtype=type;
+    elementemail = email;
+  elementurl = url;
+  elementtext= text;
+  elementtitle= title;
+  elementrssurl = rssurl;
+  contentimg = audioimg;
+  contentaudio = audiourl;
+  contentvideo = videourl;
+  contentvideothumb = videoimg;
+  tagging=tags;
+                   
+    for (var i = 0; i < elementArray.length; i++) {
+      if(elementtype == "audio"){
+        $state.go('previewaudio1');
+      }
+      
+    if(elementtype == "rss_feed"){
+    $state.go('home1');
+      }
+
+    if(elementtype == "default"){
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/elements/images.json",
+                          data:{'api_key':appKey,'id':elementId},
+                          cache: false,
+                          success:function(response){
+                          
+                          $ionicLoading.hide();
+                          previewpic = response;
+                          $state.go('previewpic1');
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                          function alertDismissed() {
+                          }
+                          
+                          navigator.notification.alert(
+                                                       total.error,
+                                                       alertDismissed,
+                                                       'Picture and Text'
+                                                       );
+                          }
+                          });
+                   
+      }
+      
+     if(elementtype == "tasks_list"){
+    $state.go('previewtask1');
+      }
+      
+       if(elementtype == "web_page"){
+                   var ref = window.open(elementurl, '_blank', 'location=yes');
+                   ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
+    //$state.go('previewweb');
+      }
+      
+      if(elementtype == "contact_form"){
+    $state.go('previewform1');
+      }
+      
+       if(elementtype == "map"){
+                   $state.go('showmap1');
+    //$state.go('previewmap');
+      }
+      
+       if(elementtype == "video"){
+    $state.go('previewvideo1');
+      }
+   }
+    }
+                   $scope.buttonAppwallgoFun = function(){
+                   $state.go('buttonAppWall1');
+                   }
+                   
+                   if(Appwall.button_wall == '0'){
+                   $scope.buttonAppWall = false;
+                   }else if(Appwall.button_wall == '1'){
+                   $scope.buttonAppWall = true;
+                   }
+                   
+                   });
+
 
 var newarray = [];
 var customid = '';
@@ -4115,11 +5054,11 @@ $scope.appcre = {}
                   data:{'api_key':appKey},
                   cache: false,
                   success:function(response){
-        
+                     // alert(JSON.stringify(response));
                             $ionicLoading.hide();
                            appdom1=response.domain;
                             appsubdomain1=response.subdomain;                            
-        
+                        //    alert(appdom1);
                         if((appsubdomain1) && (appdom1)){
                             $scope.appcre.floaturl = 'http://'+appsubdomain1+'.'+appdom1;
             
@@ -4131,7 +5070,7 @@ $scope.appcre = {}
                           },
                           error:function(error,status){
                             $ionicLoading.hide();
-                             var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -4145,13 +5084,12 @@ navigator.notification.alert(
 
   $scope.AppEditor = false;
   
- $scope.appcre.customvalue = 'false';
-                   
+   $scope.appcre.customvalue = 'false';
+   
 $scope.createnewapp1 = function(){
      
-                   if($scope.appcre.floaturl){
-                   
-
+     if($scope.appcre.floaturl){
+     
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -4165,12 +5103,12 @@ $scope.createnewapp1 = function(){
           url: "http://build.myappbuilder.com/api/book_custom_fields.json",
           data:{'api_key':appKey,'title':'Floating Social Icons','value':$scope.appcre.customvalue},
           success:function(response){
-              $ionicLoading.hide();
-              $state.go('social');
+            $ionicLoading.hide();  
+                           $state.go('social');     
             },
           error:function(error){
             $ionicLoading.hide();
-            var total = JSON.parse(error.responseText);
+           var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -4187,7 +5125,7 @@ navigator.notification.alert(
           url: "http://build.myappbuilder.com/api/book_custom_fields.json",
           data:{'api_key':appKey,'title':'Url','value':$scope.appcre.floaturl},
           success:function(response){
-         
+             //customid = response.id;
 
             $.ajax({
                         type: "GET",
@@ -4195,13 +5133,13 @@ navigator.notification.alert(
                         data:{'api_key':appKey},
                         cache: false,
                         success:function(response){
-                   
+                            // alert(JSON.stringify(response)); 
                           $ionicLoading.hide();  
                            $state.go('social');    
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -4215,7 +5153,7 @@ navigator.notification.alert(
             },
           error:function(error){
             $ionicLoading.hide();
-            var total = JSON.parse(error.responseText);
+           var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -4226,9 +5164,8 @@ navigator.notification.alert(
 ); 
           }
       });   
-  
-                   }
-                   }
+  }
+}
 
 $scope.homeapp1 = function(){    
     $state.go('sample');    
@@ -4257,8 +5194,8 @@ control.controller('socialCtrl',function($scope,$state,$ionicLoading,$ionicScrol
 
  $ionicScrollDelegate.scrollTop();
  
- $scope.appTitle = appTitle;	
-if(colour == 'undefined'){	
+ $scope.appTitle = appTitle;  
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -4314,7 +5251,7 @@ $scope.updateSocialSettings = function(){
             formData.append('facebook_link',$scope.book.facebook_link);
             formData.append('facebook_key',$scope.book.facebook_key);
             formData.append('facebook_secret',$scope.book.facebook_secret);
-            formData.append('gplus_link',$scope.book.gplus_link);	
+            formData.append('gplus_link',$scope.book.gplus_link); 
             formData.append('gplus_key', $scope.book.gplus_key);
             formData.append('gplus_secret', $scope.book.gplus_secret);
             formData.append('youtube_link', $scope.book.youtube_link);
@@ -4329,13 +5266,14 @@ $scope.updateSocialSettings = function(){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			  
+        //   alert(JSON.stringify(response));
+          //  alert('successfully created');
                   $ionicLoading.hide();         
                  $state.go('navicon');
                  
                 },error:function(error){
                   $ionicLoading.hide();
-                   var total = JSON.parse(error.responseText);
+                 var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -4354,7 +5292,7 @@ navigator.notification.alert(
 var customeditid = '';
 var piccustom = '';
 var imagepic='';
-var amenities='';
+    
     
 control.controller('piceditCtrl',function($scope,$state,$ionicScrollDelegate,$ionicLoading,$ionicActionSheet,$ionicPopup,$ionicModal){ 
 
@@ -4362,13 +5300,12 @@ control.controller('piceditCtrl',function($scope,$state,$ionicScrollDelegate,$io
   
 $scope.textCreateedit = {}
 $scope.editpic={}
-$scope.contentCreate={}
-                   
+
 $scope.textCreateedit.edittitle=elementTitle;
 $scope.textCreateedit.edittext=elementDesc;
 
-$scope.appTitle = appTitle;	
-if(colour == 'undefined'){	
+$scope.appTitle = appTitle; 
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -4414,13 +5351,13 @@ $scope.button_color='button-'+button;
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
         
-	};
-	
+  };
+  
 
 
 $scope.updatetext = function(){            
-	
-	 $ionicLoading.show({
+  
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -4428,7 +5365,7 @@ $scope.updatetext = function(){
               showDelay: 0
       });
       
-	  var formData = new FormData();
+    var formData = new FormData();
            formData.append('api_key',appKey);
            formData.append('id',elementId);       
            formData.append('title',$scope.textCreateedit.edittitle);
@@ -4444,13 +5381,14 @@ $scope.updatetext = function(){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			  
+          // alert(JSON.stringify(response));
+          //  alert('successfully Updated');
                   $ionicLoading.hide();
                 
                  
                 },error:function(error){
                   $ionicLoading.hide();
-                   var total = JSON.parse(error.responseText);
+                  var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -4461,11 +5399,11 @@ navigator.notification.alert(
 ); 
                 }
             });
-		}
-		else
-		{
-		   $ionicLoading.hide();
-		}	
+    }
+    else
+    {
+       $ionicLoading.hide();
+    } 
     
  }
  
@@ -4481,11 +5419,11 @@ navigator.notification.alert(
 
             cancelText: 'Cancel',
              cancel: function() {
-        
+          //  alert('CANCELLED');
              },
              
      buttonClicked: function(index) {
-  
+   //  alert('BUTTON CLICKED', index);
 
        if(index==0){
 
@@ -4509,16 +5447,17 @@ navigator.notification.alert(
 
           }
 
-		});
+    });
 
        };
                  
     function onSuccess(imageURI) {
 
          imagepic = imageURI;
-
-				$('#editpictext').attr('src', imagepic); 
-	    		 $('#editpictext').css({'width':'50px','height':'50px'});
+//alert(imagepic);
+        $('#editpictext').attr('src', imagepic); 
+           $('#editpictext').css({'width':'50px','height':'50px'});
+        // $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
 
      }
 
@@ -4529,8 +5468,8 @@ navigator.notification.alert(
       }
              
 $scope.upload = function(){     
-	         
-  $('#editpictext').attr({'src':"img/no_image.png"});	        
+           
+  $('#editpictext').attr({'src':"img/no_image.png"});         
 
  $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
@@ -4542,25 +5481,25 @@ $scope.upload = function(){
   
    
      cordova.exec(function(response){
-            	 var result1 = response;
+               var result1 = response;
               
-            	 piccustom =result1.id;
-            	imagepic='';
-            	   $.ajax({
+               piccustom =result1.id;
+              imagepic='';
+                 $.ajax({
                         type: "GET",
                         url: "http://build.myappbuilder.com/api/elements/images.json",
                         data:{'api_key':appKey,'id':elementId},
                         cache: false,
                         success:function(response){    
-							           
+              // alert(JSON.stringify(response));            
                           $ionicLoading.hide();
-						    $scope.editpicpage = response;
-						   $state.reload();   
+                $scope.editpicpage = response;
+               $state.reload();   
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                            var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -4571,17 +5510,16 @@ navigator.notification.alert(
 ); 
                         }
               });              
-  	 },
-                  function(e){ var total = JSON.parse(e);
+     },
+               function(e){var total = JSON.parse(e);
                   function alertDismissed() {
-                  }
-                  
-                  navigator.notification.alert(
-                                              total.error,
-                                               alertDismissed,        
-                                               'Picture and Text'
-                                               );          	 
- $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["300", "280", "image", imagepic, "http://build.myappbuilder.com/api/elements/images.json?", "post", {api_key:appKey,id:elementId}])
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+     'Picture and Text'                     
+); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["300", "280", "image", imagepic, "http://build.myappbuilder.com/api/elements/images.json?", "post", {api_key:appKey,id:elementId}])
        
  }
  
@@ -4612,15 +5550,15 @@ $scope.removepicCustom = function(id){
                         success:function(response){
                           $ionicLoading.hide();
 
-						     $scope.editpicpage = response;
-						 
-						   $state.reload();   
-						  
+                 $scope.editpicpage = response;
+              //   alert(JSON.stringify($scope.editpicpage));
+               $state.reload();   
+              
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -4634,7 +5572,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-               var total = JSON.parse(error.responseText);
+             var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -4647,10 +5585,12 @@ navigator.notification.alert(
           });
  
 }
+
+                   $scope.contentCreate={}
                    
 $scope.ok = function(){
-                   
-     $ionicLoading.show({
+
+          $ionicLoading.show({
             content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
             animation: 'fade-in',
             showBackdrop: true,
@@ -4663,6 +5603,7 @@ $scope.ok = function(){
                    amenities='';
                    console.log(datatag);
                    }
+                   
                    else{
      for(var i=0;i<datatag.length;i++){
                    
@@ -4679,14 +5620,14 @@ $scope.ok = function(){
            }
                    
                    }}
-                   
+    
       $.ajax({
              type: "POST",
              url: "http://build.myappbuilder.com/api/elements/tags.json",
              data:{'api_key':appKey,'id':elementId,'tags':amenities},
              cache: false,
              success:function(response){
-             
+                   // alert('Successfully Posted');
              $ionicLoading.hide();
              },
              error:function(error,status){
@@ -4698,20 +5639,19 @@ $scope.ok = function(){
 navigator.notification.alert(
     total.error,  
     alertDismissed,        
-     'Tag'                    
+     'Picture and Text'                    
 ); 
              }
      });
                    
 }
-                   
   $scope.AppEditor = false;
   
 $scope.createpicedit = function(){
-	
+  
     if($scope.editpic.customeditTitle){
       if($scope.editpic.customeditvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -4725,8 +5665,8 @@ $scope.createpicedit = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':elementId,'title':$scope.editpic.customeditTitle,'value':$scope.editpic.customeditvalue},
           success:function(response){
-			 customeditid = response.id;
-			
+       customeditid = response.id;
+      
               
             $.ajax({
                         type: "GET",
@@ -4736,15 +5676,15 @@ $scope.createpicedit = function(){
                         success:function(response){
                           $ionicLoading.hide();
 
-						    $scope.edittxtpage = response;
-						   
-						   $state.reload();   
-						  
+                $scope.edittxtpage = response;
+               //  alert(JSON.stringify($scope.edittxtpage));
+               $state.reload();   
+              
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -4754,13 +5694,13 @@ navigator.notification.alert(
      'Picture and Text'                    
 ); 
                         }
-              });
-              $scope.editpic.customeditTitle='';
-              $scope.editpic.customeditvalue='';
+              });  
+                $scope.editpic.customeditTitle='';
+              $scope.editpic.customeditvalue='';            
             },
           error:function(error){
             $ionicLoading.hide();
-             var total = JSON.parse(error.responseText);
+          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -4773,15 +5713,15 @@ navigator.notification.alert(
       });
     }
       }else{
-                   function alertDismissed() {
-                  
-                   }
-                   
-                   navigator.notification.alert(
-                                                'Enter Title And Value',
-                                                alertDismissed,
-                                                'Picture and Text'
-                                                );
+     function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
+    'Picture and Text'
+);
     }
    
   }
@@ -4813,10 +5753,10 @@ $scope.removetxtCustomValue = function(id){
                         success:function(response){
                           $ionicLoading.hide();
 
-						    $scope.edittxtpage = response;
-						 
-						   $state.reload();   
-						  
+                $scope.edittxtpage = response;
+             //    alert(JSON.stringify($scope.edittxtpage));
+               $state.reload();   
+              
                           
                         },
                         error:function(error,status){
@@ -4858,6 +5798,45 @@ $scope.navedittext = function(){
    $state.go('pic');
  } 
  
+/* $ionicModal.fromTemplateUrl('meta.html', {
+        scope: $scope,
+        animation: 'slide-fade-in'
+      }).then(function(modal) {
+        $scope.modal = modal;
+      });
+        
+ $scope.openModal = function() {
+   
+  $scope.modal.show();
+  
+   $scope.updateSEO = function() {
+alert('s');
+    var formData = new FormData();
+          formData.append('api_key',appKey);
+          formData.append('id',elementId);       
+          formData.append('permalink',$scope.meta.permalink);   
+          formData.append('meta_keywords',$scope.meta.metakeywords);   
+          formData.append('meta_description',$scope.meta.metadescription);   
+          formData.append('seo_title',$scope.meta.seotitle); 
+         
+          
+           $.ajax({
+          type: "PUT",
+          url: "http://build.myappbuilder.com/api/elements/meta-tags.json",
+          data:formData,
+          success:function(response){
+          alert(JSON.stringify(response));                
+          },
+          error:function(error){
+            $ionicLoading.hide();
+            var error = JSON.parse(error.responseText);
+
+            navigator.notification.alert(error.responseText);
+          }
+      }); 
+   }                 
+  
+ };*/
  
 });
 
@@ -4867,9 +5846,9 @@ control.controller('formCtrl',function($scope,$state,$ionicLoading,$ionicScrollD
 
 $ionicScrollDelegate.scrollTop();
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -4908,8 +5887,8 @@ $scope.form={}
 $scope.createform = function(){
 
 if($scope.form.email){
-	
-	 $ionicLoading.show({
+  
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -4917,21 +5896,21 @@ if($scope.form.email){
               showDelay: 0
       });
       
-	  $.ajax({
+    $.ajax({
           type: "POST",
           url: "http://build.myappbuilder.com/api/elements/create_contact_form.json",
           data:{'api_key':appKey,'button_id':buttonId,'email':$scope.form.email},
           success:function(response){
-			 
-			formEmail = response.email;
-			formelementid = response.id;
-			 $ionicLoading.hide();	
+       //   alert(JSON.stringify(response));    
+      formEmail = response.email;
+      formelementid = response.id;
+       $ionicLoading.hide();  
           $state.go('formedit');
-            	
+              
           },
           error:function(error){
             $ionicLoading.hide();
-             var total = JSON.parse(error.responseText);
+            var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -4944,19 +5923,19 @@ navigator.notification.alert(
           }
       });
     }else{
-                   function alertDismissed() {
-                  
-                   }
-                   
-                   navigator.notification.alert(
-                                                'Enter Email',
-                                                alertDismissed,
-                                                'Contact Form'
-                                                );
+     function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter The Email',  // message
+    alertDismissed,         // callback
+    'Contact Form'
+);
     }
 
 }
-	
+  
 });
 
 var customeditformid = '';
@@ -4969,9 +5948,9 @@ $ionicScrollDelegate.scrollTop();
 $scope.formedit={}
 $scope.editform={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -4999,7 +5978,7 @@ $scope.formedit.editemail = formEmail;
 
 $scope.updateform = function(){
 
-	 $ionicLoading.show({
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -5007,7 +5986,7 @@ $scope.updateform = function(){
               showDelay: 0
       });
       
-	  var formData = new FormData();
+    var formData = new FormData();
            formData.append('api_key',appKey);
            formData.append('id',formelementid);       
             formData.append('email_to_send_to',$scope.formedit.editemail);       
@@ -5022,7 +6001,8 @@ $scope.updateform = function(){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			 
+        //   alert(JSON.stringify(response));
+         //   alert('successfully Updated');
                   $ionicLoading.hide();
                 
                  
@@ -5040,19 +6020,18 @@ navigator.notification.alert(
 );
                 }
             });
-		}
-		else
-		{
-			$ionicLoading.hide();
-		}
+    }
+    else
+    {
+      $ionicLoading.hide();
+    }
 }
 
 $scope.createformcustom = function(){
 
-
     if($scope.editform.customformTitle){
       if($scope.editform.customformvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -5066,8 +6045,8 @@ $scope.createformcustom = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':formelementid,'title':$scope.editform.customformTitle,'value':$scope.editform.customformvalue},
           success:function(response){
-			 customeditformid = response.id;
-        
+       customeditformid = response.id;
+        //  alert(JSON.stringify(customeditformid));
 
             $.ajax({
                         type: "GET",
@@ -5077,15 +6056,15 @@ $scope.createformcustom = function(){
                         success:function(response){
                           $ionicLoading.hide();
                         
-						    $scope.editformpage = response;
+                $scope.editformpage = response;
 
-						   $state.reload();   
-						  
+               $state.reload();   
+              
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -5096,13 +6075,13 @@ navigator.notification.alert(
     'Contact Form'                      
 );
                         }
-              });
-              $scope.editform.customformTitle='';
-              $scope.editform.customformvalue='';
+              });    
+                $scope.editform.customformTitle='';
+              $scope.editform.customformvalue='';          
             },
           error:function(error){
             $ionicLoading.hide();
-           var total = JSON.parse(error.responseText);
+            var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -5116,15 +6095,15 @@ navigator.notification.alert(
       });
     }
       }else{
-                   function alertDismissed() {
-                   
-                   }
-                   
-                   navigator.notification.alert(
-                                                'Enter Title And Value',
-                                                alertDismissed,
-                                                'Contact Form'
-                                                );
+      function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
+    'Contact Form'
+);
     }
    
   }
@@ -5155,21 +6134,39 @@ $scope.removeformCustomValue = function(id){
                         success:function(response){
                           $ionicLoading.hide();
 
-						    $scope.editformpage = response;
-						  
-						   $state.reload();   
-						  
+                $scope.editformpage = response;
+               //  alert(JSON.stringify($scope.editformpage));
+               $state.reload();   
+              
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          navigator.notification.alert(error.responseText);
+                          var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+    'Contact Form'                      
+);
                         }
               });              
             },
             error:function(error,status){
                $ionicLoading.hide();
-              navigator.notification.alert(error.responseText)
+               var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+    'Contact Form'                      
+);
             }
           });
 }
@@ -5192,240 +6189,220 @@ var videotitle='';
 var videodesc='';
 var videoelement='';
 var imagevideo='';
-var videoframe='';
-var framepassing='';
 
 control.controller('videoCtrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicScrollDelegate,$ionicActionSheet){
-
-$ionicScrollDelegate.scrollTop();
-
-function readURL5(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#videoimg').attr({'src':"img/btn_video.png"});
-             $('#videoimg').css({'width':'50px','height':'50px'}); 			 
-           $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
-            
-            }
-
-            reader.readAsDataURL(input.files[0]);
-        }
-  }
-                 
-
                    
-      
-  $("#video").change(function(){
-                          readURL5(this);
-  });
-     
-$scope.videocreate={}
-
-$scope.appTitle = appTitle;   
- 
-if(colour == 'undefined'){	
-$scope.bar_color = 'bar-positive';
-}
-else
-{
-$scope.bar_color = 'bar-'+colour;
-}
-
-if(buttoncolour == 'undefined'){
-$scope.bar_button_color ='button-positive'; 
-}
-else
-{
-$scope.bar_button_color ='button-'+buttoncolour;
-}
-
-if(button == 'undefined'){
-$scope.button_color = 'button-positive';
-}
-else
-{
-$scope.button_color='button-'+button;
-}
-      
-   $scope.videoselect = function(){
-
-     $ionicActionSheet.show({
-
-          titleText: '<b><font size="4">Choose</font></b>',
-            buttons: [
-             { text: 'Camera' },
-             { text: 'PhotoAlbum' },
-              ],
-
-            cancelText: 'Cancel',
-             cancel: function() {
-           
-             },
-             
-     buttonClicked: function(index) {
-   
-
-       if(index==0){
-
-         navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-
-        destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
-
-       return true;
-
-       }
-
-       else{
-
-          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-
-          destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
-
-          return true;
-
-         }                                
-
-          }
-
-		});
+                   $ionicScrollDelegate.scrollTop();
                    
-
-       };
-                 
-    function onSuccess(imageURI) {
-
-         imagevideo = imageURI;
-                 
-				$('#videothumbimg').attr('src', imagevideo); 
-	    		 $('#videothumbimg').css({'width':'50px','height':'50px'});
-     
-
-     }
-
-                  
+                   function readURL5(input) {
+                   if (input.files && input.files[0]) {
+                   var reader = new FileReader();
                    
-    function onFail(message) {
-
-         navigator.notification.alert('Failed because: ' + message);
-
-      }
-        
-                   
-                   $scope.framecheck="img/no_video.png";
-                     $('#videoimg').css({'width':'50px','height':'50px'});
-                   
-      $scope.videoplugin=function(){
-                   
-              cordova.exec(function(response){
-
-                           var str=response.split("/var/mobile/Applications/F4AA2E12-B892-4EC7-8705-726EDD470ECF/Documents/");
-                           var getres=str[1];
-                         
-                           if(getres == '(null)'){
-                           
-                           function alertDismissed() {
-                           }
-                           
-                           navigator.notification.alert(
-                                                        'Please take a snapshot for the video',
-                                                        alertDismissed,
-                                                        'Video'
-                                                        );
-                           }
-                           else{check=true;
-                         framepassing=response;
-                         $scope.framecheck=framepassing;
-                       
-                           $state.reload();
-                           }
-             },
-             function(e){ }, "ThumbnailImages", "thumbnailImages")
-
-      }
-      
-$scope.createvideo = function(){
-                  
-                   if(check==true){
-                   
-       $ionicLoading.show({
-              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-              animation: 'fade-in',
-              showBackdrop: true,
-              maxWidth: 200,
-              showDelay: 0
-      });
- 
-       
- if(imagevideo){
-                           
-     cordova.exec(function(response){
-	
-		 var resultvideo = response;
-                 
-            videoimg=resultvideo.video.url;
-		   videotitle=resultvideo.title;
-		   videodesc=resultvideo.text;
-		   videoelement = resultvideo.id;
-		   videothumb = resultvideo.video.thumbnail;
-           videoframe= resultvideo.video.video_frame;
-           $ionicLoading.hide();  
-	       $state.go('videoedit');
-  
-  	 }, 
-                  function(e){var total = JSON.parse(e);
-                  function alertDismissed() {
-                  }
-                  
-                  navigator.notification.alert(
-                                               total.error,
-                                               alertDismissed,
-                                               'Video'
-                                               );    $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,buttonId,$scope.videocreate.title,$scope.videocreate.desc,imagevideo,"post"])
-}
-else
-{
-	 cordova.exec(function(response){
-	
-  var resultvideo = response;
-          
-          videoimg=resultvideo.video.url;
-		   videotitle=resultvideo.title;
-		  videodesc=resultvideo.text;
-		   videoelement = resultvideo.id;
-		  videothumb = resultvideo.video.thumbnail;
-           videoframe= resultvideo.video.video_frame;
-           $ionicLoading.hide();  
-	       $state.go('videoedit');
-  	 }, 
-                  function(e){var total = JSON.parse(e);
-                  function alertDismissed() {
-                  }
-                  
-                  navigator.notification.alert(
-                                              total.error,
-                                               alertDismissed,
-                                               'Video'
-                                               );  $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,buttonId,$scope.videocreate.title,$scope.videocreate.desc,"Nothumbnail","post"])
-
-}
-
+                   reader.onload = function (e) {
+                   $('#videoimg').attr({'src':"img/btn_video.png"});
+                   $('#videoimg').css({'width':'50px','height':'50px'});
+                   $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
+                   //  $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
                    }
-   
+                   
+                   reader.readAsDataURL(input.files[0]);
+                   }
+                   }
+                   /* $('#video').click(function(){
+                    
+                    cordova.exec(function(e){
+                    
+                    }, function(e){alert(e);}, "Thumbnail", "thumbnail", [""])
+                    
+                    });*/
+                   
+                   
+                   
+                   $("#video").change(function(){
+                                      readURL5(this);
+                                      });
+                   
+                   $scope.videocreate={}
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   $scope.videoselect = function(){
+                   
+                   $ionicActionSheet.show({
+                                          
+                                          titleText: '<b><font size="4">Choose</font></b>',
+                                          buttons: [
+                                                    { text: 'Camera' },
+                                                    { text: 'PhotoAlbum' },
+                                                    ],
+                                          
+                                          cancelText: 'Cancel',
+                                          cancel: function() {
+                                          // alert('CANCELLED');
+                                          },
+                                          
+                                          buttonClicked: function(index) {
+                                          // alert('BUTTON CLICKED', index);
+                                          
+                                          if(index==0){
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          else{
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          }
+                                          
+                                          });
+                   
+                   };
+                   
+                   function onSuccess(imageURI) {
+                   
+                   imagevideo = imageURI;
+                   $('#videothumbimg').attr('src', imagevideo);
+                   $('#videothumbimg').css({'width':'50px','height':'50px'});
+                   //   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
+                   
+                   }
+                   
+                   function onFail(message) {
+                   
+                   navigator.notification.alert('Failed because: ' + message);
+                   
+                   }
+                   
+                   $scope.createvideo = function(){
+                   
+                   if((($("#video").get(0).files[0].size) / 1024 / 1024) <= 10){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   /*  var formData = new FormData();
+                    formData.append('api_key', appKey);
+                    formData.append('button_id', buttonId);
+                    formData.append('title', $scope.videocreate.title);
+                    formData.append('description',$scope.videocreate.desc);
+                    formData.append('video',$("#video").get(0).files[0]);*/
+                   //  console.log("api_key: "+appKey+ "button_id :" +buttonId+ "title: " +$scope.videocreate.title+ "description: " +$scope.videocreate.desc+ "video :" +$("#video").get(0).files[0]+ "video_thumbnail :" +$("#videothumb").get(0).files[0]+);
+                   
+                   if(imagevideo){
+                   
+                   cordova.exec(function(response){
+                                //alert(response);
+                                var resultvideo = response;
+                                
+                                videoimg=resultvideo.video.url;
+                                videotitle=resultvideo.title;
+                                videodesc=resultvideo.text;
+                                videoelement = resultvideo.id;
+                                videothumb = resultvideo.video.thumbnail;
+                                $ionicLoading.hide();  
+                                $state.go('videoedit');
+                                
+                                }, 
+                                function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
 }
 
-$scope.navvideo = function(){
-   $state.go('navicon');
- } 
-$scope.homevideo = function(){
-   $state.go('newapp');
- } 
- $scope.backvideo= function(){
-     $state.go('elements');
-  }
-    
-});
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+     'Video'                     
+); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,buttonId,$scope.videocreate.title,$scope.videocreate.desc,$('input[name="video"]').val(),imagevideo,"post"])
+                   }
+                   else
+                   {
+                   cordova.exec(function(response){
+                                //alert(JSON.stringify(response));
+                                var resultvideo = response;
+                                
+                                videoimg=resultvideo.video.url;
+                                videotitle=resultvideo.title;
+                                videodesc=resultvideo.text;
+                                videoelement = resultvideo.id;
+                                videothumb = resultvideo.video.thumbnail;
+                                $ionicLoading.hide();  
+                                $state.go('videoedit');
+                                }, 
+                                function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+     'Video'                     
+); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,buttonId,$scope.videocreate.title,$scope.videocreate.desc,$('input[name="video"]').val(),"Nothumbnail","post"])
+                   
+                   }
+                   
+                   }else{
+                   var alertPopup = $ionicPopup.alert({
+                                                      title: 'MAB',
+                                                      template: 'Please choose Video File below 10MB!'
+                                                      });
+                   alertPopup.then(function(res) {
+                                   //console.log('Thank you for not eating my delicious ice cream cone');
+                                   });
+                   }
+                   
+                   }
+                   
+                   $scope.navvideo = function(){
+                   $state.go('navicon');
+                   } 
+                   $scope.homevideo = function(){
+                   $state.go('newapp');
+                   } 
+                   $scope.backvideo= function(){
+                   $state.go('elements');
+                   }
+                   
+                   });
 
 var mapid='';
 var custommapid='';
@@ -5438,9 +6415,9 @@ $ionicScrollDelegate.scrollTop();
 
 $scope.createmapaddr={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -5465,7 +6442,7 @@ $scope.button_color='button-'+button;
 }
 
 $scope.createmap = function(){
-	
+  
 if($scope.createmapaddr.maptitle){
 
  $ionicLoading.show({
@@ -5476,29 +6453,29 @@ if($scope.createmapaddr.maptitle){
               showDelay: 0
       });
 
-	  $.ajax({
+    $.ajax({
           type: "POST",
           url: "http://build.myappbuilder.com/api/elements/create_map.json",
           data:{'api_key':appKey,'button_id':buttonId,'text':$scope.createmapaddr.maptitle},
           success:function(response){
-			 
-			    mapid=response.id;  
-			    
+        //  alert(JSON.stringify(response));  
+          mapid=response.id;  
+          
              $.ajax({
                         type: "POST",
                         url: "http://build.myappbuilder.com/api/elements/addresses.json",
                         data:{'api_key':appKey,'id':mapid,'address':$scope.createmapaddr.maptitle},
                         cache: false,
                         success:function(response){
-							
+              //alert(JSON.stringify(response));  
                           $ionicLoading.hide();
-						addressid=response.id;
-						addressname=response.address;
-                         $state.go('mapedit');	 
+            addressid=response.id;
+            addressname=response.address;
+                         $state.go('mapedit');   
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -5513,7 +6490,7 @@ navigator.notification.alert(
           },
           error:function(error){
             $ionicLoading.hide();
-             var total = JSON.parse(error.responseText);
+         var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -5525,15 +6502,15 @@ navigator.notification.alert(
           }
       });
     }else{
-                   function alertDismissed() {
-                  
-                   }
-                   
-                   navigator.notification.alert(
-                                                'Enter The Address',
-                                                alertDismissed,
-                                                'Map and Location'
-                                                );
+      function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter The Address',  // message
+    alertDismissed,         // callback
+    'Map and Location'
+);
     }
 
 }
@@ -5558,9 +6535,9 @@ $ionicScrollDelegate.scrollTop();
 $scope.editmap={}
 $scope.createeditmap={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -5590,7 +6567,7 @@ $scope.mapeditcustom = function(){
 
     if($scope.editmap.custommaptitle){
       if($scope.editmap.custommapvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -5604,7 +6581,7 @@ $scope.mapeditcustom = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':mapid,'title':$scope.editmap.custommaptitle,'value':$scope.editmap.custommapvalue},
           success:function(response){
-			 custommapid = response.id;
+       custommapid = response.id;
 
             $.ajax({
                         type: "GET",
@@ -5614,14 +6591,14 @@ $scope.mapeditcustom = function(){
                         success:function(response){
                           $ionicLoading.hide();
                         
-						    $scope.editmappage = response;
-                 
-						   $state.reload();   					  
+                $scope.editmappage = response;
+                  //   alert(JSON.stringify( $scope.editmappage));
+               $state.reload();               
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -5631,9 +6608,9 @@ navigator.notification.alert(
      'Map and Location'                    
 ); 
                         }
-              });
-              $scope.editmap.custommaptitle='';
-               $scope.editmap.custommapvalue='';
+              });    
+                            $scope.editmap.custommaptitle='';
+               $scope.editmap.custommapvalue='';          
             },
           error:function(error){
             $ionicLoading.hide();
@@ -5651,12 +6628,12 @@ navigator.notification.alert(
     }
       }else{
       function alertDismissed() {
-    
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',  
-    alertDismissed,
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
     'Map and Location'
 );
     }
@@ -5689,10 +6666,10 @@ $scope.removemapCustomValue = function(id){
                         success:function(response){
                           $ionicLoading.hide();
 
-						    $scope.editmappage = response;
-						 
-						   $state.reload();   
-						  
+                $scope.editmappage = response;
+             //    alert(JSON.stringify($scope.editmappage));
+               $state.reload();   
+              
                           
                         },
                         error:function(error,status){
@@ -5711,7 +6688,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-             var total = JSON.parse(error.responseText);
+              var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -5738,7 +6715,7 @@ $scope.homeeditmap = function(){
 $scope.addAddress = function(){
 
     if($scope.createeditmap.title){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -5752,7 +6729,7 @@ $scope.addAddress = function(){
           url: "http://build.myappbuilder.com/api/elements/addresses.json",
           data:{'api_key':appKey,'id':mapid,'address':$scope.createeditmap.title},
           success:function(response){
-			newaddressid=response.id;
+      newaddressid=response.id;
             $.ajax({
                         type: "GET",
                         url: "http://build.myappbuilder.com/api/elements/addresses.json",
@@ -5761,14 +6738,14 @@ $scope.addAddress = function(){
                         success:function(response){
                           $ionicLoading.hide();
                         
-						    $scope.addresses = response;
-                 
+                $scope.addresses = response;
+                  //   alert(JSON.stringify( $scope.addresses));  
                    $scope.createeditmap.title='';   
-						   $state.reload();                            
+               $state.reload();                            
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -5795,13 +6772,13 @@ navigator.notification.alert(
       });
     }
       else{
-      function alertDismissed() {
-    
+     function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter The Address',
-    alertDismissed,
+    'Enter The Address',  // message
+    alertDismissed,         // callback
     'Map and Location'
 );
     }
@@ -5809,9 +6786,9 @@ navigator.notification.alert(
   }
 
 $scope.updateAddress = function(id,updateaddress){
-	
-	
-	  
+  
+  //  alert(JSON.stringify(id));
+    
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -5834,13 +6811,14 @@ $scope.updateAddress = function(id,updateaddress){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			
+       //    alert(JSON.stringify(response));
+        //    alert('successfully Updated');
                   $ionicLoading.hide();
                 
                  
                 },error:function(error){
                   $ionicLoading.hide();
-                  var total = JSON.parse(error.responseText);
+                 var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -5853,7 +6831,7 @@ navigator.notification.alert(
             });
     }
  $scope.deleteAddress = function(id){
-	 
+   
  $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -5862,14 +6840,14 @@ navigator.notification.alert(
               showDelay: 0
       });
                    
-       
+                  
           $.ajax({
             type: "DELETE",
             url: "http://build.myappbuilder.com/api/elements/addresses/"+id+".json",
             data: {'api_key':appKey,'id':mapid},
             cache: false,
             success:function(response){
-			
+      //  alert(JSON.stringify(response));
               $.ajax({
                         type: "GET",
                         url: "http://build.myappbuilder.com/api/elements/addresses.json",
@@ -5877,10 +6855,10 @@ navigator.notification.alert(
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						$scope.addresses = response;
-                  
-						   $state.reload();   
-						  
+            $scope.addresses = response;
+                 //    alert(JSON.stringify( $scope.addresses));   
+               $state.reload();   
+              
                           
                         },
                         error:function(error,status){
@@ -5910,9 +6888,10 @@ navigator.notification.alert(
 ); 
             }
           });
-
+            
+   
 }   
-	
+  
 });
 
 var audioelement='';
@@ -5920,6 +6899,466 @@ var audiotitle='';
 var audiotext='';
 var audioimg='';
 var check=false;
+
+/*control.controller('audioCtrl',function($scope,$state,$ionicLoading,$ionicScrollDelegate,$stateParams,$http,$location,$ionicPopup,$rootScope){ 
+
+$ionicScrollDelegate.scrollTop();
+
+$scope.navaudio = function(){
+   $state.go('navicon');
+ } 
+$scope.homeaudio = function(){
+   $state.go('newapp');
+ }
+ $scope.backaudio= function(){
+    $state.go('elements');
+   }
+ 
+ function readURL10(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+       $('#audiourlimg').attr({'src':"img/btn_audio.png"});
+             $('#audiourlimg').css({'width':'50px','height':'50px'});        
+           $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+  }
+
+  $("#audio").change(function(){
+  /* audio = document.getElementById("audio").value;
+    var res = audio.split(".");
+    var srt2=res[1];
+   alert(srt2);
+    if((srt2 == 'mp3') || (srt2 == 'wav') || (srt2 == 'aiff') || (srt2 == 'm4a') || (srt2 == 'ogg') || (srt2 == '3gp') || (srt2 == 'ape') || (srt2 == 'wv') || (srt2 == 'raw')){
+      checking=false;
+    readURL10(this);
+  }
+  else
+  {
+    alert('Please select an audio');  
+   $('#audiourlimg').attr({'src':"img/no_audio.png"});
+    checking=true;
+   }*/
+    /*readURL10(this);  
+  });
+  
+   function readURL11(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+       $('#audioimg').attr('src', e.target.result); 
+        $('#audioimg').css({'width':'50px','height':'50px'});   
+          //  $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+  }
+
+  $("#audiothumb").change(function(){
+   /*  localStorage.audiothumb = document.getElementById("audiothumb").value;
+    var res = localStorage.audiothumb.split(".");
+    var srt2=res[1];
+    if((srt2 == 'jpg') || (srt2 == 'png') || (srt2 == 'jpeg')){
+      checking=false;
+    
+  }
+  else
+  {
+    alert('Please select an thumbnail image');
+    checking=true;
+   $('#audioimg').attr({'src':"img/no_image.png"});
+   }*/
+     /*readURL11(this); 
+  });
+
+$scope.appTitle = appTitle; 
+
+if(colour == 'undefined'){  
+$scope.bar_color = 'bar-positive';
+}
+else
+{
+$scope.bar_color = 'bar-'+colour;
+}
+
+if(buttoncolour == 'undefined'){
+$scope.bar_button_color ='button-positive'; 
+}
+else
+{
+$scope.bar_button_color ='button-'+buttoncolour;
+}
+
+if(button == 'undefined'){
+$scope.button_color = 'button-positive';
+}
+else
+{
+$scope.button_color='button-'+button;
+}
+ 
+  
+$scope.audiocreate={}
+
+$scope.createaudio = function(){  
+
+if((($("#audio").get(0).files[0].size) / 1024 / 1024) <= 10){
+  
+   $ionicLoading.show({
+              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+              animation: 'fade-in',
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0
+      });
+    
+      
+   var formData = new FormData();
+    formData.append('api_key', appKey);
+      formData.append('button_id', buttonId);
+      formData.append('title', $scope.audiocreate.title);
+      formData.append('description',$scope.audiocreate.desc);
+      formData.append('audio', $("#audio").get(0).files[0]);    
+      
+      if($('#audiothumb').get(0).files[0]){
+            formData.append('audio_thumbnail',$('#audiothumb').get(0).files[0]);   
+       }else{
+            formData.append('audio_thumbnail_url', 'http://www.nuatransmedia.com/iBookImages/btn_audio.png');
+       }
+                            
+    $http.post('http://build.myappbuilder.com/api/elements/create_audio.json', formData, {
+                        transformRequest: angular.identity,
+                        headers: {'Content-Type': undefined}
+                      })
+                      
+                      .success(function(data,status, headers, config){
+
+              $ionicLoading.hide();
+              $state.go('audioedit');
+              audioelement=data.id;
+              audiotitle=data.title;
+              audiotext=data.text;
+              audioimg=data.audio.thumbnail;
+              audio=data.audio.url;
+            })
+            .error(function(data,status, headers, config){
+                        $ionicLoading.hide();
+                        alert(JSON.stringify(data));
+                      });
+}else{
+          var alertPopup = $ionicPopup.alert({
+             title: 'MAB',
+             template: 'Please choose Audio File below 10MB!'
+           });
+           alertPopup.then(function(res) {
+             //console.log('Thank you for not eating my delicious ice cream cone');
+           });
+    }
+
+}
+ 
+});
+
+var customeditaudioid='';
+
+control.controller('audioeditCtrl',function($scope,$state,$ionicScrollDelegate,$ionicLoading,$stateParams,$http,$location,$ionicPopup,$rootScope){ 
+ 
+ $ionicScrollDelegate.scrollTop();
+  
+function readURL12(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+      $('#audioediturlimg').attr({'src':"img/btn_audio.png"});
+             $('#audioediturlimg').css({'width':'50px','height':'50px'});           
+          $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+  }
+
+  $("#editaudio").change(function(){
+   /*  editaudio = document.getElementById("editaudio").value;
+    var res = editaudio.split(".");
+    var srt2=res[1];
+    alert(srt2);
+    if((srt2 == 'mp3') || (srt2 == 'wav') || (srt2 == 'aiff') || (srt2 == 'm4a') || (srt2 == 'ogg') || (srt2 == '3gp')){
+      checking=false;
+    check=true;
+      readURL12(this);
+  }
+  else
+  {
+    alert('Please select an audio');  
+   $('#audioediturlimg').attr({'src':"img/no_audio.png"});
+    checking=true;
+   }*/
+   /*check=true;
+    readURL12(this);   
+  });
+    
+  
+   function readURL13(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+       $('#audioeditimg').attr('src', e.target.result); 
+       
+           // $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+  }
+
+  $("#editaudiothumb").change(function(){
+        
+/*editaudiothumb = document.getElementById("editaudiothumb").value;
+    var res = editaudiothumb.split(".");
+    var srt2=res[1];
+    if((srt2 == 'jpg') || (srt2 == 'png') || (srt2 == 'jpeg')){
+      checking=false;
+      check=true;
+     readURL13(this);
+  }
+  else
+  {
+    alert('Please select an image');
+    checking=true;
+   $('#audioeditimg').attr({'src':"img/no_image.png"});
+   }*/
+    /* check=true;
+    readURL13(this);   
+  });
+  
+$scope.naveditaudio = function(){
+   $state.go('navicon');
+ } 
+$scope.homeeditaudio = function(){
+   $state.go('newapp');
+ }
+ $scope.backeditaudio = function(){
+    $state.go('audio');
+  }
+
+$scope.appTitle = appTitle; 
+
+if(colour == 'undefined'){  
+$scope.bar_color = 'bar-positive';
+}
+else
+{
+$scope.bar_color = 'bar-'+colour;
+}
+
+if(buttoncolour == 'undefined'){
+$scope.bar_button_color ='button-positive'; 
+}
+else
+{
+$scope.bar_button_color ='button-'+buttoncolour;
+}
+
+if(button == 'undefined'){
+$scope.button_color = 'button-positive';
+}
+else
+{
+$scope.button_color='button-'+button;
+}
+ 
+  
+$scope.createeditaudio={}
+
+ $scope.tinymceOptions = {
+        
+
+        menubar: false,
+        theme: "modern",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime table contextmenu ",
+            "emoticons textcolor"
+        ],
+        toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
+        
+  };
+  
+ 
+$scope.createeditaudio.editaudiotitle=audiotitle;
+$scope.createeditaudio.editaudiotext=audiotext;
+if(audioimg){
+    $('#audioeditimg').attr({'src':audioimg});
+      $('#audioeditimg').css({'width':'50px','height':'50px'});     
+  }
+ if(audio){
+    $('#editaudio').attr({'url':audio});   
+    $('#audioediturlimg').attr({'src':audioimg});
+    $('#audioediturlimg').css({'width':'50px','height':'50px'});    
+  
+  }
+
+$scope.updateaudio = function(){            
+  
+   $ionicLoading.show({
+              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+              animation: 'fade-in',
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0
+      });
+  
+    var formData = new FormData();
+           formData.append('api_key',appKey);
+           formData.append('id',audioelement);       
+           formData.append('title',$scope.createeditaudio.editaudiotitle);
+           formData.append('text',$scope.createeditaudio.editaudiotext);
+            if(check==true){  
+          formData.append('audio', $("#editaudio").get(0).files[0]);
+            if($('#editaudiothumb').get(0).files[0]){
+           formData.append('audio_thumbnail', $('#editaudiothumb').get(0).files[0]);
+       }else{
+            formData.append('audio_thumbnail_url', 'http://www.nuatransmedia.com/iBookImages/btn_audio.png');
+       }
+          
+    }else{
+       $('#editaudio').attr({'url':audio}); 
+           $('#audioediturlimg').attr({'src':audioimg});
+    $('#audioediturlimg').css({'width':'50px','height':'50px'});    
+        $('#audioeditimg').attr({'src':audioimg});
+      $('#audioeditimg').css({'width':'50px','height':'50px'});   
+     }        
+         $http.put('http://build.myappbuilder.com/api/elements/update_audio.json', formData, {
+                        transformRequest: angular.identity,
+                        headers: {'Content-Type': undefined}
+                      })
+                      
+                      .success(function(data,status, headers, config){
+          // alert(JSON.stringify(data));
+            alert('Successfully updated');
+              $ionicLoading.hide();
+
+            })
+            .error(function(data,status, headers, config){
+                        $ionicLoading.hide();
+                        alert(JSON.stringify(data));
+                      });
+}
+
+
+
+ $scope.cuseditaudio={}
+ 
+$scope.createaudioedit = function(){
+
+  $('#editcusaudiotitle').val('');
+  $('#editcusaudiovalue').val('');
+  
+    if($scope.cuseditaudio.customeditaudioTitle){
+      if($scope.cuseditaudio.customeditaudiovalue){
+   
+      $ionicLoading.show({
+              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+              animation: 'fade-in',
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0
+      });
+
+       $.ajax({
+          type: "POST",
+          url: "http://build.myappbuilder.com/api/custom_values.json",
+          data:{'api_key':appKey,'element_id':audioelement,'title':$scope.cuseditaudio.customeditaudioTitle,'value':$scope.cuseditaudio.customeditaudiovalue},
+          success:function(response){
+       customeditaudioid = response.id;
+     
+            $.ajax({
+                        type: "GET",
+                        url: "http://build.myappbuilder.com/api/custom_values.json",
+                        data:{'api_key':appKey,'element_id':audioelement},
+                        cache: false,
+                        success:function(response){
+                          $ionicLoading.hide();
+                $scope.editaudiopage = response;
+            //    alert(JSON.stringify($scope.editaudiopage));
+               $state.reload();   
+                      
+                        },
+                        error:function(error,status){
+                           $ionicLoading.hide();
+                          navigator.notification.alert(error.responseText);
+                        }
+              });              
+            },
+          error:function(error){
+            $ionicLoading.hide();
+            var error = JSON.parse(error.responseText);
+            navigator.notification.alert(error.responseText);
+          }
+      });
+    }
+      }else{
+      navigator.notification.alert("Enter Title And Value");
+    }
+   
+  }
+
+
+$scope.removeaudioCustomValue = function(id){
+
+    customeditaudioid = id;
+    
+   $ionicLoading.show({
+              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+              animation: 'fade-in',
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0
+      });
+      
+          $.ajax({
+            type: "DELETE",
+            url: "http://build.myappbuilder.com/api/custom_values.json",
+            data: {"api_key":appKey,"id":customeditaudioid},
+            cache: false,
+            success:function(response){
+              $.ajax({
+                        type: "GET",
+                        url: "http://build.myappbuilder.com/api/custom_values.json",
+                        data:{'api_key':appKey,'element_id':audioelement},
+                        cache: false,
+                        success:function(response){
+                          $ionicLoading.hide();
+              
+                $scope.editaudiopage = response;
+            //    alert(JSON.stringify($scope.editaudiopage));
+               $state.reload();                 
+                          
+                        },
+                        error:function(error,status){
+                           $ionicLoading.hide();
+                          navigator.notification.alert(error.responseText);
+                        }
+              });              
+            },
+            error:function(error,status){
+               $ionicLoading.hide();
+              navigator.notification.alert(error.responseText)
+            }
+          });
+}
+
+});*/
 
  
 var webelement='';
@@ -5943,9 +7382,9 @@ $scope.backlive= function(){
  
 $scope.createweb={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -5974,8 +7413,8 @@ $scope.createwebpage = function(){
 if($scope.createweb.livewebname){
                    
    if($scope.createweb.liveweburl){
-	
-	 $ionicLoading.show({
+  
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -5983,22 +7422,22 @@ if($scope.createweb.livewebname){
               showDelay: 0
       });
       
-	  $.ajax({
+    $.ajax({
           type: "POST",
           url: "http://build.myappbuilder.com/api/elements/create_web_page.json",
           data:{'api_key':appKey,'button_id':buttonId,'title':$scope.createweb.livewebname,'url':$scope.createweb.liveweburl,'description':$scope.createweb.livewebdesc},
           success:function(response){
-				
-			 $ionicLoading.hide();
-			    webelement=response.id;
-			    webname=response.title;
-			    webdesc=response.text;
-			    weburl= response.live_url;
-            $state.go('webedit');	
+      //    alert(JSON.stringify(response));  
+       $ionicLoading.hide();
+          webelement=response.id;
+          webname=response.title;
+          webdesc=response.text;
+          weburl= response.live_url;
+            $state.go('webedit'); 
           },
           error:function(error){
             $ionicLoading.hide();
-          var total = JSON.parse(error.responseText);
+           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6013,13 +7452,13 @@ navigator.notification.alert(
     }
     }
     else{
-      function alertDismissed() {
-   
+     function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter The Name and Valid Url',
-    alertDismissed,
+    'Enter The Name and Valid Url',  // message
+    alertDismissed,         // callback
     'Web'
 );
     }
@@ -6031,10 +7470,10 @@ navigator.notification.alert(
 var customwebid='';
 
 control.controller('webeditCtrl',function($scope,$state,$ionicLoading,$ionicScrollDelegate){ 
-	
-	$ionicScrollDelegate.scrollTop();
-	
-	$scope.naveditweb = function(){
+  
+  $ionicScrollDelegate.scrollTop();
+  
+  $scope.naveditweb = function(){
    $state.go('navicon');
  } 
 $scope.homeeditweb = function(){
@@ -6044,12 +7483,12 @@ $scope.backeditweb = function(){
   $state.go('web');
 }
   
-	$scope.editcusweb={}
-	$scope.createwebedit={}
+  $scope.editcusweb={}
+  $scope.createwebedit={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -6088,11 +7527,11 @@ $scope.updateweb = function(){
               maxWidth: 200,
               showDelay: 0
       });
-			var formData = new FormData();
+      var formData = new FormData();
            formData.append('api_key',appKey);
            formData.append('id',webelement);  
             formData.append('title',$scope.createwebedit.editwebname);  
-         
+          //  alert(JSON.stringify($scope.createwebedit.editwebname));
              formData.append('text',$scope.createwebedit.editwebdesc);    
             formData.append('live_url',$scope.createwebedit.editweburl); 
                   
@@ -6104,13 +7543,14 @@ $scope.updateweb = function(){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			
+      //  alert(JSON.stringify(response));
+          //  alert('successfully Updated');
                   $ionicLoading.hide();
                 
                  
                 },error:function(error){
                   $ionicLoading.hide();
-                 var total = JSON.parse(error.responseText);
+                var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6122,26 +7562,27 @@ navigator.notification.alert(
 );
                 }
             });
-		}
-		
-		else
-                   {	 function alertDismissed() {
+    }
     
+    else
+                   { function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Update the live url',
-    alertDismissed,
+    'Update the live url',  // message
+    alertDismissed,         // callback
     'Web'
 );
-		}
+    }
 }
+
 
 $scope.createcusweb = function(){
 
     if($scope.editcusweb.cuseditwebtitle){
       if($scope.editcusweb.cuseditwebvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -6155,7 +7596,7 @@ $scope.createcusweb = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':webelement,'title':$scope.editcusweb.cuseditwebtitle,'value':$scope.editcusweb.cuseditwebvalue},
           success:function(response){
-			 customwebid = response.id;
+       customwebid = response.id;
 
             $.ajax({
                         type: "GET",
@@ -6165,10 +7606,10 @@ $scope.createcusweb = function(){
                         success:function(response){
                           $ionicLoading.hide();
                         
-						    $scope.editwebpage = response;
-                
-						   $state.reload();   
-						  
+                $scope.editwebpage = response;
+                 //    alert(JSON.stringify( $scope.editwebpage));
+               $state.reload();   
+              
                           
                         },
                         error:function(error,status){
@@ -6184,14 +7625,14 @@ navigator.notification.alert(
     'Web'                      
 );
                         }
-              });
-              $scope.editcusweb.cuseditwebtitle='';
+              });  
+               $scope.editcusweb.cuseditwebtitle='';
               $scope.editcusweb.cuseditwebvalue='';
-
+            
             },
           error:function(error){
             $ionicLoading.hide();
-          var total = JSON.parse(error.responseText);
+         var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6206,19 +7647,19 @@ navigator.notification.alert(
     }
       }else{
       function alertDismissed() {
-   
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
     'Web'
 ); 
     }
    
   }
 
-	 $scope.tinymceOptions = {
+   $scope.tinymceOptions = {
         
 
         menubar: false,
@@ -6231,7 +7672,7 @@ navigator.notification.alert(
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
         
-	};
+  };
 
 $scope.removewebCustomValue = function(id){
 
@@ -6259,14 +7700,14 @@ $scope.removewebCustomValue = function(id){
                         success:function(response){
                           $ionicLoading.hide();
 
-						    $scope.editwebpage = response;
-                   
-						   $state.reload();   			  
+                $scope.editwebpage = response;
+                   //  alert(JSON.stringify( $scope.editwebpage));
+               $state.reload();           
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                        var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6293,7 +7734,7 @@ navigator.notification.alert(
 );
             }
           });
-}	
+} 
 
 });
 
@@ -6308,7 +7749,7 @@ control.controller('rssCtrl',function($scope,$state,$ionicLoading,$ionicScrollDe
 
 $ionicScrollDelegate.scrollTop();
 
-	$scope.navrss = function(){
+  $scope.navrss = function(){
    $state.go('navicon');
  } 
 $scope.homerss = function(){
@@ -6318,11 +7759,11 @@ $scope.homerss = function(){
          $state.go('elements');
    }
   
-	$scope.createrss={}
+  $scope.createrss={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -6349,10 +7790,10 @@ $scope.button_color='button-'+button;
 $scope.createrssform = function(){
 
 if($scope.createrss.rssname){
-	
+  
   if($scope.createrss.rssurl){
                    
-	 $ionicLoading.show({
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -6360,18 +7801,18 @@ if($scope.createrss.rssname){
               showDelay: 0
       });
       
-	  $.ajax({
+    $.ajax({
           type: "POST",
           url: "http://build.myappbuilder.com/api/elements/create_rss.json",
           data:{'api_key':appKey,'button_id':buttonId,'title':$scope.createrss.rssname,'url':$scope.createrss.rssurl,'description':$scope.createrss.rssdesc},
           success:function(response){
-				
-			    rsselement=response.id;
-			    rssname=response.title;
-			    rssdesc=response.text;
-			    rssurl= response.rss_url;
-			      $ionicLoading.hide();
-            $state.go('rssedit');	
+       //   alert(JSON.stringify(response));  
+          rsselement=response.id;
+          rssname=response.title;
+          rssdesc=response.text;
+          rssurl= response.rss_url;
+            $ionicLoading.hide();
+            $state.go('rssedit'); 
           },
           error:function(error){
             $ionicLoading.hide();
@@ -6389,26 +7830,25 @@ navigator.notification.alert(
       });
     }
     }else{
-       function alertDismissed() {
-    
+      function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter The Name and Valid Url',
-    alertDismissed,
+    'Enter The Name and Valid Url',  // message
+    alertDismissed,         // callback
     'Rss Feed'
 ); 
     }
 
 }
-
 });
 
 control.controller('rsseditCtrl',function($scope,$state,$ionicLoading,$ionicScrollDelegate){ 
-	
-	$ionicScrollDelegate.scrollTop();
-	
-	$scope.naveditrss = function(){
+  
+  $ionicScrollDelegate.scrollTop();
+  
+  $scope.naveditrss = function(){
    $state.go('navicon');
  } 
 $scope.homeeditrss = function(){
@@ -6419,12 +7859,12 @@ $scope.backeditrss = function(){
 }
   
   
-	$scope.editcusrss={}
-	$scope.createrssedit={}
+  $scope.editcusrss={}
+  $scope.createrssedit={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -6454,7 +7894,7 @@ $scope.createrssedit.editrssdesc=rssdesc
 
 $scope.updaterss = function(){
 
-	 $ionicLoading.show({
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -6463,8 +7903,8 @@ $scope.updaterss = function(){
       });
       if((($scope.createrssedit.editrssname)!=rssname) && (($scope.createrssedit.editrssdesc)!=rssdesc) && (($scope.createrssedit.editrssurl)!=rssurl)){
   
-		
-	  var formData = new FormData();
+    
+    var formData = new FormData();
            formData.append('api_key',appKey);
            formData.append('id',rsselement);    
             formData.append('rss_url',$scope.createrssedit.editrssurl);
@@ -6479,13 +7919,14 @@ $scope.updaterss = function(){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			 
+       //  alert(JSON.stringify(response));
+         //   alert('successfully Updated');
                   $ionicLoading.hide();
                 
                  
                 },error:function(error){
                   $ionicLoading.hide();
-                   var total = JSON.parse(error.responseText);
+                  var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6497,20 +7938,20 @@ navigator.notification.alert(
 );
                 }
             });
-		}
+    }
                   
                    else
                    {
                    $ionicLoading.hide();
                    }
-			
+      
 }
 
 $scope.createcusrss = function(){
 
     if($scope.editcusrss.cuseditrsstitle){
       if($scope.editcusrss.cuseditrssvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -6524,7 +7965,7 @@ $scope.createcusrss = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':rsselement,'title':$scope.editcusrss.cuseditrsstitle,'value':$scope.editcusrss.cuseditrssvalue},
           success:function(response){
-			 customrssid = response.id;
+       customrssid = response.id;
 
             $.ajax({
                         type: "GET",
@@ -6534,15 +7975,15 @@ $scope.createcusrss = function(){
                         success:function(response){
                           $ionicLoading.hide();
                         
-						    $scope.editrsspage = response;
-                
-						   $state.reload();   
-						  
+                $scope.editrsspage = response;
+                 //    alert(JSON.stringify( $scope.editrsspage));
+               $state.reload();   
+              
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6553,9 +7994,9 @@ navigator.notification.alert(
     'Rss Feed'                      
 );
                         }
-              });
-              $scope.editcusrss.cuseditrsstitle='';
-              $scope.editcusrss.cuseditrssvalue='';
+              });   
+               $scope.editcusrss.cuseditrsstitle='';
+              $scope.editcusrss.cuseditrssvalue='';           
             },
           error:function(error){
             $ionicLoading.hide();
@@ -6573,20 +8014,20 @@ navigator.notification.alert(
       });
     }
       }else{
-       function alertDismissed() {
-   
+      function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
     'Rss Feed'
 ); 
     }
    
   }
 
-	 $scope.tinymceOptions = {
+   $scope.tinymceOptions = {
         
 
         menubar: false,
@@ -6599,7 +8040,7 @@ navigator.notification.alert(
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
         
-	};
+  };
 
 $scope.removerssCustomValue = function(id){
 
@@ -6626,15 +8067,15 @@ $scope.removerssCustomValue = function(id){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-	   
-						    $scope.editrsspage = response;
-                  
-						   $state.reload();   		  
+     
+                $scope.editrsspage = response;
+                   //  alert(JSON.stringify( $scope.editrsspage));
+               $state.reload();         
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6649,7 +8090,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-             var total = JSON.parse(error.responseText);
+              var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6661,7 +8102,7 @@ navigator.notification.alert(
 );
             }
           });
-}	
+} 
 
 });
 
@@ -6669,6 +8110,87 @@ var customtaskid='';
 var taskelement='';
 var tasklistid='';
 
+control.controller('taskCtrl',function($scope,$state,$ionicLoading,$ionicScrollDelegate){ 
+
+$ionicScrollDelegate.scrollTop();
+
+$scope.navtask = function(){
+   $state.go('navicon');
+ } 
+$scope.hometask = function(){
+   $state.go('newapp');
+ }
+$scope.backtask= function(){
+    $state.go('elements');
+}
+
+  $scope.createtask={}
+
+$scope.appTitle = appTitle; 
+
+if(colour == 'undefined'){  
+$scope.bar_color = 'bar-positive';
+}
+else
+{
+$scope.bar_color = 'bar-'+colour;
+}
+
+if(buttoncolour == 'undefined'){
+$scope.bar_button_color ='button-positive'; 
+}
+else
+{
+$scope.bar_button_color ='button-'+buttoncolour;
+}
+
+if(button == 'undefined'){
+$scope.button_color = 'button-positive';
+}
+else
+{
+$scope.button_color='button-'+button;
+}
+
+$scope.addTask = function(){
+  
+  $ionicLoading.show({
+              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+              animation: 'fade-in',
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0
+      });
+      
+   $.ajax({
+          type: "POST",
+          url: "http://build.myappbuilder.com/api/elements/create_task_list.json",
+          data:{'api_key':appKey,'button_id':buttonId},
+          success:function(response){
+      // alert(JSON.stringify(response));
+        $ionicLoading.hide();
+      taskelement=response.id;
+       //alert(JSON.stringify(taskelement));
+           $state.go('taskedit');
+            },
+          error:function(error){
+            $ionicLoading.hide();
+            var error = JSON.parse(error.responseText);
+           var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+    'Task List'                      
+);
+          }
+      });
+     } 
+
+});
 
 control.controller('taskeditCtrl',function($scope,$state,$ionicLoading,$ionicScrollDelegate){ 
 
@@ -6681,16 +8203,16 @@ $scope.homeedittask = function(){
    $state.go('newapp');
  }
  $scope.backedittask = function(){
-     $state.go('task');
+     $state.go('elements');
  }
   
   
-	$scope.editcustask={}
-	$scope.createedittask={}
+  $scope.editcustask={}
+  $scope.createedittask={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -6716,10 +8238,10 @@ $scope.button_color='button-'+button;
 
 $scope.addeditTask = function(task,desc){
 
-	if($scope.createedittask.taskTitle)
-	{
-	
-	$ionicLoading.show({
+  if($scope.createedittask.taskTitle)
+  {
+
+  $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -6734,8 +8256,8 @@ $scope.addeditTask = function(task,desc){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-              
-                          tasklistid=response.id;			  
+                       //   alert(JSON.stringify(response));    
+                          tasklistid=response.id;       
               $.ajax({
                         type: "GET",
                         url: "http://build.myappbuilder.com/api/elements/tasks.json",
@@ -6744,16 +8266,16 @@ $scope.addeditTask = function(task,desc){
                         success:function(response){
                           $ionicLoading.hide();
                         
-						    $scope.tasks = response;
-              
+                $scope.tasks = response;
+               //      alert(JSON.stringify( $scope.tasks));
                            $scope.createedittask.taskTitle='';  
                            $scope.createedittask.taskDescription='';    
-						   $state.reload();   
+               $state.reload();   
 
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6768,7 +8290,7 @@ navigator.notification.alert(
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6780,20 +8302,20 @@ navigator.notification.alert(
 );
                         }
               });   
-		
-		  }else
-		  {
-			    function alertDismissed() {
-    
+      }
+      else
+      {
+         function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter The Title ',
-    alertDismissed,
+    'Enter The Title ',  // message
+    alertDismissed,         // callback
     'Task List'
 ); 
-		  }           
-	
+      }           
+  
 }
 
 $scope.deleteTask = function(id){
@@ -6812,7 +8334,7 @@ $scope.deleteTask = function(id){
             data: {"api_key":appKey,'id':taskelement},
             cache: false,
             success:function(response){
-			
+      //  alert(JSON.stringify(response));
                $ionicLoading.hide();
                $.ajax({
                         type: "GET",
@@ -6822,15 +8344,15 @@ $scope.deleteTask = function(id){
                         success:function(response){
                           $ionicLoading.hide();
                         
-						    $scope.tasks = response;
-                   
-						   $state.reload();   
-						  
+                $scope.tasks = response;
+                   //  alert(JSON.stringify( $scope.tasks));
+               $state.reload();   
+              
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6845,7 +8367,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-              var total = JSON.parse(error.responseText);
+             var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6857,7 +8379,7 @@ navigator.notification.alert(
 );
             }
           });
-}	
+} 
 
 $scope.updateTask = function(updateid,title,desc){
 
@@ -6886,13 +8408,14 @@ $scope.updateTask = function(updateid,title,desc){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			
+      // alert(JSON.stringify(response));
+        //    alert('successfully Updated');
                   $ionicLoading.hide();
                 
             },
             error:function(error,status){
                $ionicLoading.hide();
-             var total = JSON.parse(error.responseText);
+            var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6904,14 +8427,14 @@ navigator.notification.alert(
 );
             }
           });
-}	
+} 
 
 
 $scope.createtaskcustom = function(){
 
     if($scope.editcustask.customtasktitle){
       if($scope.editcustask.customtaskvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -6925,7 +8448,7 @@ $scope.createtaskcustom = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':taskelement,'title':$scope.editcustask.customtasktitle,'value':$scope.editcustask.customtaskvalue},
           success:function(response){
-			 customtaskid = response.id;
+       customtaskid = response.id;
 
             $.ajax({
                         type: "GET",
@@ -6935,10 +8458,10 @@ $scope.createtaskcustom = function(){
                         success:function(response){
                           $ionicLoading.hide();
                         
-						    $scope.taskpage = response;
+                $scope.taskpage = response;
+                //     alert(JSON.stringify( $scope.taskpage));
+               $state.reload();   
               
-						   $state.reload();   
-						  
                           
                         },
                         error:function(error,status){
@@ -6954,14 +8477,14 @@ navigator.notification.alert(
     'Task List'                      
 );
                         }
-              });
-             $scope.editcustask.customtasktitle='';
+              });  
+                $scope.editcustask.customtasktitle='';
               $scope.editcustask.customtaskvalue='';
-
+            
             },
           error:function(error){
             $ionicLoading.hide();
-            var total = JSON.parse(error.responseText);
+           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -6975,13 +8498,13 @@ navigator.notification.alert(
       });
     }
       }else{
-       function alertDismissed() {
-   
+      function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
     'Task List'
 ); 
     }
@@ -7013,15 +8536,15 @@ $scope.removetaskCustomValue = function(id){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-	   
-						     $scope.taskpage = response;
-                 
-						   $state.reload();   	  
+     
+                 $scope.taskpage = response;
+                  //   alert(JSON.stringify( $scope.taskpage));
+               $state.reload();       
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -7036,7 +8559,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-              var total = JSON.parse(error.responseText);
+             var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -7048,7 +8571,7 @@ navigator.notification.alert(
 );
             }
           });
-}	
+} 
 
 
 });
@@ -7062,7 +8585,7 @@ control.controller('editAppCtrl',function($scope,$state,$ionicScrollDelegate,$io
 $ionicScrollDelegate.scrollTop();
 
 $scope.homeappedit = function(){
-	$state.go('sample');
+  $state.go('sample');
 } 
  
   if(appimg){
@@ -7091,10 +8614,10 @@ $scope.homeappedit = function(){
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
         
-	};
+  };
 
-	$scope.editbook={}
-	$scope.editappcreate={}
+  $scope.editbook={}
+  $scope.editappcreate={}
       
 $scope.editappcreate.editgridAppTitle=appTitle;
 $scope.editappcreate.editmypost=appDesc;
@@ -7105,7 +8628,7 @@ $scope.editbook.bar_color=colour;
 $scope.editbook.bar_button_color=buttoncolour;
 $scope.editbook.button_color=button;
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $('#editbarimg').attr({'src':"img/positive.png"});
 $scope.bar_color = 'bar-positive';
 }
@@ -7147,11 +8670,11 @@ $scope.editsplashselect = function(){
 
             cancelText: 'Cancel',
              cancel: function() {
-          
+           // alert('CANCELLED');
              },
              
      buttonClicked: function(index) {
-    
+    // alert('BUTTON CLICKED', index);
 
        if(index==0){
 
@@ -7175,16 +8698,16 @@ $scope.editsplashselect = function(){
 
           }
 
-		});
+    });
 
        };
                  
     function onSuccess4(imageURI) {
 
          imageeditsplash = imageURI;
-				$('#editsplash').attr('src', imageeditsplash); 
-	    		 $('#editsplash').css({'width':'50px','height':'50px'});
-     
+        $('#editsplash').attr('src', imageeditsplash); 
+           $('#editsplash').css({'width':'50px','height':'50px'});
+      //   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
 
      }
 
@@ -7206,11 +8729,11 @@ $scope.editsplashselect = function(){
 
             cancelText: 'Cancel',
              cancel: function() {
-          
+           // alert('CANCELLED');
              },
              
      buttonClicked: function(index) {
-   
+    // alert('BUTTON CLICKED', index);
 
        if(index==0){
 
@@ -7234,16 +8757,16 @@ $scope.editsplashselect = function(){
 
           }
 
-		});
+    });
 
        };
                  
     function onSuccess5(imageURI) {
 
          imageeditapp = imageURI;
-				$('#editapp').attr('src', imageeditapp); 
-	    		 $('#editapp').css({'width':'50px','height':'50px'});
-     
+        $('#editapp').attr('src', imageeditapp); 
+           $('#editapp').css({'width':'50px','height':'50px'});
+      //   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
 
      }
 
@@ -7265,11 +8788,11 @@ $scope.editsplashselect = function(){
 
             cancelText: 'Cancel',
              cancel: function() {
-          
+           // alert('CANCELLED');
              },
              
      buttonClicked: function(index) {
-   
+    // alert('BUTTON CLICKED', index);
 
        if(index==0){
 
@@ -7293,16 +8816,16 @@ $scope.editsplashselect = function(){
 
           }
 
-		});
+    });
 
        };
                  
     function onSuccess6(imageURI) {
 
          imageeditstore= imageURI;
-				$('#editstore').attr('src', imageeditstore); 
-	    		 $('#editstore').css({'width':'50px','height':'50px'});
-      
+        $('#editstore').attr('src', imageeditstore); 
+           $('#editstore').css({'width':'50px','height':'50px'});
+      //   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
 
      }
 
@@ -7346,13 +8869,13 @@ $scope.editsplashselect = function(){
 
                                           cancel: function() {
 
-                                         
+                                         // alert('CANCELLED');
 
                                           },
 
                                           buttonClicked: function(index) {
 
-                                       
+                                        //  alert('BUTTON CLICKED', index);
 
                                           if(index==0){
 
@@ -7539,7 +9062,7 @@ $scope.editsplashselect = function(){
 
                                           cancel: function() {
 
-                                      
+                                         // alert('CANCELLED');
 
                                           },
 
@@ -7652,7 +9175,7 @@ $scope.editsplashselect = function(){
                                           $scope.bar_button_color=bar_button_color;
                                           
                                           $('#editbarbuttonimg').attr({'src':"img/royal.png"});
-		
+    
                                           $state.reload();
 
                                           }
@@ -7728,16 +9251,16 @@ $scope.editsplashselect = function(){
 
                                           cancel: function() {
 
-                                        
+                                        //  alert('CANCELLED');
 
                                           },
 
                                           buttonClicked: function(index1) {
 
-                                       
+                                        //  alert('BUTTON CLICKED', index1);
 
                                           if(index1==0){
-												
+                        
                                           button_color = 'button-light';
 
                                           $scope.editbook.button_color = 'light';
@@ -7882,10 +9405,108 @@ $scope.editsplashselect = function(){
 
                                           });
 
-                   };   
+                   };
+                   
+                   $scope.count = function(){
+                   //    navigator.notification.alert(val);
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   $http({method: "GET", url:'key.txt', cache: false, params:{}})
+                   .success(function(data){
+                            defaultkey = data.trim();
+                            appList=[];
+                            $http({method: "GET", url:'http://build.myappbuilder.com/api/apps/general.json', cache: false, params:{'api_key':defaultkey}})
+                            .success(function(data, status){
+                                     //                                  alert(data.title);
+                                     appId=defaultkey;
+                                     appTit=data.title;
+                                     appList.push(data);
+                                     
+                                     $http({method: "GET", url:'http://build.myappbuilder.com/api/book_custom_fields.json', cache: false, params:{'api_key':defaultkey}})
+                                     .success(function(reskey){
+                                              
+                                              for(var j=0;j<reskey.length;j++){
+                                              if(reskey[j].key=="keys"){
+                                              $http({method: "GET", url:'http://build.myappbuilder.com/api/apps/general.json', cache: false, params:{'api_key':reskey[j].value}})
+                                              .success(function(data, status){
+                                                       
+                                                       appList.push(data);
+                                                       
+                                                       })
+                                              .error(function(data, status) {
+                                                     var total = JSON.parse(data);
+                                                     function alertDismissed() {
+                                                     }
+                                                     
+                                                     navigator.notification.alert(
+                                                                                   total.error,
+                                                                                  alertDismissed,
+                                                                                  appTitle
+                                                                                  );
+                                                     $ionicLoading.hide();
+                                                     });
+                                              }
+                                              }
+                                              $ionicLoading.hide();
+                                              
+                                              $state.go('listView');
+                                              
+                                              
+                                              
+                                              })
+                                     .error(function(data, status) {
+                                            $ionicLoading.hide();
+                                            var total = JSON.parse(data);
+                                            function alertDismissed() {
+                                            }
+                                            
+                                            navigator.notification.alert(
+                                                                         total.error,
+                                                                         alertDismissed,
+                                                                         appTitle
+                                                                         );
+                                            
+                                            });
+                                     
+                                     })
+                            .error(function(data, status) {
+                                   var total = JSON.parse(data);
+                                   function alertDismissed() {
+                                   }
+                                   
+                                   navigator.notification.alert(
+                                                                total.error,
+                                                                alertDismissed,
+                                                                appTitle
+                                                                );
+                                   $ionicLoading.hide();
+                                   });
+                            
+                            
+                            })
+                   .error(function(data, status) {
+                          $ionicLoading.hide();
+                          var total = JSON.parse(data);
+                          function alertDismissed() {
+                          }
+                          
+                          navigator.notification.alert(
+                                                       total.error,
+                                                       alertDismissed,
+                                                       appTitle
+                                                       );
+                          
+                          });
+                   };
+
   
-$scope.editupdatesettings = function(){                  
-	 
+$scope.editupdatesettings = function(){
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -7894,21 +9515,21 @@ $scope.editupdatesettings = function(){
               showDelay: 0
       });
  if(imageeditsplash == '' && imageeditapp == '' && imageeditstore == ''){
-	 
-	  
-	 var formData = new FormData(); 
-	  
-        	
-		 if($scope.editbook.editdomain != undefined){
-			  formData.append('domain',$scope.editbook.editdomain);	
-		   }
-		    if($scope.editbook.subdomain != undefined){
-			     formData.append('subdomain',$scope.editbook.subdomain);
-			 }
+    //alert('s');
+    
+   var formData = new FormData(); 
+    
+          
+     if($scope.editbook.editdomain != undefined){
+        formData.append('domain',$scope.editbook.editdomain); 
+       }
+        if($scope.editbook.subdomain != undefined){
+           formData.append('subdomain',$scope.editbook.subdomain);
+       }
 
             formData.append('api_key',appKey);
             formData.append('title',$scope.editappcreate.editgridAppTitle);
-            formData.append('description',$scope.editappcreate.editmypost);		
+            formData.append('description',$scope.editappcreate.editmypost);   
             formData.append('bar_color', $scope.editbook.bar_color);
             formData.append('bar_button_color',$scope.editbook.bar_button_color);
             formData.append('button_color',$scope.editbook.button_color);
@@ -7921,55 +9542,27 @@ $scope.editupdatesettings = function(){
                   contentType: false,
                   processData: false,
                   success:function(response){
-					
-					  appTitle =response.title;
-					  	colour=response.bar_color;
-			buttoncolour=response.bar_button_color; 			
-			button= response.button_color;
-               
-                  $ionicLoading.hide();  
-                   $state.reload();
-                
-                appList='';
-                $.ajax({
-                       type: "GET",
-                       url: "http://build.myappbuilder.com/api/users.json",
-                       data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                       cache: false,
-                       success:function(response){
-                      
-                       $ionicLoading.hide();
-                       appList = response;
-                       localStorage["login"] = JSON.stringify(appkeyResult);
-                       
-                       },
-                       error:function(error,status){
-                       $ionicLoading.hide();
-                       var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-    appTitle                      
-);
-                       }
-                       })
-                 $ionicLoading.hide();
-                console.log(JSON.stringify(floatarray));
+          //  alert(JSON.stringify(response));
+            appTitle =response.title;
+              colour=response.bar_color;
+      buttoncolour=response.bar_button_color;       
+      button= response.button_color; 
+                //  $ionicLoading.hide();
+                 //  $state.reload();
+                $scope.count();
+             console.log(JSON.stringify(floatarray));
                 for(var i=0;i<floatarray.length;i++){
                 if(floatarray[i].key == 'Url'){
                 
                 console.log(JSON.stringify(floatarray[i].key));
-                
+            
                 $state.go('editnewapp1');
                 
                 }}
+                
                 },error:function(error){
                   $ionicLoading.hide();
-                   var total = JSON.parse(error.responseText);
+                  var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -7981,9 +9574,9 @@ navigator.notification.alert(
 );
                 }
             });
-		}
-		else
-		{
+    }
+    else
+    { // alert('s1');
          $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -8015,305 +9608,157 @@ navigator.notification.alert(
                           contentType: false,
                           processData: false,
                           success:function(response){
-                         
+                          // alert(JSON.stringify(response));
                           appTitle =response.title;
                           colour=response.bar_color;
                           buttoncolour=response.bar_button_color;
                           button= response.button_color;
                           
                         
-		   
-			   Data = {api_key:appKey,title:$scope.editappcreate.editgridAppTitle};
-	
-		   
-		if(imageeditsplash != ''){
-			
-			 cordova.exec(function(response){
+       
+         Data = {api_key:appKey,title:$scope.editappcreate.editgridAppTitle};
+  
+       
+    if(imageeditsplash != ''){
+      // alert("splashimage");
+       cordova.exec(function(response){
                         
                           appTitle=response.title;
                           colour=response.bar_color;
                           buttoncolour=response.bar_button_color;
                           button= response.button_color;
                         
-            	  if(imageeditapp != ''){
-			 
+                if(imageeditapp != ''){
+        //  alert("appimage");
         cordova.exec(function(response){
-			
-            	 if(imageeditstore != ''){
-					
-			 cordova.exec(function(response){
+      
+               if(imageeditstore != ''){
+          // alert("storeimage");
+       cordova.exec(function(response){
                         
-                  $ionicLoading.hide();
-                  
-                  
-                          appList='';
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/users.json",
-                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                                 cache: false,
-                                 success:function(response){
-                                 
-                                 $ionicLoading.hide();
-                                 appList = response;
-                                 localStorage["login"] = JSON.stringify(appkeyResult);
-                                 
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                 var total = JSON.parse(error.responseText);
-
+                 $scope.count();
+                    console.log(JSON.stringify(floatarray));
+                    for(var i=0;i<floatarray.length;i++){
+                    if(floatarray[i].key == 'Url'){
+                    
+                    console.log(JSON.stringify(floatarray[i].key));
+                    
+                    $state.go('editnewapp1');
+                    
+                    }}
+             }, function(e){var total = JSON.parse(e);
                   function alertDismissed() {
 }
 
 navigator.notification.alert(
-    total.error,  
+    total.error,
     alertDismissed,        
-    appTitle                      
-);
-                                 }
-                                 });
-                          
-                          console.log(JSON.stringify(floatarray));
-                          for(var i=0;i<floatarray.length;i++){
-                          if(floatarray[i].key == 'Url'){
-                          
-                          console.log(JSON.stringify(floatarray[i].key));
-                          
-                          $state.go('editnewapp1');
-                          
-                          }}
-                          }, function(e){var total = JSON.parse(e);
-                          
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,  
-                                                       alertDismissed,        
-                                                       appTitle                      
-                                                       );
- $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageeditstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+     appTitle                    
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageeditstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
           
-		 }	
-                     },function(e){var total = JSON.parse(e);
-                     
-                     function alertDismissed() {
-                     }
-                     
-                     navigator.notification.alert(
-                                                  total.error,
-                                                  alertDismissed,
-                                                  appTitle
-                                                  ); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["114", "114", "app_image", imageeditapp, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
-           	
-		 } 
-		 else{
-			 if(imageeditstore != ''){
-			 
-			 cordova.exec(function(response){
+     }  
+               },function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+     appTitle                    
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["114", "114", "app_image", imageeditapp, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
             
-                  $ionicLoading.hide();
-                  	colour=response.bar_color;
-			buttoncolour=response.bar_button_color; 			
-			button= response.button_color;
+     } 
+     else{
+       if(imageeditstore != ''){
+      // alert("storeimage"); 
+       cordova.exec(function(response){
+            //  alert(JSON.stringify(response));
+                 // $ionicLoading.hide();
+                    colour=response.bar_color;
+      buttoncolour=response.bar_button_color;       
+      button= response.button_color;
                          
-                          appList='';
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/users.json",
-                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                                 cache: false,
-                                 success:function(response){
-                                
-                                 $ionicLoading.hide();
-                                 appList = response;
-                                 localStorage["login"] = JSON.stringify(appkeyResult);
-                                 
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                var total = JSON.parse(error.responseText);
-
+                      $scope.count();
+                    console.log(JSON.stringify(floatarray));
+                    for(var i=0;i<floatarray.length;i++){
+                    if(floatarray[i].key == 'Url'){
+                    
+                    console.log(JSON.stringify(floatarray[i].key));
+                    
+                    $state.go('editnewapp1');
+                    
+                    }}
+             }, function(e){var total = JSON.parse(e);
                   function alertDismissed() {
 }
 
 navigator.notification.alert(
-    total.error,  
+    total.error,
     alertDismissed,        
-    appTitle                      
-);
-                                 }
-                                 });
-                          
-                          console.log(JSON.stringify(floatarray));
-                          for(var i=0;i<floatarray.length;i++){
-                          if(floatarray[i].key == 'Url'){
-                          
-                          console.log(JSON.stringify(floatarray[i].key));
-                          
-                          $state.go('editnewapp1');
-                          
-                          }}
-                          }, function(e){var total = JSON.parse(e);
-                          
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,
-                                                       alertDismissed,
-                                                       appTitle
-                                                       ); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageeditstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+     appTitle                    
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageeditstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
           
-		 }
-			 
-		 }
-                          appList='';
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/users.json",
-                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                                 cache: false,
-                                 success:function(response){
-                                
-                                 $ionicLoading.hide();
-                                 appList = response;
-                                 localStorage["login"] = JSON.stringify(appkeyResult);
-                                 
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                  var total = JSON.parse(error.responseText);
-
+     }
+       
+     }       $scope.count();
+                    console.log(JSON.stringify(floatarray));
+                    for(var i=0;i<floatarray.length;i++){
+                    if(floatarray[i].key == 'Url'){
+                    
+                    console.log(JSON.stringify(floatarray[i].key));
+                    
+                    $state.go('editnewapp1');
+                    
+                    }}
+               },function(e){var total = JSON.parse(e);
                   function alertDismissed() {
 }
 
 navigator.notification.alert(
-    total.error,  
+    total.error,
     alertDismissed,        
-    appTitle                      
-);
-                                 }
-                                 });
-                 
-                          console.log(JSON.stringify(floatarray));
-                          for(var i=0;i<floatarray.length;i++){
-                          if(floatarray[i].key == 'Url'){
-                          
-                          console.log(JSON.stringify(floatarray[i].key));
-                          
-                          $state.go('editnewapp1');
-                          
-                          }}
-                          },function(e){var total = JSON.parse(e);
-                          
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,
-                                                       alertDismissed,
-                                                       appTitle
-                                                       ); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["320", "460", "splash_image", imageeditsplash, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+     appTitle                    
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["320", "460", "splash_image", imageeditsplash, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
            
-		}
-		else{
-			if(imageeditapp != ''){
-			 
+    }
+    else{
+      if(imageeditapp != ''){
+        // alert("appimage"); 
         cordova.exec(function(response){
                      colour=response.bar_color;
                      buttoncolour=response.bar_button_color;
                      button= response.button_color;
                      
-            	 if(imageeditstore != ''){
-					
-			 cordova.exec(function(response){
-           
-                  $ionicLoading.hide();
-                  
-                          
-                          appList='';
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/users.json",
-                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                                 cache: false,
-                                 success:function(response){
-                                
-                                 $ionicLoading.hide();
-                                 appList = response;
-                                 localStorage["login"] = JSON.stringify(appkeyResult);
-                                 
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                 var total = JSON.parse(error.responseText);
-
+               if(imageeditstore != ''){
+           // alert("storeimage");
+       cordova.exec(function(response){
+           // alert(JSON.stringify(response));
+                  $scope.count();
+                    console.log(JSON.stringify(floatarray));
+                    for(var i=0;i<floatarray.length;i++){
+                    if(floatarray[i].key == 'Url'){
+                    
+                    console.log(JSON.stringify(floatarray[i].key));
+                    
+                    $state.go('editnewapp1');
+                    
+                    }}
+             }, function(e){var total = JSON.parse(e);
                   function alertDismissed() {
 }
 
 navigator.notification.alert(
-    total.error,  
+     total.error,
     alertDismissed,        
-    appTitle                      
-);
-                                 }
-                                 });
-                          
-                          console.log(JSON.stringify(floatarray));
-                          for(var i=0;i<floatarray.length;i++){
-                          if(floatarray[i].key == 'Url'){
-                          
-                          console.log(JSON.stringify(floatarray[i].key));
-                          
-                          $state.go('editnewapp1');
-                          
-                          }}
-                          }, function(e){var total = JSON.parse(e);
-                          
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,
-                                                       alertDismissed,
-                                                       appTitle
-                                                       ); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageeditstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+     appTitle                    
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageeditstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
           
-		 }
+     }
                      colour=response.bar_color;
                      buttoncolour=response.bar_button_color;
                      button= response.button_color;
 
-                     appList='';
-                     $.ajax({
-                            type: "GET",
-                            url: "http://build.myappbuilder.com/api/users.json",
-                            data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                            cache: false,
-                            success:function(response){
-                            
-                            $ionicLoading.hide();
-                            appList = response;
-                            localStorage["login"] = JSON.stringify(appkeyResult);
-                            
-                            },
-                            error:function(error,status){
-                            $ionicLoading.hide();
-                             var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-    appTitle                      
-);
-                            }
-                            });
-                  	
+                    $scope.count();
                      console.log(JSON.stringify(floatarray));
                      for(var i=0;i<floatarray.length;i++){
                      if(floatarray[i].key == 'Url'){
@@ -8323,85 +9768,56 @@ navigator.notification.alert(
                      $state.go('editnewapp1');
                      
                      }}
-                     },function(e){var total = JSON.parse(e);
-                     
-                     function alertDismissed() {
-                     }
-                     
-                     navigator.notification.alert(
-                                                  total.error,
-                                                  alertDismissed,
-                                                  appTitle
-                                                  ); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["114", "114", "app_image", imageeditapp, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
-           	
-		 } 
-		 else{
-			 if(imageeditstore != ''){
-				
-			 cordova.exec(function(response){
-        	
-                  $ionicLoading.hide();
-                  	colour=response.bar_color;
-			buttoncolour=response.bar_button_color; 			
-			button= response.button_color;
-                          
-                          appList='';
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/users.json",
-                                 data:{'api_key':appkeyResult.api_key,'id':appkeyResult.id},
-                                 cache: false,
-                                 success:function(response){
-                                 
-                                 $ionicLoading.hide();
-                                 appList = response;
-                                 localStorage["login"] = JSON.stringify(appkeyResult);
-                                 
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                var total = JSON.parse(error.responseText);
-
+               },function(e){var total = JSON.parse(e);
                   function alertDismissed() {
 }
 
 navigator.notification.alert(
-    total.error,  
+     total.error,
     alertDismissed,        
-    appTitle                      
-);
-                                 }
-                                 });
+     appTitle                    
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["114", "114", "app_image", imageeditapp, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+            
+     } 
+     else{
+       if(imageeditstore != ''){
+        //  alert("storeimage");
+       cordova.exec(function(response){
+          //alert(JSON.stringify(response));
+                  $ionicLoading.hide();
+                    colour=response.bar_color;
+      buttoncolour=response.bar_button_color;       
+      button= response.button_color;
                           
-                          console.log(JSON.stringify(floatarray));
-                          for(var i=0;i<floatarray.length;i++){
-                          if(floatarray[i].key == 'Url'){
-                          
-                          console.log(JSON.stringify(floatarray[i].key));
-                          
-                          $state.go('editnewapp1');
-                          
-                          }}
-                          }, function(e){var total = JSON.parse(e);
-                          
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,
-                                                       alertDismissed,
-                                                       appTitle
-                                                       ); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageeditstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
+                         $scope.count();
+                    console.log(JSON.stringify(floatarray));
+                    for(var i=0;i<floatarray.length;i++){
+                    if(floatarray[i].key == 'Url'){
+                    
+                    console.log(JSON.stringify(floatarray[i].key));
+                    
+                    $state.go('editnewapp1');
+                    
+                    }}
+             }, function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+     appTitle                    
+); $ionicLoading.hide(); }, "ImageCompress", "imageCompress", ["512", "512", "app_store_image", imageeditstore, "http://build.myappbuilder.com/api/apps/settings/general.json?", "put",Data])
           
-		 }
-		}
+     }
+    }
          
 }
      
-		
+    
                    },error:function(error){
                    $ionicLoading.hide();
-                    var total = JSON.parse(error.responseText);
+                var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -8419,25 +9835,26 @@ navigator.notification.alert(
 });
 
 var appTitle1='';
+var floatarray='';
 
-control.controller('editsocialCtrl',function($scope,$state,$ionicScrollDelegate,$ionicModal,$ionicPopup,$ionicLoading,$sce,$http,$ionicScrollDelegate){ 
+control.controller('editsocialCtrl',function($scope,$state,$ionicScrollDelegate,$ionicModal,$ionicPopup,$ionicLoading,$sce,$http,$ionicScrollDelegate){
 
 $ionicScrollDelegate.scrollTop();
 
 $scope.homeeditsocial = function(){
-	$state.go('sample');
+  $state.go('sample');
 }
 
 $scope.backeditsocial = function(){
-	$state.go('editApp');
+  $state.go('editApp');
 }
 
 $scope.editbook1={}
-			
+      
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -8460,9 +9877,9 @@ else
 {
 $scope.button_color='button-'+button;
 }
- 
-                  
-                 console.log(JSON.stringify(twitter));
+          
+                   
+                   console.log(JSON.stringify(twitter));
                    
                    if((twitter == 'undefined') || (twitter == 'null')){
                    $scope.editbook1.twitter_editusername = '';
@@ -8545,7 +9962,7 @@ $scope.button_color='button-'+button;
                    
                    }
                    else{
-                  $scope.editbook1.editflickr_link=flickr;
+                   $scope.editbook1.editflickr_link=flickr;
                    }
                    if((pin == 'undefined') || (pin == 'null')){
                    $scope.editbook1.editpinterest_link = '';
@@ -8554,8 +9971,8 @@ $scope.button_color='button-'+button;
                    else{
                    $scope.editbook1.editpinterest_link=pin;
                    }
-               
-                
+                   
+
              
 $scope.updateeditSocialSettings = function(){              
   
@@ -8575,7 +9992,7 @@ $scope.updateeditSocialSettings = function(){
             formData.append('facebook_link',$scope.editbook1.editfacebook_link);
             formData.append('facebook_key',$scope.editbook1.editfacebook_key);
             formData.append('facebook_secret',$scope.editbook1.editfacebook_secret);
-            formData.append('gplus_link',$scope.editbook1.editgplus_link);	
+            formData.append('gplus_link',$scope.editbook1.editgplus_link);  
             formData.append('gplus_key', $scope.editbook1.editgplus_key);
             formData.append('gplus_secret',$scope.editbook1.editgplus_secret);
             formData.append('youtube_link',$scope.editbook1.edityoutube_link);
@@ -8590,8 +10007,9 @@ $scope.updateeditSocialSettings = function(){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			 
-			      $state.go('sample');
+        //   alert(JSON.stringify(response));
+         //   alert('successfully Updated');
+            $state.go('sample');
                   $ionicLoading.hide();
                  
                 },error:function(error){
@@ -8620,19 +10038,19 @@ control.controller('buttonlistCtrl',function($scope,$state,$ionicScrollDelegate,
 $ionicScrollDelegate.scrollTop();
 
 $scope.backbuttonlist = function(){
-	$state.go('app');
+  $state.go('app');
 }
 $scope.homebuttonlist = function(){
-	$state.go('sample');
+  $state.go('sample');
 }
 
 $scope.editbuttoncreate={}
 $('#editbuttonsrc').attr('src', localStorage.xxx); 
 
-  
-$scope.appTitle = appTitle;	
+  // alert(localStorage.xxx);
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -8668,11 +10086,11 @@ $scope.button_color='button-'+button;
 
             cancelText: 'Cancel',
              cancel: function() {
-         
+           // alert('CANCELLED');
              },
              
      buttonClicked: function(index) {
-   
+    // alert('BUTTON CLICKED', index);
 
        if(index==0){
 
@@ -8696,16 +10114,17 @@ $scope.button_color='button-'+button;
 
           }
 
-		});
+    });
 
        };
                  
     function onSuccess(imageURI) {
 
          imageeditbutton = imageURI;
-       
-				$('#editbuttonsrc').attr('src', imageeditbutton); 
-	    		 $('#editbuttonsrc').css({'width':'50px','height':'50px'});
+       //  imageeditbutton = localStorage.xxx;
+//alert(imageeditbutton);
+        $('#editbuttonsrc').attr('src', imageeditbutton); 
+           $('#editbuttonsrc').css({'width':'50px','height':'50px'});
          $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
 
      }
@@ -8725,12 +10144,12 @@ $scope.editbuttoncreate.editbuttontitle = buttonTitle;
   }
  
   $scope.updatebutton =function(){
-	  
- 	 if(chapterImage){
+    
+   if(chapterImage){
     $('#editbuttonimage').attr({'src':chapterImage});    
   }
   
-	 $ionicLoading.show({
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -8738,25 +10157,24 @@ $scope.editbuttoncreate.editbuttontitle = buttonTitle;
               showDelay: 0
       });
 
-      	 Data1 = {api_key:appKey,id:buttonId,title:$scope.editbuttoncreate.editbuttontitle};
-      	
-		cordova.exec(function(response){
-            	
-            	 buttonId = response.id;
+         Data1 = {api_key:appKey,id:buttonId,title:$scope.editbuttoncreate.editbuttontitle};
+        
+    cordova.exec(function(response){
+              // alert(response);
+               buttonId = response.id;
                     buttonTitle = response.title;  
-                   
+                //     alert("Successfully Updated");
                       $ionicLoading.hide();  
-                     }, function(e){var total = JSON.parse(e);
-                     
-                     function alertDismissed() {
-                     }
-                     
-                     navigator.notification.alert(
-                                                total.error,
-                                                  alertDismissed,
-                                                  'button'
-                                                  );
-          $ionicLoading.hide();
+         }, function(e){var total = JSON.parse(e);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+     total.error,
+    alertDismissed,        
+     'Button'                    
+);
+          $ionicLoading.hide(); 
          var formData = new FormData();
         var methodData = '';
         
@@ -8787,15 +10205,15 @@ $scope.editbuttoncreate.editbuttontitle = buttonTitle;
                 processData: false,
                 success:function(response){
                     $ionicLoading.hide();
-              
+               //  alert(JSON.stringify(response));
                     buttonId = response.id;
                     buttonTitle = response.title;
-                  
+                   // $state.go('elements');
                 },
                 error:function(error,status){
                     $ionicLoading.hide();
                   
-                   var total = JSON.parse(e.responseText);
+                      var total = JSON.parse(e.responseText);
                   function alertDismissed() {
 }
 
@@ -8825,7 +10243,7 @@ $ionicScrollDelegate.scrollTop();
   }
   
   $scope.elementAppwallgoFun=function(){
-	  $state.go('elementAppWall');
+    $state.go('elementAppWall');
   }
   $scope.backdismap=function(){
        $state.go('showmap');
@@ -8833,12 +10251,12 @@ $ionicScrollDelegate.scrollTop();
   $scope.homedismap=function(){
         $state.go('sample');
    }
-	$scope.dismap={}
+  $scope.dismap={}
 $scope.createdisplaymap={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -8870,12 +10288,12 @@ $scope.button_color='button-'+button;
                         success:function(response){                       
                           $ionicLoading.hide();
                            $scope.addressess = response; 
-						   $state.reload();               
+               $state.reload();               
 
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                        var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -8895,13 +10313,13 @@ navigator.notification.alert(
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.dismappage = response;
-						   $state.reload();   	  
+                $scope.dismappage = response;
+               $state.reload();       
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -8915,9 +10333,9 @@ navigator.notification.alert(
               });              
 
 $scope.adddisAddress = function(){
-	
+  
     if($scope.createdisplaymap.title){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -8931,7 +10349,7 @@ $scope.adddisAddress = function(){
           url: "http://build.myappbuilder.com/api/elements/addresses.json",
           data:{'api_key':appKey,'id':elementId,'address':$scope.createdisplaymap.title},
           success:function(response){
-			
+      // alert(JSON.stringify(response));
             $.ajax({
                         type: "GET",
                         url: "http://build.myappbuilder.com/api/elements/addresses.json",
@@ -8939,14 +10357,14 @@ $scope.adddisAddress = function(){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();                       
-						    $scope.addressess = response;                 
-						    $scope.createdisplaymap.title='';
-						   $state.reload();   
-						                            
+                $scope.addressess = response;                 
+                $scope.createdisplaymap.title='';
+               $state.reload();   
+                                        
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                        var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -8961,7 +10379,7 @@ navigator.notification.alert(
             },
           error:function(error){
             $ionicLoading.hide();
-          var total = JSON.parse(error.responseText);
+             var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -8976,12 +10394,12 @@ navigator.notification.alert(
     }
       else{
        function alertDismissed() {
-   
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter The Address',
-    alertDismissed,
+    'Enter The Address',  // message
+    alertDismissed,         // callback
     'Map and Location'
 ); 
     }
@@ -8989,7 +10407,7 @@ navigator.notification.alert(
   }
 
 $scope.updatedisplayAddress = function(id,updateaddresss){
-	  
+    
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -9012,13 +10430,13 @@ $scope.updatedisplayAddress = function(id,updateaddresss){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			    
+      //      alert('successfully Updated');
                   $ionicLoading.hide();
                 
                  
                 },error:function(error){
                   $ionicLoading.hide();
-                 var total = JSON.parse(error.responseText);
+                    var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -9032,7 +10450,7 @@ navigator.notification.alert(
             });
     }
  $scope.deletedisplayAddress = function(id){
-	 
+   
  $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -9040,15 +10458,29 @@ navigator.notification.alert(
               maxWidth: 200,
               showDelay: 0
       });
-                               
-                   
+    
+                   if((($scope.addressess).length)==1)
+                   {
+                   $ionicLoading.hide();
+                   function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'You Cannot delete this address',  // message
+    alertDismissed,         // callback
+    'Map and Location'
+);       
+                   }
+                   else
+                   {
           $.ajax({
             type: "DELETE",
             url: "http://build.myappbuilder.com/api/elements/addresses/"+id+".json",
             data: {'api_key':appKey,'id':elementId},
             cache: false,
             success:function(response){
-				
+        //alert(JSON.stringify(response));
               $.ajax({
                         type: "GET",
                         url: "http://build.myappbuilder.com/api/elements/addresses.json",
@@ -9056,12 +10488,12 @@ navigator.notification.alert(
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						$scope.addressess = response;  
-						   $state.reload();   
+            $scope.addressess = response;  
+               $state.reload();   
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -9076,7 +10508,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-              var total = JSON.parse(error.responseText);
+               var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -9087,16 +10519,15 @@ navigator.notification.alert(
     'Map and Location'                     
 );
             }
-          });	 
-
-                   
+          });
                    }
+}   
 
 $scope.mapdiscustom = function(){
 
     if($scope.dismap.discustommaptitle){
       if($scope.dismap.discustommapvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -9110,7 +10541,7 @@ $scope.mapdiscustom = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':elementId,'title':$scope.dismap.discustommaptitle,'value':$scope.dismap.discustommapvalue},
           success:function(response){
-			 customdismapid = response.id;
+       customdismapid = response.id;
 
             $.ajax({
                         type: "GET",
@@ -9119,14 +10550,14 @@ $scope.mapdiscustom = function(){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();                        
-					    $scope.dismappage = response;
-						   $state.reload();   
-						  
+              $scope.dismappage = response;
+               $state.reload();   
+              
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -9137,13 +10568,13 @@ navigator.notification.alert(
     'Map and Location'                     
 );
                         }
-              });
-              $scope.dismap.discustommaptitle='';
-              $scope.dismap.discustommapvalue='';
+              });  
+               $scope.dismap.discustommaptitle='';
+              $scope.dismap.discustommapvalue='';            
             },
           error:function(error){
             $ionicLoading.hide();
-            var total = JSON.parse(error.responseText);
+             var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -9157,13 +10588,13 @@ navigator.notification.alert(
       });
     }
       }else{
-     function alertDismissed() {
-   
+      function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
     'Map and Location'
 );
     }
@@ -9195,13 +10626,13 @@ $scope.removedismapCustomValue = function(id){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.dismappage = response;
-						   $state.reload();   	  
+                $scope.dismappage = response;
+               $state.reload();       
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                            var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -9216,7 +10647,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-             var total = JSON.parse(error.responseText);
+                var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -9245,7 +10676,7 @@ $ionicScrollDelegate.scrollTop();
   }
   
   $scope.elementAppwallgoFun=function(){
-	  $state.go('elementAppWall');
+    $state.go('elementAppWall');
   }
   $scope.backdisform=function(){
       $state.go('previewform');
@@ -9258,9 +10689,9 @@ $scope.formdis={}
 $scope.displayform={}
 
 $scope.formdis.disemail = elementemail;
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -9292,13 +10723,13 @@ $scope.button_color='button-'+button;
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.disformtype = response;
-						   $state.reload();   	  
+                $scope.disformtype = response;
+               $state.reload();       
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9312,7 +10743,7 @@ navigator.notification.alert(
                 
 $scope.updatedisform = function(){
 
-	 $ionicLoading.show({
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -9320,7 +10751,7 @@ $scope.updatedisform = function(){
               showDelay: 0
       });
       
-	  var formData = new FormData();
+    var formData = new FormData();
            formData.append('api_key',appKey);
            formData.append('id',elementId);       
             formData.append('email_to_send_to',$scope.formdis.disemail);       
@@ -9335,13 +10766,13 @@ $scope.updatedisform = function(){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			  
+         //   alert('successfully Updated');
                   $ionicLoading.hide();
                 
                  
                 },error:function(error){
                   $ionicLoading.hide();
-                   var total = JSON.parse(error.responseText);
+                  var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9352,19 +10783,19 @@ navigator.notification.alert(
 ); 
                 }
             });
-		}
-		else
-		{
-			 $ionicLoading.hide();
-		 }
-			
+    }
+    else
+    {
+       $ionicLoading.hide();
+     }
+      
 }
 
 $scope.createdisformcustom = function(){
 
     if($scope.displayform.customdisTitle){
       if($scope.displayform.customdisvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -9378,7 +10809,7 @@ $scope.createdisformcustom = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':elementId,'title':$scope.displayform.customdisTitle,'value':$scope.displayform.customdisvalue},
           success:function(response){
-			 customedisformid = response.id;
+       customedisformid = response.id;
 
             $.ajax({
                         type: "GET",
@@ -9387,8 +10818,8 @@ $scope.createdisformcustom = function(){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();                      
-						    $scope.disformtype = response;
-						   $state.reload();   
+                $scope.disformtype = response;
+               $state.reload();   
 
                         },
                         error:function(error,status){
@@ -9403,9 +10834,9 @@ navigator.notification.alert(
      'Contact Form'                     
 ); 
                         }
-              });
-              $scope.displayform.customdisTitle='';
-              $scope.displayform.customdisvalue='';
+              });  
+                $scope.displayform.customdisTitle='';
+              $scope.displayform.customdisvalue='';            
             },
           error:function(error){
             $ionicLoading.hide();
@@ -9422,13 +10853,13 @@ navigator.notification.alert(
       });
     }
       }else{
-       function alertDismissed() {
-    
+      function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
     'Contact Form'
 );
     }
@@ -9460,8 +10891,8 @@ $scope.removeformdisCustomValue = function(id){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.disformtype = response;						 
-						   $state.reload();     
+                $scope.disformtype = response;             
+               $state.reload();     
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
@@ -9479,7 +10910,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-              var total = JSON.parse(error.responseText);
+            var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9507,7 +10938,7 @@ control.controller('taskdisplayCtrl',function($scope,$state,$ionicLoading,$ionic
   }
   
   $scope.elementAppwallgoFun=function(){
-	  $state.go('elementAppWall');
+    $state.go('elementAppWall');
   }
   $scope.backdistask=function(){
       $state.go('previewtask');
@@ -9516,12 +10947,12 @@ control.controller('taskdisplayCtrl',function($scope,$state,$ionicLoading,$ionic
        $state.go('sample');
   }
   
-	$scope.discustask={}
-	$scope.createdisplaytask={}
+  $scope.discustask={}
+  $scope.createdisplaytask={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -9552,12 +10983,12 @@ $scope.button_color='button-'+button;
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();   
-						     $scope.taskdisplaypage = response;
-						   $state.reload();   	  
+                 $scope.taskdisplaypage = response;
+               $state.reload();       
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9576,8 +11007,8 @@ navigator.notification.alert(
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.taskdisplay = response;
-						   $state.reload();    
+                $scope.taskdisplay = response;
+               $state.reload();    
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
@@ -9594,11 +11025,11 @@ navigator.notification.alert(
               });   
               
 $scope.adddisplayTask = function(task,desc){
-	
-	if($scope.createdisplaytask.taskTitle)
-	{
-		
-	$ionicLoading.show({
+  
+  if($scope.createdisplaytask.taskTitle)
+  {
+
+  $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -9612,8 +11043,8 @@ $scope.adddisplayTask = function(task,desc){
                         data:{'api_key':appKey,'id':elementId,'title':$scope.createdisplaytask.taskTitle,'description':$scope.createdisplaytask.taskDescription},
                         cache: false,
                         success:function(response){
-                          $ionicLoading.hide();		
-                          tasklistid=response.id;			  
+                          $ionicLoading.hide();   
+                          tasklistid=response.id;       
               $.ajax({
                         type: "GET",
                         url: "http://build.myappbuilder.com/api/elements/tasks.json",
@@ -9621,10 +11052,10 @@ $scope.adddisplayTask = function(task,desc){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.taskdisplay = response;
-						$scope.createdisplaytask.taskTitle='';
-						$scope.createdisplaytask.taskDescription='';    
-						   $state.reload();    
+                $scope.taskdisplay = response;
+            $scope.createdisplaytask.taskTitle='';
+            $scope.createdisplaytask.taskDescription='';    
+               $state.reload();    
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
@@ -9642,7 +11073,7 @@ navigator.notification.alert(
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9653,19 +11084,19 @@ navigator.notification.alert(
 ); 
                         }
               });   
-		  }else
-		  {
-			  function alertDismissed() {
-   
+      }else
+      {
+         function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter The Title ',
-    alertDismissed,
+    'Enter The Title ',  // message
+    alertDismissed,         // callback
     'Task List'
 );
-		  }           
-	
+      }           
+  
 }
 
 $scope.deletedisplayTask = function(id){
@@ -9684,7 +11115,7 @@ $scope.deletedisplayTask = function(id){
             data: {"api_key":appKey,'id':elementId},
             cache: false,
             success:function(response){
-
+//        alert(JSON.stringify(response));
                $ionicLoading.hide();
               $.ajax({
                         type: "GET",
@@ -9693,12 +11124,12 @@ $scope.deletedisplayTask = function(id){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.taskdisplay = response;
-						   $state.reload();    
+                $scope.taskdisplay = response;
+               $state.reload();    
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                            var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9712,7 +11143,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-               var total = JSON.parse(error.responseText);
+             var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9723,7 +11154,7 @@ navigator.notification.alert(
 ); 
             }
           });
-}	
+} 
 
 $scope.updatedisplayTask = function(updatesid,titles,descp){
 
@@ -9750,13 +11181,13 @@ $scope.updatedisplayTask = function(updatesid,titles,descp){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			
+         //   alert('successfully Updated');
                   $ionicLoading.hide();
                 
             },
             error:function(error,status){
                $ionicLoading.hide();
-              var total = JSON.parse(error.responseText);
+             var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9767,14 +11198,14 @@ navigator.notification.alert(
 ); 
             }
           });
-}	
+} 
 
 
 $scope.createtaskdiscustom = function(){
 
     if($scope.discustask.customtaskdistitle){
     if($scope.discustask.customtaskdisvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -9788,7 +11219,7 @@ $scope.createtaskdiscustom = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':elementId,'title':$scope.discustask.customtaskdistitle,'value':$scope.discustask.customtaskdisvalue},
           success:function(response){
-			 customdistaskid = response.id;
+       customdistaskid = response.id;
 
             $.ajax({
                         type: "GET",
@@ -9797,12 +11228,12 @@ $scope.createtaskdiscustom = function(){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.taskdisplaypage = response;
-						   $state.reload();     
+                $scope.taskdisplaypage = response;
+               $state.reload();     
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+ var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9812,14 +11243,13 @@ navigator.notification.alert(
      'Task List'                     
 ); 
                         }
-              });
-              $scope.discustask.customtaskdistitle='';
-              $scope.discustask.customtaskdisvalue='';
-
+              });  
+               $scope.discustask.customtaskdistitle='';
+              $scope.discustask.customtaskdisvalue='';            
             },
           error:function(error){
             $ionicLoading.hide();
-              var total = JSON.parse(error.responseText);
+             var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9832,13 +11262,13 @@ navigator.notification.alert(
       });
     }
       }else{
-       function alertDismissed() {
-    
+      function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title and Value',
-    alertDismissed,
+    'Enter Title and Value',  // message
+    alertDismissed,         // callback
     'Task List'
 );
     }
@@ -9870,12 +11300,12 @@ $scope.removetaskdisCustomValue = function(id){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();   
-						     $scope.taskdisplaypage = response;
-						   $state.reload();   	  
+                 $scope.taskdisplaypage = response;
+               $state.reload();       
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9889,7 +11319,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-               var total = JSON.parse(error.responseText);
+ var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -9917,7 +11347,7 @@ $ionicScrollDelegate.scrollTop();
   }
   
    $scope.elementAppwallgoFun=function(){
-	  $state.go('elementAppWall');
+    $state.go('elementAppWall');
   }
   $scope.backdisweb=function(){
       $state.go('previewweb');
@@ -9925,13 +11355,13 @@ $ionicScrollDelegate.scrollTop();
   $scope.homedisweb=function(){
       $state.go('sample');
   }
-  	
-	$scope.discusweb={}
-	$scope.creatediswebedit={}
+    
+  $scope.discusweb={}
+  $scope.creatediswebedit={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -9972,16 +11402,16 @@ $scope.creatediswebedit.diswebdesc=elementtext;
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
         
-	};
-	$.ajax({
+  };
+  $.ajax({
                         type: "GET",
                         url: "http://build.myappbuilder.com/api/custom_values.json",
                         data:{'api_key':appKey,'element_id':elementId},
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						   $scope.diswebpage = response;
-						   $state.reload();   			                           
+               $scope.diswebpage = response;
+               $state.reload();                                    
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
@@ -9993,16 +11423,16 @@ $scope.updatedisweb = function(){
 
                    if(($scope.creatediswebedit.disweburl)!=elementurl){
     
-	 $ionicLoading.show({
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
               maxWidth: 200,
               showDelay: 0
       });
-	
+  
 
-	  var formData = new FormData();
+    var formData = new FormData();
            formData.append('api_key',appKey);
            formData.append('id',elementId);   
             formData.append('title',$scope.creatediswebedit.diswebname);   
@@ -10017,7 +11447,7 @@ $scope.updatedisweb = function(){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			  
+        //    alert('successfully Updated');
                   $ionicLoading.hide();  
                 },error:function(error){
                   $ionicLoading.hide();
@@ -10026,25 +11456,25 @@ $scope.updatedisweb = function(){
             });
                    }
                    else
-                   {function alertDismissed() {
-    
+                   { function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Update the live url',
-    alertDismissed,
-    'Web',
-    'Done'
+    'Update the live url',  // message
+    alertDismissed,         // callback
+    'Web',            // title
+    'Done'                  // buttonName
 );
                           }
-		
+    
 }
 
 $scope.creatediscusweb = function(){
 
     if($scope.discusweb.cusdiswebtitle){
       if($scope.discusweb.cusdiswebvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -10058,7 +11488,7 @@ $scope.creatediscusweb = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':elementId,'title':$scope.discusweb.cusdiswebtitle,'value':$scope.discusweb.cusdiswebvalue},
           success:function(response){
-			 customdiswebid = response.id;
+       customdiswebid = response.id;
 
             $.ajax({
                         type: "GET",
@@ -10067,16 +11497,16 @@ $scope.creatediscusweb = function(){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide(); 
-						    $scope.diswebpage = response;
-						   $state.reload();                              
+                $scope.diswebpage = response;
+               $state.reload();                              
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
                           navigator.notification.alert(error.responseText);
                         }
-              });
-              $scope.discusweb.cusdiswebtitle='';
-              $scope.discusweb.cusdiswebvalue='';
+              });   
+               $scope.discusweb.cusdiswebtitle='';
+              $scope.discusweb.cusdiswebvalue='';           
             },
           error:function(error){
             $ionicLoading.hide();
@@ -10086,15 +11516,15 @@ $scope.creatediscusweb = function(){
       });
     }
       }else{
-      function alertDismissed() {
-   
+     function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
-    'Web',
-    'Done'
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
+    'Web',            // title
+    'Done'                  // buttonName
 );
     }  
   }
@@ -10124,8 +11554,8 @@ $scope.removediswebCustomValue = function(id){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						   $scope.diswebpage = response;
-						   $state.reload();   			                           
+               $scope.diswebpage = response;
+               $state.reload();                                    
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
@@ -10138,7 +11568,7 @@ $scope.removediswebCustomValue = function(id){
               navigator.notification.alert(error.responseText)
             }
           });
-}	
+} 
 
 });
 
@@ -10153,7 +11583,7 @@ $ionicScrollDelegate.scrollTop();
   }
   
   $scope.elementAppwallgoFun=function(){
-	  $state.go('elementAppWall');
+    $state.go('elementAppWall');
   }
   $scope.backdisrss=function(){
        $state.go('entries');
@@ -10161,13 +11591,13 @@ $ionicScrollDelegate.scrollTop();
    $scope.homedisrss=function(){
         $state.go('sample');
 }
-  	
-	$scope.discusrss={}
-	$scope.createrssdis={}
+    
+  $scope.discusrss={}
+  $scope.createrssdis={}
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -10197,7 +11627,7 @@ $scope.createrssdis.disrssdesc=elementtext;
 
 $scope.updaterssdis = function(){
 
-	 $ionicLoading.show({
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -10209,7 +11639,7 @@ $scope.updaterssdis = function(){
    $ionicLoading.hide();
 }
 else{
-	  var formData = new FormData();
+    var formData = new FormData();
            formData.append('api_key',appKey);
            formData.append('id',elementId);    
             formData.append('rss_url',$scope.createrssdis.disrssurl);
@@ -10224,13 +11654,13 @@ else{
                   contentType: false,
                   processData: false,
                   success:function(response){
-			
+         //   alert('successfully Updated');
                   $ionicLoading.hide();
                 
                  
                 },error:function(error){
                   $ionicLoading.hide();
-                  var total = JSON.parse(error.responseText);
+                 var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -10241,7 +11671,7 @@ navigator.notification.alert(
 ); 
                 }
             });
-		}
+    }
 }
 
 $scope.tinymceOptions = {
@@ -10257,7 +11687,7 @@ $scope.tinymceOptions = {
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
         
-	};
+  };
 
  $.ajax({
                         type: "GET",
@@ -10266,12 +11696,12 @@ $scope.tinymceOptions = {
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();                        
-						    $scope.disrsspage = response;
-						   $state.reload();   
+                $scope.disrsspage = response;
+               $state.reload();   
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -10284,10 +11714,10 @@ navigator.notification.alert(
               });              
               
 $scope.createcusdisrss = function(){
-	
+  
     if($scope.discusrss.cusdisrsstitle){
       if($scope.discusrss.cusdisrssvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -10301,7 +11731,7 @@ $scope.createcusdisrss = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':elementId,'title':$scope.discusrss.cusdisrsstitle,'value':$scope.discusrss.cusdisrssvalue},
           success:function(response){
-			 customdisrssid = response.id;
+       customdisrssid = response.id;
 
             $.ajax({
                         type: "GET",
@@ -10310,12 +11740,12 @@ $scope.createcusdisrss = function(){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();                      
-						    $scope.disrsspage = response;                 
-						   $state.reload();     
+                $scope.disrsspage = response;                 
+               $state.reload();     
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -10325,9 +11755,9 @@ navigator.notification.alert(
      'Rss Feed'                     
 ); 
                         }
-              });
+              }); 
               $scope.discusrss.cusdisrsstitle='';
-              $scope.discusrss.cusdisrssvalue='';
+              $scope.discusrss.cusdisrssvalue='';             
             },
           error:function(error){
             $ionicLoading.hide();
@@ -10345,12 +11775,12 @@ navigator.notification.alert(
     }
       }else{
        function alertDismissed() {
-   
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
     'Rss Feed'
 );
     }
@@ -10382,12 +11812,12 @@ $scope.removerssdisCustomValue = function(id){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-							$scope.disrsspage = response;
-						   $state.reload();       
+              $scope.disrsspage = response;
+               $state.reload();       
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                        var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -10401,7 +11831,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-              var total = JSON.parse(error.responseText);
+             var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -10416,11 +11846,11 @@ navigator.notification.alert(
 
 });
 
+var customdisaudioid='';
 var customdisid = '';
 var picdiscustom = '';
 var imagepicdis='';
- var amenities3='';
-
+  
 control.controller('picdisplayCtrl',function($scope,$state,$ionicScrollDelegate,$ionicActionSheet,$ionicLoading,$ionicPopup,$ionicModal){ 
 
  $ionicScrollDelegate.scrollTop();
@@ -10432,7 +11862,7 @@ control.controller('picdisplayCtrl',function($scope,$state,$ionicScrollDelegate,
   }
   
   $scope.elementAppwallgoFun=function(){
-	  $state.go('elementAppWall');
+    $state.go('elementAppWall');
   }
   $scope.backdispic=function(){
                    
@@ -10460,7 +11890,7 @@ control.controller('picdisplayCtrl',function($scope,$state,$ionicScrollDelegate,
                                                        );
                           }
                           });
-     
+
   }
  $scope.homedispic=function(){
        $state.go('sample');
@@ -10469,15 +11899,15 @@ control.controller('picdisplayCtrl',function($scope,$state,$ionicScrollDelegate,
  
 $scope.textCreatedis = {}
 $scope.dispic={}
-$scope.contenteditCreate={}
+                   $scope.contenteditCreate={}
                    
-$scope.contenteditCreate.elementeditTag = tagging;
+                   $scope.contenteditCreate.elementeditTag = tagging;
 $scope.textCreatedis.distitle=elementtitle;
 $scope.textCreatedis.distext=elementtext;
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -10523,7 +11953,7 @@ $scope.button_color='button-'+button;
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
         
-	};
+  };
 
  $.ajax({
                         type: "GET",
@@ -10531,14 +11961,14 @@ $scope.button_color='button-'+button;
                         data:{'api_key':appKey,'id':elementId},
                         cache: false,
                         success:function(response){
-							
+              
                           $ionicLoading.hide();
-							$scope.dispicpage = response;
-						   $state.reload();       
+              $scope.dispicpage = response;
+               $state.reload();       
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -10558,13 +11988,13 @@ navigator.notification.alert(
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.distxtpage = response;
-						  
-						   $state.reload();   						                            
+                $scope.distxtpage = response;
+               //  alert(JSON.stringify($scope.distxtpage));
+               $state.reload();                                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                            var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -10578,8 +12008,8 @@ navigator.notification.alert(
               });              
               
 $scope.updatedistext = function(){            
-	
-	 $ionicLoading.show({
+  
+   $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
               showBackdrop: true,
@@ -10587,7 +12017,7 @@ $scope.updatedistext = function(){
               showDelay: 0
       });
       
-	  var formData = new FormData();
+    var formData = new FormData();
            formData.append('api_key',appKey);
            formData.append('id',elementId);       
            formData.append('title',$scope.textCreatedis.distitle);
@@ -10603,11 +12033,11 @@ $scope.updatedistext = function(){
                   contentType: false,
                   processData: false,
                   success:function(response){
-			  
+         //   alert('successfully Updated');
                   $ionicLoading.hide();                
                 },error:function(error){
                   $ionicLoading.hide();
-                   var total = JSON.parse(error.responseText);
+                 var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -10619,11 +12049,11 @@ navigator.notification.alert(
 );
                 }
             });   
-		}
-		else
-		{
-			 $ionicLoading.hide();  
-		}
+    }
+    else
+    {
+       $ionicLoading.hide();  
+    }
  }
 
  $scope.picdisplayselect = function(){
@@ -10638,11 +12068,11 @@ navigator.notification.alert(
 
             cancelText: 'Cancel',
              cancel: function() {
-         
+           // alert('CANCELLED');
              },
              
      buttonClicked: function(index) {
-  
+    // alert('BUTTON CLICKED', index);
 
        if(index==0){
 
@@ -10666,16 +12096,16 @@ navigator.notification.alert(
 
           }
 
-		});
+    });
 
        };
                  
     function onSuccess(imageURI) {
 
          imagepicdis = imageURI;
-
-				$('#dispictext').attr('src', imagepicdis); 
-	    		 $('#dispictext').css({'width':'50px','height':'50px'});
+//alert(imagepicdis);
+        $('#dispictext').attr('src', imagepicdis); 
+           $('#dispictext').css({'width':'50px','height':'50px'});
          $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
 
      }
@@ -10696,25 +12126,25 @@ $scope.uploaddisplay = function(){
               maxWidth: 200,
               showDelay: 0
       });
-		      
+          
      cordova.exec(function(response){
-            	 var result3 = response;
+               var result3 = response;
  
-            	 picdiscustom =result3.id;
-            	 imagepicdis='';
-            	   $.ajax({
+               picdiscustom =result3.id;
+               imagepicdis='';
+                 $.ajax({
                         type: "GET",
                         url: "http://build.myappbuilder.com/api/elements/images.json",
                         data:{'api_key':appKey,'id':elementId},
                         cache: false,
                         success:function(response){               
                           $ionicLoading.hide();
-						    $scope.dispicpage = response;						     
-						   $state.reload();                            
+                $scope.dispicpage = response;                
+               $state.reload();                            
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                            var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -10726,17 +12156,17 @@ navigator.notification.alert(
 );
                         }
               });              
-  	 },
-                  function(e){var total = JSON.parse(e);
-                  
+     },
+               function(e){var total = JSON.parse(e);
+
                   function alertDismissed() {
-                  }
-                  
-                  navigator.notification.alert(
-                                             total.error,
-                                               alertDismissed,
-                                               'Picture and Text'
-                                               ); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["300", "280", "image", imagepicdis, "http://build.myappbuilder.com/api/elements/images.json?", "post", {api_key:appKey,id:elementId}])
+}
+
+navigator.notification.alert(
+     total.error,
+    alertDismissed,        
+   'Picture and Text'                   
+); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["300", "280", "image", imagepicdis, "http://build.myappbuilder.com/api/elements/images.json?", "post", {api_key:appKey,id:elementId}])
  }
 
 $scope.removepicdisCustom = function(id){
@@ -10764,12 +12194,12 @@ $scope.removepicdisCustom = function(id){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.dispicpage = response;						     
-						   $state.reload();  						                            
+                $scope.dispicpage = response;                
+               $state.reload();                                         
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                            var total = JSON.parse(error.responseText);
+                        var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -10784,7 +12214,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-               var total = JSON.parse(error.responseText);
+              var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -10801,10 +12231,10 @@ navigator.notification.alert(
   $scope.AppEditor = false;
   
 $scope.createpicdis = function(){
-	
+
     if($scope.dispic.customdisTitle){
       if($scope.dispic.customedisvalue){
-	 
+   
       $ionicLoading.show({
               content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
               animation: 'fade-in',
@@ -10818,7 +12248,7 @@ $scope.createpicdis = function(){
           url: "http://build.myappbuilder.com/api/custom_values.json",
           data:{'api_key':appKey,'element_id':elementId,'title':$scope.dispic.customdisTitle,'value':$scope.dispic.customedisvalue},
           success:function(response){
-			 customdisid = response.id;
+       customdisid = response.id;
           
             $.ajax({
                         type: "GET",
@@ -10827,13 +12257,13 @@ $scope.createpicdis = function(){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.distxtpage = response;
-						  
-						   $state.reload();                            
+                $scope.distxtpage = response;
+               //  alert(JSON.stringify($scope.distxtpage));
+               $state.reload();                            
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -10844,14 +12274,13 @@ navigator.notification.alert(
    'Picture and Text'                   
 );
                         }
-              });
-              
-              $scope.dispic.customdisTitle='';
-              $scope.dispic.customedisvalue='';
+              });  
+                $scope.dispic.customdisTitle='';
+              $scope.dispic.customedisvalue='';            
             },
           error:function(error){
             $ionicLoading.hide();
-             var total = JSON.parse(error.responseText);
+           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -10866,18 +12295,18 @@ navigator.notification.alert(
     }
       }else{
        function alertDismissed() {
-   
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
     'Picture and Text'
 );
     }  
   }
 
-                   $scope.ok = function(){
+   $scope.ok = function(){
                    
                    $ionicLoading.show({
                                       content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
@@ -10892,6 +12321,7 @@ navigator.notification.alert(
                    amenities='';
                    console.log(datatag);
                    }
+                   
                    else{
                    for(var i=0;i<datatag.length;i++){
                    
@@ -10907,20 +12337,20 @@ navigator.notification.alert(
                    
                    }
                    
-                   }}
-                   
+                   }
+                   }
                    $.ajax({
                           type: "PUT",
                           url: "http://build.myappbuilder.com/api/elements/tags.json",
                           data:{'api_key':appKey,'element_id':elementId,'value':amenities},
                           cache: false,
                           success:function(response){
-                      
+                       //   alert('Successfully Updated');
                           $ionicLoading.hide();                        
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -10935,6 +12365,8 @@ navigator.notification.alert(
                    
                    }
                    
+
+
 $scope.removedistxtCustomValue = function(id){
 
     customdisid = id;
@@ -10960,13 +12392,13 @@ $scope.removedistxtCustomValue = function(id){
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.distxtpage = response;
-						
-						   $state.reload();                            
+                $scope.distxtpage = response;
+            //   alert(JSON.stringify($scope.distxtpage));
+               $state.reload();                            
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                            var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -10981,7 +12413,7 @@ navigator.notification.alert(
             },
             error:function(error,status){
                $ionicLoading.hide();
-               var total = JSON.parse(error.responseText);
+              var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -11001,10 +12433,10 @@ var messages = "";
 
 
 control.controller("appWallCtrl",function($scope,$state, $ionicLoading,$http,$ionicPopup){
-	
+  
 $scope.appTitle = appTitle;
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -11066,7 +12498,8 @@ $scope.button_color='button-'+button;
       });
 
       $scope.popupClose=function() {
-   
+      // alert('Tapped!', $scope.checkBox.element+" : "+$scope.checkBox.button);
+      // alert('Tapped!', $scope.checkBox.element+" : "+$scope.checkBox.button);
         myPopup.close();
       }
 
@@ -11088,10 +12521,12 @@ $scope.button_color='button-'+button;
         $ionicLoading.show({template: '<i class="icon ion-loading-a"></i>&nbsp;Please wait...'});
         $http.post('http://build.myappbuilder.com/api/app_wall_settings.json',{api_key: appKey,button_wall:button_wall,element_wall:element_wall})
               .success(function(data,status,headers,config){
-                
+                  //$ionicLoading.hide();
+//alert(JSON.stringify(data));
+                  //Appwall = data;
                   $.ajax({url:'http://build.myappbuilder.com/api/app_wall_settings.json', type:"GET",data:{'api_key':appKey},
                       success:function(response){
-                    
+                      //  alert(JSON.stringify(response))
                           Appwall = response;
                           $ionicLoading.hide();
                            myPopup.close();
@@ -11123,7 +12558,7 @@ $scope.button_color='button-'+button;
                   data:{'api_key':appKey},
                   cache: false,
                   success:function(response){
-					
+          //  alert(JSON.stringify(response));
                   window.wizSpinner.hide();
                    messages = response;
                    appWallPostFun();
@@ -11142,7 +12577,7 @@ navigator.notification.alert(
    'Messages'                    
 );
                     }else {
-                      function alertDismissed() {
+                   function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11172,11 +12607,11 @@ function appWallPostFun(){
     var replyappend = '';
     var z = 0;
     var p = 0;
-  
+   // alert("msgLen:"+messages.length);
   
     if(messages.length > 0){
-      $.each( messages, function( key, value ) {	
-        $.each( value, function( k, v ) {			  
+      $.each( messages, function( key, value ) {  
+        $.each( value, function( k, v ) {       
             if(k == "id"){
               mgs_id.push(v);
             }else if(k == "created_at"){
@@ -11265,7 +12700,7 @@ function appWallPostFun(){
         replyappend ='';
 
       }else{
-	
+  
       }
     }
     
@@ -11299,18 +12734,18 @@ function appWallPostFun(){
                   data:{'api_key':appKey},
                   cache: false,
                   success:function(response){
-				
+        //   alert(JSON.stringify(response));
                     window.wizSpinner.hide();
                    messages = response;
                    $('#appwallListview').empty();
                    appWallPostFun();
                   },
                   error:function(error,status){
-					window.wizSpinner.hide();
+          window.wizSpinner.hide();
                     $ionicLoading.hide();
                     var error = JSON.parse(error.responseText);
                     if(error.error == "Unauthorized"){
-                      function alertDismissed() {
+                       function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11319,7 +12754,7 @@ navigator.notification.alert(
    'Messages'                    
 );
                     }else {
-                      function alertDismissed() {
+                     function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11334,11 +12769,14 @@ navigator.notification.alert(
               error:function(msg){   window.wizSpinner.hide(); alert(JSON.stringify(msg));}
             });
           }else{
-            
+            // login();
           }
     });
     
-
+ /*   $("#textReplyMgs").click(function(event){
+        event.preventDefault();
+        replymessageFun();
+    });*/
 }
 
 function replymessageFun(){
@@ -11347,7 +12785,7 @@ function replymessageFun(){
     var replyarray = "replymessage"+replyMgsNo1[1];
     var replymessage = $('#'+replyarray).val();
       if(replymessage == ''){
-      function alertDismissed() {
+     function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11378,7 +12816,7 @@ navigator.notification.alert(
                     $ionicLoading.hide();
                     var error = JSON.parse(error.responseText);
                     if(error.error == "Unauthorized"){
-                      function alertDismissed() {
+                        function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11387,7 +12825,7 @@ navigator.notification.alert(
    'Messages'                    
 );
                     }else {
-                     function alertDismissed() {
+                       function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11403,7 +12841,7 @@ navigator.notification.alert(
         });
       }
   }else{
-   
+   // login();
   }
 
 }
@@ -11414,7 +12852,7 @@ function postmessageFun(){
 
     var postmessage = $('#postmessage').val();
     if(postmessage == ''){
-     function alertDismissed() {
+      function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11425,7 +12863,7 @@ navigator.notification.alert(
     }else{
 
       window.wizSpinner.show(options);
-		  
+      
       $.ajax({url:'http://build.myappbuilder.com/api/messages.json', type:"POST",data:{'message[body]':postmessage,'message[sender_id]':localStorage.sender_id,'api_key':appKey},
         success:function(response){
           $('#appwallListview').empty();
@@ -11434,10 +12872,10 @@ navigator.notification.alert(
                   url: "http://build.myappbuilder.com/api/messages.json",
                   data:{'api_key':appKey},
                   cache: false,
-                  success:function(response){	
+                  success:function(response){ 
                  window.wizSpinner.hide();
                  $('#postmessage').val('');
-                
+                 //$ionicLoading.hide();
                     messages = response;
                     appWallPostFun();
                   },
@@ -11446,7 +12884,7 @@ navigator.notification.alert(
                     $ionicLoading.hide();
                     var error = JSON.parse(error.responseText);
                     if(error.error == "Unauthorized"){
-                     function alertDismissed() {
+                       function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11455,7 +12893,7 @@ navigator.notification.alert(
    'Messages'                    
 );
                     }else {
-                     function alertDismissed() {
+                      function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11471,7 +12909,7 @@ navigator.notification.alert(
       });
     }
   }else{
-   
+    //login();
   }
 
 }
@@ -11480,12 +12918,12 @@ navigator.notification.alert(
 function relative_time(date_str) {
     if (!date_str) {return;}
     date_str = $.trim(date_str);
-    date_str = date_str.replace(/\.\d\d\d+/,"");
-    date_str = date_str.replace(/-/,"/").replace(/-/,"/");
-    date_str = date_str.replace(/T/," ").replace(/Z/," UTC");
-    date_str = date_str.replace(/([\+\-]\d\d)\:?(\d\d)/," $1$2");
+    date_str = date_str.replace(/\.\d\d\d+/,""); // remove the milliseconds
+    date_str = date_str.replace(/-/,"/").replace(/-/,"/"); //substitute - with /
+    date_str = date_str.replace(/T/," ").replace(/Z/," UTC"); //remove T and substitute Z with UTC
+    date_str = date_str.replace(/([\+\-]\d\d)\:?(\d\d)/," $1$2"); // +08:00 -> +0800
     var parsed_date = new Date(date_str);
-    var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
+    var relative_to = (arguments.length > 1) ? arguments[1] : new Date(); //defines relative to what ..default is now
     var delta = parseInt((relative_to.getTime()-parsed_date)/1000);
     delta=(delta<2)?2:delta;
     var r = '';
@@ -11511,16 +12949,16 @@ function relative_time(date_str) {
 control.controller('buttonAppWallCtrl',function($scope,$state,$ionicLoading){
 
 $scope.backbuttonAppwall = function(){
-	$state.go('chapterlist');
+  $state.go('chapterlist');
 }
 
 $scope.homebuttonAppwall = function(){
-	$state.go('sample');
+  $state.go('sample');
 }
 
  $scope.appTitle = appTitle;
  
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -11561,9 +12999,9 @@ $scope.button_color='button-'+button;
                   error:function(error,status){
                      window.wizSpinner.hide();
                     var error = JSON.parse(error.responseText);
-           
+                     // alert(JSON.stringify(error));
                     if(error.error == "Unauthorized"){
-                     function alertDismissed() {
+                      function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11602,7 +13040,7 @@ function ButtonAppWallPostFun(){
               var replyappend ='';
               var z = 0;
               var p = 0;
-    
+              //alert("msgLen:"+messages.length);
               if(messages.length > 0){
                 $.each( messages, function( key, value ) {
                   $.each( value, function( k, v ) {
@@ -11693,7 +13131,7 @@ function ButtonAppWallPostFun(){
                             data:{'api_key':appKey,'button_id':buttonId},
                             cache: false,
                             success:function(response){
-							
+              //  alert(JSON.stringify(response));
                               window.wizSpinner.hide();
                               messages = response;
                               ButtonAppWallPostFun();
@@ -11703,7 +13141,7 @@ function ButtonAppWallPostFun(){
                               
                               var error = JSON.parse(error.responseText);
                               if(error.error == "Unauthorized"){
-                                function alertDismissed() {
+                               function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11712,7 +13150,7 @@ navigator.notification.alert(
    'Messages'                    
 );
                               }else {
-                               function alertDismissed() {
+                                function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11733,12 +13171,12 @@ navigator.notification.alert(
 }
 
 function ButtonreplymessageFun(){
-	
+  
   if(localStorage.appwallLoginData){
     var replyarray = "Buttonreplymessage"+replyMgsNo1[1];
     var replymessage = $('#'+replyarray).val();
       if(replymessage == ''){
-       function alertDismissed() {
+        function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11768,7 +13206,7 @@ navigator.notification.alert(
                      window.wizSpinner.hide();
                     var error = JSON.parse(error.responseText);
                     if(error.error == "Unauthorized"){
-                      function alertDismissed() {
+                       function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11816,7 +13254,7 @@ navigator.notification.alert(
      window.wizSpinner.show(options);
       $.ajax({url:'http://build.myappbuilder.com/api/messages.json', type:"POST",data:{"message[body]":postmessage,"message[sender_id]":localStorage.sender_id,"api_key":appKey,"button_id":buttonId},
         success:function(response){
-		
+    //  alert(JSON.stringify(response));
           $('#ButtonappwallListview').empty();
           $.ajax({
                   type: "GET",
@@ -11824,7 +13262,7 @@ navigator.notification.alert(
                   data:{'api_key':appKey,'button_id':buttonId},
                   cache: false,
                   success:function(response){
-					
+          //alert(JSON.stringify(response));
                     window.wizSpinner.hide();
                     $('#Buttonpostmessage').val('');
                     messages = response;
@@ -11844,7 +13282,7 @@ navigator.notification.alert(
    'Messages'                    
 );
                     }else {
-                       function alertDismissed() {
+                     function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11869,16 +13307,16 @@ navigator.notification.alert(
 control.controller('elementAppWallCtrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicModal,$ionicScrollDelegate){
 
 $scope.backelementAppwall = function(){
-	$state.go('chapterlist');
+  $state.go('chapterlist');
 }
 
 $scope.homeelementAppwall = function(){
-	$state.go('sample');
+  $state.go('sample');
 }
 
  $scope.appTitle = appTitle;
  
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -11906,7 +13344,7 @@ $scope.button_color='button-'+button;
    window.wizSpinner.show(options);
   $.ajax({url:'http://build.myappbuilder.com/api/messages.json',type:"GET",data:{"api_key":appKey,"element_id":elementId},
     success:function(response){
-
+//alert(JSON.stringify(response));
        window.wizSpinner.hide();
       messages = response;
       ElementAppWallPostFun();
@@ -11915,7 +13353,7 @@ $scope.button_color='button-'+button;
       window.wizSpinner.hide();
       var error = JSON.parse(error.responseText);
       if(error.error == "Unauthorized"){
-            function alertDismissed() {
+          function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -11953,7 +13391,7 @@ function ElementAppWallPostFun(){
               var replyappend ='';
               var z = 0;
               var p = 0;
-    
+              //alert("msgLen:"+messages.length);
               if(messages.length > 0){
                 $.each( messages, function( key, value ) {
                   $.each( value, function( k, v ) {
@@ -12033,7 +13471,7 @@ function ElementAppWallPostFun(){
 
               $(".ElementdeleteMgs").click(function(){
                     var deleteMgsNo = (this.id).split('-');
-                   
+                    //alert(mgs_id[deleteMgsNo[1]])
                     window.wizSpinner.show(options);
                     if(localStorage.appwallLoginData){
                       $.ajax({url:'http://build.myappbuilder.com/api/messages.json?api_key='+appKey+'&message_id='+mgs_id[deleteMgsNo[1]], type:"DELETE",data:{},
@@ -12045,7 +13483,7 @@ function ElementAppWallPostFun(){
                             data:{'api_key':appKey,'element_id':elementId},
                             cache: false,
                             success:function(response){
-								window.wizSpinner.hide();
+                window.wizSpinner.hide();
                               messages = response;
                               ElementAppWallPostFun();
                             },
@@ -12054,7 +13492,7 @@ function ElementAppWallPostFun(){
                               
                               var error = JSON.parse(error.responseText);
                               if(error.error == "Unauthorized"){
-                                function alertDismissed() {
+                                 function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -12063,7 +13501,7 @@ navigator.notification.alert(
    'Messages'                    
 );
                               }else {
-                                function alertDismissed() {
+                                  function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -12089,7 +13527,7 @@ function ElementreplymessageFun(){
     var replyarray = "Elementreplymessage"+replyMgsNo1[1];
     var replymessage = $('#'+replyarray).val();
       if(replymessage == ''){
-      function alertDismissed() {
+       function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -12118,7 +13556,7 @@ navigator.notification.alert(
                     
                     var error = JSON.parse(error.responseText);
                     if(error.error == "Unauthorized"){
-                      function alertDismissed() {
+                       function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -12127,7 +13565,7 @@ navigator.notification.alert(
    'Messages'                    
 );
                     }else {
-                     function alertDismissed() {
+                        function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -12151,11 +13589,11 @@ navigator.notification.alert(
 
 
 function ElementpostmessageFun(){
-	
+  
   if(localStorage.appwallLoginData){
     var postmessage = $('#Elementpostmessage').val();
     if(postmessage == ''){
-      function alertDismissed() {
+function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -12193,7 +13631,7 @@ navigator.notification.alert(
    'Messages'                    
 );
                     }else {
-                     function alertDismissed() {
+                      function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -12216,378 +13654,309 @@ navigator.notification.alert(
 var valnothumbnail =  "Nothumbnail";
 var customeditvideoid='';
 var imageeditvideo='';
-var frameeditpassing='';
 
-control.controller('videoeditCtrl',function($scope,$state,$ionicScrollDelegate,$ionicActionSheet,$ionicLoading,$stateParams,$http,$location,$ionicPopup,$rootScope){ 
-  
-    $ionicScrollDelegate.scrollTop();
- 
-  
-$scope.naveditvideo = function(){
-   $state.go('navicon');
- } 
-$scope.homeeditvideo = function(){
-   $state.go('newapp');
- }
- $scope.backeditvideo = function(){
-    $state.go('video');
-  }
-  
-$scope.appTitle = appTitle;	
-
-if(colour == 'undefined'){	
-$scope.bar_color = 'bar-positive';
-}
-else
-{
-$scope.bar_color = 'bar-'+colour;
-}
-
-if(buttoncolour == 'undefined'){
-$scope.bar_button_color ='button-positive'; 
-}
-else
-{
-$scope.bar_button_color ='button-'+buttoncolour;
-}
-
-if(button == 'undefined'){
-$scope.button_color = 'button-positive';
-}
-else
-{
-$scope.button_color='button-'+button;
-}
- 
- 	
-$scope.createeditvideo={}
-
- $scope.tinymceOptions = {
-        
-
-        menubar: false,
-        theme: "modern",
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace wordcount visualblocks visualchars code fullscreen",
-            "insertdatetime table contextmenu ",
-            "emoticons textcolor"
-        ],
-        toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
-        
-	};
-	
- 
-$scope.createeditvideo.editvideotitle=videotitle;
-$scope.createeditvideo.editvideotext= videodesc;
-if(videothumb){
-    $('#videoeditimg').attr({'src':videothumb});
-    	$('#videoeditimg').css({'width':'50px','height':'50px'}); 		
-  }
- if(videoimg){
-    $('#editvideo').attr({'url':videoimg});   
-    $('#videoediturlimg').attr({'src':videoframe});
-   $('#videoediturlimg').css({'width':'50px','height':'50px'}); 			
-  }
-
-$scope.editvideoselect = function(){
-
-     $ionicActionSheet.show({
-
-          titleText: '<b><font size="4">Choose</font></b>',
-            buttons: [
-             { text: 'Camera' },
-             { text: 'PhotoAlbum' },
-              ],
-
-            cancelText: 'Cancel',
-             cancel: function() {
-        
-             },
-             
-     buttonClicked: function(index) {
-   
-
-       if(index==0){
-
-         navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-
-        destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
-
-       return true;
-
-       }
-
-       else{
-
-          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-
-          destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
-
-          return true;
-
-         }                                
-
-          }
-
-		});
-
-       };
-                 
-    function onSuccess(imageURI) {
-check1=true;
-         imageeditvideo = imageURI;
-				$('#videoeditimg').attr('src', imageeditvideo); 
-	    		 $('#videoeditimg').css({'width':'50px','height':'50px'});
-      
-
-     }
-
-    function onFail(message) {
-
-         navigator.notification.alert('Failed because: ' + message);
-
-      } 
-      
+control.controller('videoeditCtrl',function($scope,$state,$ionicScrollDelegate,$ionicActionSheet,$ionicLoading,$stateParams,$http,$location,$ionicPopup,$rootScope){
                    
-                   $scope.videoeditplugin=function(){
+                   $ionicScrollDelegate.scrollTop();
+                   
+                   function readURL22(input) {
+                   if (input.files && input.files[0]) {
+                   var reader = new FileReader();
+                   
+                   reader.onload = function (e) {
+                   $('#videoediturlimg').attr({'src':"img/btn_video.png"});
+                   $('#videoediturlimg').css({'width':'50px','height':'50px'});
+                   $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
+                   //  $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
+                   }
+                   
+                   reader.readAsDataURL(input.files[0]);
+                   }
+                   }
+                   /* $('#editvideo').click(function(){
+                    
+                    cordova.exec(function(e){
+                    
+                    }, function(e){alert(e);}, "Thumbnail", "thumbnail", [""])
+                    
+                    });*/
+                   
+                   
+                   $("#editvideo").change(function(){
+                                          check=true;
+                                          readURL22(this);
+                                          });
+                   
+                   $scope.naveditvideo = function(){
+                   $state.go('navicon');
+                   }
+                   $scope.homeeditvideo = function(){
+                   $state.go('newapp');
+                   }
+                   $scope.backeditvideo = function(){
+                   $state.go('video');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   
+                   $scope.createeditvideo={}
+                   
+                   $scope.tinymceOptions = {
+                   
+                   
+                   menubar: false,
+                   theme: "modern",
+                   plugins: [
+                             "advlist autolink lists link image charmap print preview anchor",
+                             "searchreplace wordcount visualblocks visualchars code fullscreen",
+                             "insertdatetime table contextmenu ",
+                             "emoticons textcolor"
+                             ],
+                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
+                   
+                   };
+                   
+                   
+                   $scope.createeditvideo.editvideotitle=videotitle;
+                   $scope.createeditvideo.editvideotext= videodesc;
+                   if(videothumb){
+                   $('#videoeditimg').attr({'src':videothumb});
+                   $('#videoeditimg').css({'width':'50px','height':'50px'});
+                   }
+                   if(videoimg){
+                   $('#editvideo').attr({'url':videoimg});
+                   $('#videoediturlimg').attr({'src':videothumb});
+                   $('#videoediturlimg').css({'width':'50px','height':'50px'});
+                   }
+                   
+                   $scope.editvideoselect = function(){
+                   
+                   $ionicActionSheet.show({
+                                          
+                                          titleText: '<b><font size="4">Choose</font></b>',
+                                          buttons: [
+                                                    { text: 'Camera' },
+                                                    { text: 'PhotoAlbum' },
+                                                    ],
+                                          
+                                          cancelText: 'Cancel',
+                                          cancel: function() {
+                                          // alert('CANCELLED');
+                                          },
+                                          
+                                          buttonClicked: function(index) {
+                                          // alert('BUTTON CLICKED', index);
+                                          
+                                          if(index==0){
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          else{
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          }
+                                          
+                                          });
+                   
+                   };
+                   
+                   function onSuccess(imageURI) {
+                   check1=true;
+                   imageeditvideo = imageURI;
+                   $('#videoeditimg').attr('src', imageeditvideo);
+                   $('#videoeditimg').css({'width':'50px','height':'50px'});
+                   //   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
+                   
+                   }
+                   
+                   function onFail(message) {
+                   
+                   navigator.notification.alert('Failed because: ' + message);
+                   
+                   }
+                   
+                   $scope.updatevideo = function(){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   if(check ==true) {
+                   
+                   if((($("#editvideo").get(0).files[0].size) / 1024 / 1024) <= 10){
+                   
+                   if((($scope.createeditvideo.editvideotitle)!=videotitle) || (($scope.createeditvideo.editvideotext)!=videodesc) && (check1==true)){
                    
                    cordova.exec(function(response){
-                                
-                                var str=response.split("/var/mobile/Applications/F4AA2E12-B892-4EC7-8705-726EDD470ECF/Documents/");
-                                var getres=str[1];
-                                
-                                if(getres == '(null)'){
-                                
-                                function alertDismissed() {
-                                }
-                                
-                                navigator.notification.alert(
-                                                             'Please take a snapshot for the video',
-                                                             alertDismissed,
-                                                             'Video'
-                                                             );
-                                }
-
-                                
-                                else{
-                               check=true;
-                                framepassing=response;
-                                
-                                $('#videoediturlimg').attr('src', framepassing);
-                                $('#videoediturlimg').css({'width':'50px','height':'50px'});
-                                $state.reload();
-                                }
-                                
+                                //    alert('1');
+                             //   alert("Successfully Updated");
+                                $ionicLoading.hide();
                                 },
-                                function(e){ }, "ThumbnailImages", "thumbnailImages")
-                   
-                   }
+                                function(e){var total = JSON.parse(e);
 
-                   
-$scope.updatevideo = function(){
-                   
-	 $ionicLoading.show({
-              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-              animation: 'fade-in',
-              showBackdrop: true,
-              maxWidth: 200,
-              showDelay: 0
-      });
- if(check ==true) {
-                   
-       if((($scope.createeditvideo.editvideotitle)!=videotitle) || (($scope.createeditvideo.editvideotext)!=videodesc) && (check1==true)){
-                   
-    cordova.exec(function(response){
-        
-       $ionicLoading.hide();
-  	 }, 
-                 function(e){var total = JSON.parse(e);
-                 
-                 function alertDismissed() {
-                 }
-                 
-                 navigator.notification.alert(
-                                            total.error,
-                                              alertDismissed,
-                                              'Video'
-                                              ); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,videoelement,$scope.createeditvideo.editvideotitle,$scope.createeditvideo.editvideotext,imageeditvideo,"put"])
-
-	  }
-else {
-		cordova.exec(function(response){
-			
-			   $ionicLoading.hide();
-                     },
-                     function(e){var total = JSON.parse(e);
-                     
-                     function alertDismissed() {
-                     }
-                     
-                     navigator.notification.alert(
-                                                  total.error,
-                                                  alertDismissed,
-                                                  'Video'
-                                                  ); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,videoelement,$scope.createeditvideo.editvideotitle,$scope.createeditvideo.editvideotext,valnothumbnail,"put"])
-                   
-                   }
-               
-   
-                   }
-else{
-
-		   var formData = new FormData();
-           formData.append('api_key',appKey);
-           formData.append('id',videoelement);       
-           formData.append('title',$scope.createeditvideo.editvideotitle);
-           formData.append('text',$scope.createeditvideo.editvideotext);
-           
-		        $('#editvideo').attr({'url':videoimg});
-				$('#videoediturlimg').attr({'src':videothumb});
-				$('#videoediturlimg').css({'width':'50px','height':'50px'}); 	
-				$('#videoeditimg').attr({'src':videothumb});
-				$('#videoeditimg').css({'width':'50px','height':'50px'}); 	
-
-	  
-				$http.put('http://build.myappbuilder.com/api/elements/update_video.json', formData, {
-                        transformRequest: angular.identity,
-                        headers: {'Content-Type': undefined}
-                      })
-                      
-                      .success(function(data,status, headers, config){
-					
-						  $ionicLoading.hide();					 
-
-					  })
-					  .error(function(data,status, headers, config){
-                        $ionicLoading.hide();
-                             var total = JSON.parse(data);
-                             
-                             function alertDismissed() {
-                             }
-                             
-                             navigator.notification.alert(
-                                                         total.error,
-                                                          alertDismissed,
-                                                          'Video'
-                                                          );
-                      });	
-	  
-                   }
+                  function alertDismissed() {
 }
-                   
- $scope.cuseditvideo={}
- 
-$scope.createvideoedit = function(){
-	
-    if($scope.cuseditvideo.customeditvideoTitle){
-      if($scope.cuseditvideo.customeditvideovalue){
-	 
-      $ionicLoading.show({
-              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-              animation: 'fade-in',
-              showBackdrop: true,
-              maxWidth: 200,
-              showDelay: 0
-      });
 
-       $.ajax({
-          type: "POST",
-          url: "http://build.myappbuilder.com/api/custom_values.json",
-          data:{'api_key':appKey,'element_id':videoelement,'title':$scope.cuseditvideo.customeditvideoTitle,'value':$scope.cuseditvideo.customeditvideovalue},
-          success:function(response){
-			 customeditvideoid = response.id;
-     
-            $.ajax({
-                        type: "GET",
-                        url: "http://build.myappbuilder.com/api/custom_values.json",
-                        data:{'api_key':appKey,'element_id':videoelement},
-                        cache: false,
-                        success:function(response){
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+   'Video'                   
+); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,videoelement,$scope.createeditvideo.editvideotitle,$scope.createeditvideo.editvideotext,$('input[name="editvideo"]').val(),imageeditvideo,"put"])
+                   
+                   }
+                   
+                   
+                   else {
+                   cordova.exec(function(response){
+                                // alert('2');
+                             //   alert("Successfully Updated");
+                                $ionicLoading.hide();
+                                },
+                                function(e){var total = JSON.parse(e);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+     total.error,
+    alertDismissed,        
+   'Video'                   
+); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,videoelement,$scope.createeditvideo.editvideotitle,$scope.createeditvideo.editvideotext,$('input[name="editvideo"]').val(),valnothumbnail,"put"])
+                   
+                   }
+                   }
+                   else{
+                   var alertPopup = $ionicPopup.alert({
+                                                      title: 'MAB',
+                                                      template: 'Please choose Video File below 10MB!'
+                                                      });
+                   alertPopup.then(function(res) {
+                                   //console.log('Thank you for not eating my delicious ice cream cone');
+                                   });
+                   }
+                   }
+
+                   
+                   else{
+                   //alert('3');
+                   var formData = new FormData();
+                   formData.append('api_key',appKey);
+                   formData.append('id',videoelement);
+                   formData.append('title',$scope.createeditvideo.editvideotitle);
+                   formData.append('text',$scope.createeditvideo.editvideotext);
+                   
+                   $('#editvideo').attr({'url':videoimg});
+                   $('#videoediturlimg').attr({'src':videothumb});
+                   $('#videoediturlimg').css({'width':'50px','height':'50px'});
+                   $('#videoeditimg').attr({'src':videothumb});
+                   $('#videoeditimg').css({'width':'50px','height':'50px'});
+                   
+                   
+                   $http.put('http://build.myappbuilder.com/api/elements/update_video.json', formData, {
+                             transformRequest: angular.identity,
+                             headers: {'Content-Type': undefined}
+                             })
+                   
+                   .success(function(data,status, headers, config){
+                            //alert(JSON.stringify(data));
+                         //   alert("Successfully Updated");
+                            $ionicLoading.hide();
+                            
+                            })
+                   .error(function(data,status, headers, config){
                           $ionicLoading.hide();
-						    $scope.editvideopage = response;
-						 
-						   $state.reload();   
-                      
-                        },
-                        error:function(error,status){
-                           $ionicLoading.hide();
-                        var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(data);
+
                   function alertDismissed() {
 }
 
 navigator.notification.alert(
-    total.error,  
+     total.error,
     alertDismissed,        
-     'Video'                     
-); 
-                        }
-              });
-              $scope.cuseditvideo.customeditvideoTitle='';
-              $scope.cuseditvideo.customeditvideovalue='';
-            },
-          error:function(error){
-            $ionicLoading.hide();
-         var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Video'                     
-); 
-          }
-      });
-    }
-      }else{
-      function alertDismissed() {
-   
-}
-
-navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
-    'Video'
+   'Video'                   
 );
-    }
-   
-  }
-
-
-$scope.removevideoCustomValue = function(id){
-
-    customeditvideoid = id;
-    
-   $ionicLoading.show({
-              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-              animation: 'fade-in',
-              showBackdrop: true,
-              maxWidth: 200,
-              showDelay: 0
-      });
-      
-          $.ajax({
-            type: "DELETE",
-            url: "http://build.myappbuilder.com/api/custom_values.json",
-            data: {"api_key":appKey,"id":customeditvideoid},
-            cache: false,
-            success:function(response){
-              $.ajax({
-                        type: "GET",
-                        url: "http://build.myappbuilder.com/api/custom_values.json",
-                        data:{'api_key':appKey,'element_id':videoelement},
-                        cache: false,
-                        success:function(response){
-                           $ionicLoading.hide();
-						    $scope.editvideopage = response;
-						  
-						   $state.reload()						  
+                          });
+                   }
+                   
+                   }
+                   $scope.cuseditvideo={}
+                   
+                   $scope.createvideoedit = function(){
+                   
+                   if($scope.cuseditvideo.customeditvideoTitle){
+                   if($scope.cuseditvideo.customeditvideovalue){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "POST",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':videoelement,'title':$scope.cuseditvideo.customeditvideoTitle,'value':$scope.cuseditvideo.customeditvideovalue},
+                          success:function(response){
+                          customeditvideoid = response.id;
                           
-                        },
-                        error:function(error,status){
-                           $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':videoelement},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.editvideopage = response;
+                                 // alert(JSON.stringify($scope.editvideopage));
+                                 $state.reload();
+                                 
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                 var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -12596,454 +13965,13 @@ navigator.notification.alert(
     alertDismissed,        
      'Video'                     
 ); 
-                        }
-              });              
-            },
-            error:function(error,status){
-               $ionicLoading.hide();
-             var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Video'                     
-); 
-            }
-          });
-}
-
-});
-
-
-var customdisvideoid='';
-var imagedisvideo='';
-var check1=false;
-var videothumbno="Nothumbnail";
-
-control.controller('videodisplayCtrl',function($scope,$state,$ionicScrollDelegate,$ionicLoading,$http,$ionicActionSheet){ 
-
-  $ionicScrollDelegate.scrollTop();
-
- if(Appwall.element_wall == '0'){
-    $scope.elementAppWall = false;
-  }else if(Appwall.element_wall == '1'){
-    $scope.elementAppWall = true;
-  }
-  
-  $scope.elementAppwallgoFun=function(){
-	  $state.go('elementAppWall');
-  }
-function readURL26(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-				 $('#videodisurlimg').attr({'src':"img/btn_video.png"});
-				$('#videodisurlimg').css({'width':'50px','height':'50px'});
-				$('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')'); 		
-       
-            }
-
-            reader.readAsDataURL(input.files[0]);
-        }
-  }
-
-  $("#videodisplay").change(function(){
-	    check=true;
-	 
-      readURL26(this);
-  });
-	 
-  if(contentvideothumb){
-    $('#videodisplayimg').attr({'src':contentvideothumb});
-    	$('#videodisplayimg').css({'width':'50px','height':'50px'}); 		
-  }
- if(contentvideo){
-    $('#videodisplay').attr({'url':contentvideo});   
-    $('#videodisurlimg').attr({'src':contentvideoframe});
-   $('#videodisurlimg').css({'width':'50px','height':'50px'}); 			
-  }
-  
-  $scope.disvideoselect = function(){
-
-     $ionicActionSheet.show({
-
-          titleText: '<b><font size="4">Choose</font></b>',
-            buttons: [
-             { text: 'Camera' },
-             { text: 'PhotoAlbum' },
-              ],
-
-            cancelText: 'Cancel',
-             cancel: function() {
-         
-             },
-             
-     buttonClicked: function(index) {
-   
-
-       if(index==0){
-
-         navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-
-        destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
-
-       return true;
-
-       }
-
-       else{
-
-          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-
-          destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
-
-          return true;
-
-         }                                
-
-          }
-
-		});
-
-       };
-                 
-    function onSuccess(imageURI) {
-     check1=true;
-         imagedisvideo = imageURI;
-                  
-				$('#videodisplayimg').attr('src', imagedisvideo); 
-	    		 $('#videodisplayimg').css({'width':'50px','height':'50px'});
-     
-     }
-
-    function onFail(message) {
-
-         navigator.notification.alert('Failed because: ' + message);
-
-      } 
-  
-                   $scope.videodisplugin=function(){
-                  
-                   cordova.exec(function(response){
-                                
-                                var str=response.split("/var/mobile/Applications/F4AA2E12-B892-4EC7-8705-726EDD470ECF/Documents/");
-                                var getres=str[1];
-                                
-                                if(getres == '(null)'){
-                                
-                                function alertDismissed() {
-                                }
-                                
-                                navigator.notification.alert(
-                                                             'Please take a snapshot for the video',
-                                                             alertDismissed,
-                                                             'Video'
-                                                             );
-                                }
-
-                                
-                                else{ check=true;
-                                frameeditpassing=response;
-                                
-                                $('#videodisurlimg').attr('src', frameeditpassing);
-                                $('#videodisurlimg').css({'width':'50px','height':'50px'});
-                                }
-                                
-                                },
-                                function(e){ }, "ThumbnailImages", "thumbnailImages")
-                   
-                   }
-
-                   
-$scope.backdisplayvideo = function(){
-   $state.go('previewvideo');
- } 
-$scope.homedisplayvideo = function(){
-   $state.go('sample');
- }
- 
-$scope.appTitle = appTitle;	
-
-if(colour == 'undefined'){	
-$scope.bar_color = 'bar-positive';
-}
-else
-{
-$scope.bar_color = 'bar-'+colour;
-}
-
-if(buttoncolour == 'undefined'){
-$scope.bar_button_color ='button-positive'; 
-}
-else
-{
-$scope.bar_button_color ='button-'+buttoncolour;
-}
-
-if(button == 'undefined'){
-$scope.button_color = 'button-positive';
-}
-else
-{
-$scope.button_color='button-'+button;
-}
- 
- 	
- 	  $.ajax({
-                        type: "GET",
-                        url: "http://build.myappbuilder.com/api/custom_values.json",
-                        data:{'api_key':appKey,'element_id':elementId},
-                        cache: false,
-                        success:function(response){
+                                 }
+                                 });
+                          $scope.cuseditvideo.customeditvideoTitle='';
+                          $scope.cuseditvideo.customeditvideovalue='';
+                          },
+                          error:function(error){
                           $ionicLoading.hide();
-							$scope.disvideopage = response;
-						   $state.reload();       
-                        },
-                        error:function(error,status){
-                           $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Video'                     
-); 
-                        }
-              });       
-                           
-$scope.createdisplayvideo={}
-$scope.cusdisplayvideo={}
-
- $scope.tinymceOptions = {
-        
-
-        menubar: false,
-        theme: "modern",
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace wordcount visualblocks visualchars code fullscreen",
-            "insertdatetime table contextmenu ",
-            "emoticons textcolor"
-        ],
-        toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
-        
-	};
-	
- 
-$scope.createdisplayvideo.displayvideotitle = elementtitle;
-$scope.createdisplayvideo.displayvideotext = elementtext;
-
-                   if(contentvideothumb){
-                   $('#videodisplayimg').attr({'src':contentvideothumb});
-                   $('#videodisplayimg').css({'width':'50px','height':'50px'});
-                   }
-                   if(contentvideo){
-                   $('#videodisplay').attr({'url':contentvideo});
-                   $('#videodisurlimg').attr({'src':contentvideoframe});
-                   $('#videodisurlimg').css({'width':'50px','height':'50px'});
-                   }
-                   
-$scope.updatevideodisplay = function(){            
-	
-	 $ionicLoading.show({
-              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-              animation: 'fade-in',
-              showBackdrop: true,
-              maxWidth: 200,
-              showDelay: 0
-      });
-
-   if(check ==true) {
-                   
-         if((($scope.createdisplayvideo.displayvideotitle)!=elementtitle) || (($scope.createdisplayvideo.displayvideotext)!=elementtext) && (($scope.createdisplayvideo.displayvideotitle)==elementtitle) || (($scope.createdisplayvideo.displayvideotext)==elementtext) && (check1==true)){
-		cordova.exec(function(response){
-		
-       $ionicLoading.hide();
-                     }, function(e){var total = JSON.parse(e);
-                     
-                     function alertDismissed() {
-                     }
-                     
-                     navigator.notification.alert(
-                                                 total.error,
-                                                  alertDismissed,
-                                                  'Video'
-                                                  ); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,elementId,$scope.createdisplayvideo.displayvideotitle,$scope.createdisplayvideo.displayvideotext,imagedisvideo,"put"])
-
-                   }
-    else{
-
-		cordova.exec(function(response){
-		
-       $ionicLoading.hide();
-  	 }, 
-                     function(e){var total = JSON.parse(e);
-                     
-                     function alertDismissed() {
-                     }
-                     
-                     navigator.notification.alert(
-                                                 total.error,
-                                                  alertDismissed,
-                                                  'Video'
-                                                  ); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,elementId,$scope.createdisplayvideo.displayvideotitle,$scope.createdisplayvideo.displayvideotext,videothumbno,"put"])
-
-                   }
-               
-                   }
-
-else{
-
-		   var formData = new FormData();
-           formData.append('api_key',appKey);
-           formData.append('id',elementId);       
-           formData.append('title',$scope.createdisplayvideo.displayvideotitle);
-           formData.append('text',$scope.createdisplayvideo.displayvideotext);
-           
-		        $('#videodisplay').attr({'url':contentvideo}); 
-		        $('#videodisurlimg').attr({'src':contentvideothumb});
-				$('#videodisurlimg').css({'width':'50px','height':'50px'});  			
-				$('#videodisplayimg').attr({'src':contentvideothumb});
-				$('#videodisplayimg').css({'width':'50px','height':'50px'}); 
-
-	  
-				$http.put('http://build.myappbuilder.com/api/elements/update_video.json', formData, {
-                        transformRequest: angular.identity,
-                        headers: {'Content-Type': undefined}
-                      })
-                      
-                      .success(function(data,status, headers, config){
-					
-						  $ionicLoading.hide();					 
-
-					  })
-					  .error(function(data,status, headers, config){
-                        $ionicLoading.hide();
-                             var total = JSON.parse(data);
-                             
-                             function alertDismissed() {
-                             }
-                             
-                             navigator.notification.alert(
-                                                          total.error,
-                                                          alertDismissed,
-                                                          'Video'
-                                                          );
-                      });	
-	   }  
-	   
-	
- 
-}
- $scope.createvideodis = function(){
-	
-    if($scope.cusdisplayvideo.customdisvideoTitle){
-      if($scope.cusdisplayvideo.customdisvideovalue){
-	 
-      $ionicLoading.show({
-              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-              animation: 'fade-in',
-              showBackdrop: true,
-              maxWidth: 200,
-              showDelay: 0
-      });
-
-       $.ajax({
-          type: "POST",
-          url: "http://build.myappbuilder.com/api/custom_values.json",
-          data:{'api_key':appKey,'element_id':elementId,'title':$scope.cusdisplayvideo.customdisvideoTitle,'value':$scope.cusdisplayvideo.customdisvideovalue},
-          success:function(response){
-			 customdisvideoid = response.id;
-
-            $.ajax({
-                        type: "GET",
-                        url: "http://build.myappbuilder.com/api/custom_values.json",
-                        data:{'api_key':appKey,'element_id':elementId},
-                        cache: false,
-                        success:function(response){
-                          $ionicLoading.hide();                      
-						    $scope.disvideopage = response;                 
-						   $state.reload();     
-                        },
-                        error:function(error,status){
-                           $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Video'                     
-); 
-                        }
-              });
-              $scope.cusdisplayvideo.customdisvideoTitle='';
-              $scope.cusdisplayvideo.customdisvideovalue='';
-            },
-          error:function(error){
-            $ionicLoading.hide();
-          var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Video'                     
-); 
-          }
-      });
-    }
-      }else{
-     function alertDismissed() {
-  
-}
-
-navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
-    'Video'
-);
-    }
-   
-  }
-  
-$scope.removevideodisCustomValue = function(id){
-
-    customdisvideoid = id;
-    
-   $ionicLoading.show({
-              content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-              animation: 'fade-in',
-              showBackdrop: true,
-              maxWidth: 200,
-              showDelay: 0
-      });
-      
-          $.ajax({
-            type: "DELETE",
-            url: "http://build.myappbuilder.com/api/custom_values.json",
-            data: {"api_key":appKey,"id":customdisvideoid},
-            cache: false,
-            success:function(response){
-              $.ajax({
-                        type: "GET",
-                        url: "http://build.myappbuilder.com/api/custom_values.json",
-                        data:{'api_key':appKey,'element_id':elementId},
-                        cache: false,
-                        success:function(response){
-                          $ionicLoading.hide();
-							$scope.disvideopage = response;
-						   $state.reload();       
-                        },
-                        error:function(error,status){
-                           $ionicLoading.hide();
                           var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
@@ -13053,12 +13981,57 @@ navigator.notification.alert(
     alertDismissed,        
      'Video'                     
 ); 
-                        }
-              });              
-            },
-            error:function(error,status){
-               $ionicLoading.hide();
-              var total = JSON.parse(error.responseText);
+                          }
+                          });
+                   }
+                   }else{
+                    function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
+    'Video'
+);
+                   }
+                   
+                   }
+                   
+                   
+                   $scope.removevideoCustomValue = function(id){
+                   
+                   customeditvideoid = id;
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "DELETE",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data: {"api_key":appKey,"id":customeditvideoid},
+                          cache: false,
+                          success:function(response){
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':videoelement},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.editvideopage = response;
+                                 //alert(JSON.stringify($scope.editvideopage));
+                                 $state.reload()
+                                 
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -13067,33 +14040,486 @@ navigator.notification.alert(
     alertDismissed,        
      'Video'                     
 ); 
-            }
-          });
+                                 }
+                                 });
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
 }
 
-});
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Video'                     
+); 
+                          }
+                          });
+                   }
+                   
+                   });
+
+
+var customdisvideoid='';
+var imagedisvideo='';
+var check1=false;
+var videothumbno="Nothumbnail";
+
+control.controller('videodisplayCtrl',function($scope,$state,$ionicScrollDelegate,$ionicLoading,$http,$ionicActionSheet){
+                   
+                   $ionicScrollDelegate.scrollTop();
+                   
+                   if(Appwall.element_wall == '0'){
+                   $scope.elementAppWall = false;
+                   }else if(Appwall.element_wall == '1'){
+                   $scope.elementAppWall = true;
+                   }
+                   
+                   $scope.elementAppwallgoFun=function(){
+                   $state.go('elementAppWall');
+                   }
+                   function readURL26(input) {
+                   if (input.files && input.files[0]) {
+                   var reader = new FileReader();
+                   
+                   reader.onload = function (e) {
+                   $('#videodisurlimg').attr({'src':"img/btn_video.png"});
+                   $('#videodisurlimg').css({'width':'50px','height':'50px'});
+                   $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
+                   // $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
+                   }
+                   
+                   reader.readAsDataURL(input.files[0]);
+                   }
+                   }
+                   
+                   $("#videodisplay").change(function(){
+                                             check=true;
+                                             
+                                             readURL26(this);
+                                             });
+                   
+                   if(contentvideothumb){
+                   $('#videodisplayimg').attr({'src':contentvideothumb});
+                   $('#videodisplayimg').css({'width':'50px','height':'50px'});
+                   }
+                   if(contentvideo){
+                   $('#videodisplay').attr({'url':contentvideo});
+                   $('#videodisurlimg').attr({'src':contentvideothumb});
+                   $('#videodisurlimg').css({'width':'50px','height':'50px'});
+                   }
+                   
+                   $scope.disvideoselect = function(){
+                   
+                   $ionicActionSheet.show({
+                                          
+                                          titleText: '<b><font size="4">Choose</font></b>',
+                                          buttons: [
+                                                    { text: 'Camera' },
+                                                    { text: 'PhotoAlbum' },
+                                                    ],
+                                          
+                                          cancelText: 'Cancel',
+                                          cancel: function() {
+                                          // alert('CANCELLED');
+                                          },
+                                          
+                                          buttonClicked: function(index) {
+                                          // alert('BUTTON CLICKED', index);
+                                          
+                                          if(index==0){
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          else{
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          }
+                                          
+                                          });
+                   
+                   };
+                   
+                   function onSuccess(imageURI) {
+                   check1=true;
+                   imagedisvideo = imageURI;
+                   $('#videodisplayimg').attr('src', imagedisvideo);
+                   $('#videodisplayimg').css({'width':'50px','height':'50px'});
+                   //   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
+                   
+                   }
+                   
+                   function onFail(message) {
+                   
+                   navigator.notification.alert('Failed because: ' + message);
+                   
+                   }
+                   
+                   $scope.backdisplayvideo = function(){
+                   $state.go('previewvideo');
+                   } 
+                   $scope.homedisplayvideo = function(){
+                   $state.go('sample');
+                   }
+                   
+                   $scope.appTitle = appTitle;  
+                   
+                   if(colour == 'undefined'){ 
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive'; 
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.disvideopage = response;
+                          $state.reload();       
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Video'                     
+); 
+                          }
+                          });       
+                   
+                   $scope.createdisplayvideo={}
+                   $scope.cusdisplayvideo={}
+                   
+                   $scope.tinymceOptions = {
+                   
+                   
+                   menubar: false,
+                   theme: "modern",
+                   plugins: [
+                             "advlist autolink lists link image charmap print preview anchor",
+                             "searchreplace wordcount visualblocks visualchars code fullscreen",
+                             "insertdatetime table contextmenu ",
+                             "emoticons textcolor"
+                             ],
+                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
+                   
+                   };
+                   
+                   
+                   $scope.createdisplayvideo.displayvideotitle = elementtitle;
+                   $scope.createdisplayvideo.displayvideotext = elementtext;
+                   
+                   if(contentvideothumb){
+                   $('#videodisplayimg').attr({'src':contentvideothumb});
+                   $('#videodisplayimg').css({'width':'50px','height':'50px'});     
+                   }
+                   if(contentvideo){
+                   $('#videodisplay').attr({'url':contentvideo});
+                   $('#videodisurlimg').attr({'src':contentvideothumb});
+                   $('#videodisurlimg').css({'width':'50px','height':'50px'});  
+                   }
+                   $scope.updatevideodisplay = function(){            
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   if(check ==true) {
+                   
+                    if((($("#videodisplay").get(0).files[0].size) / 1024 / 1024) <= 10){
+                   
+                   if((($scope.createdisplayvideo.displayvideotitle)!=elementtitle) || (($scope.createdisplayvideo.displayvideotext)!=elementtext) && (($scope.createdisplayvideo.displayvideotitle)==elementtitle) || (($scope.createdisplayvideo.displayvideotext)==elementtext) && (check1==true)){
+                   cordova.exec(function(response){
+                                //alert('1');
+                             //   alert("Successfully Updated");
+                                $ionicLoading.hide();
+                                }, function(e){var total = JSON.parse(e);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+   'Video'                   
+); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,elementId,$scope.createdisplayvideo.displayvideotitle,$scope.createdisplayvideo.displayvideotext,$('input[name="disvideo"]').val(),imagedisvideo,"put"])
+                   
+                   }
+                   else{
+                   
+                   cordova.exec(function(response){
+                                //alert('2');
+                           //     alert("Successfully Updated");
+                                $ionicLoading.hide();
+                                }, 
+                                function(e){var total = JSON.parse(e);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+     total.error,
+    alertDismissed,        
+   'Video'                   
+); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,elementId,$scope.createdisplayvideo.displayvideotitle,$scope.createdisplayvideo.displayvideotext,$('input[name="disvideo"]').val(),videothumbno,"put"])
+                   
+                   }
+                   }
+                   else{
+                   var alertPopup = $ionicPopup.alert({
+                                                      title: 'MAB',
+                                                      template: 'Please choose Video File below 10MB!'
+                                                      });
+                   alertPopup.then(function(res) {
+                                   //console.log('Thank you for not eating my delicious ice cream cone');
+                                   });
+                   }
+                   }
+
+                   
+                   else{
+                   //alert('3');
+                   var formData = new FormData();
+                   formData.append('api_key',appKey);
+                   formData.append('id',elementId);       
+                   formData.append('title',$scope.createdisplayvideo.displayvideotitle);
+                   formData.append('text',$scope.createdisplayvideo.displayvideotext);
+                   
+                   $('#videodisplay').attr({'url':contentvideo}); 
+                   $('#videodisurlimg').attr({'src':contentvideothumb});
+                   $('#videodisurlimg').css({'width':'50px','height':'50px'});        
+                   $('#videodisplayimg').attr({'src':contentvideothumb});
+                   $('#videodisplayimg').css({'width':'50px','height':'50px'}); 
+                   
+                   
+                   $http.put('http://build.myappbuilder.com/api/elements/update_video.json', formData, {
+                             transformRequest: angular.identity,
+                             headers: {'Content-Type': undefined}
+                             })
+                   
+                   .success(function(data,status, headers, config){
+                            //alert(JSON.stringify(data));
+                       //     alert("Successfully Updated");
+                            $ionicLoading.hide();          
+                            
+                            })
+                   .error(function(data,status, headers, config){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(data);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+     total.error,
+    alertDismissed,        
+   'Video'                   
+);
+                          }); 
+                   }  
+                   
+                   
+                   
+                   }
+                   $scope.createvideodis = function(){
+                   
+                   if($scope.cusdisplayvideo.customdisvideoTitle){
+                   if($scope.cusdisplayvideo.customdisvideovalue){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "POST",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId,'title':$scope.cusdisplayvideo.customdisvideoTitle,'value':$scope.cusdisplayvideo.customdisvideovalue},
+                          success:function(response){
+                          customdisvideoid = response.id;
+                          
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();                      
+                                 $scope.disvideopage = response;                 
+                                 $state.reload();     
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                  var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Video'                     
+); 
+                                 }
+                                 });
+                          $scope.cusdisplayvideo.customdisvideoTitle='';
+                          $scope.cusdisplayvideo.customdisvideovalue='';
+                          },
+                          error:function(error){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Video'                     
+); 
+                          }
+                          });
+                   }
+                   }else{
+                    function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
+    'Video'
+);
+                   }
+                   
+                   }
+                   
+                   $scope.removevideodisCustomValue = function(id){
+                   
+                   customdisvideoid = id;
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "DELETE",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data: {"api_key":appKey,"id":customdisvideoid},
+                          cache: false,
+                          success:function(response){
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.disvideopage = response;
+                                 $state.reload();       
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                 var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Video'                     
+); 
+                                 }
+                                 });              
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                         var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Video'                     
+); 
+                          }
+                          });
+                   }
+                   
+                   });
 
 var amenities1='';
 
+
 control.controller('previewpicCtrl',function($scope,$state,$ionicLoading,$http){
-	 
+   
 
 $scope.elementTitle = elementtitle;
 $scope.description = elementtext;
 
 $scope.logprevtext = function(){
-	$state.go('picdisplay');
+  $state.go('picdisplay');
 }
 $scope.homeprevtext = function(){
-	$state.go('sample');
+  $state.go('sample');
 }
 $scope.backprevtext = function(){
-	$state.go('chapterlist');
+  $state.go('chapterlist');
 }
 
- $scope.appTitle = appTitle;	
+ $scope.appTitle = appTitle;  
  
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -13127,9 +14553,8 @@ $scope.button_color='button-'+button;
     }
   }
 
-
-	$scope.editpicpage = previewpic;
-       
+              $scope.editpicpage = previewpic;
+      
 
  $.ajax({
                         type: "GET",
@@ -13138,13 +14563,13 @@ $scope.button_color='button-'+button;
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.edittxtpage = response;
-						 
-						   $state.reload();   						                            
+                $scope.edittxtpage = response;
+               //  alert(JSON.stringify($scope.distxtpage));
+               $state.reload();                                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -13154,21 +14579,22 @@ navigator.notification.alert(
      'Picture and Text'                     
 ); 
                         }
-              });
-                   $.ajax({
+              }); 
+
+                $.ajax({
                           type: "GET",
                           url: "http://build.myappbuilder.com/api/elements/tags.json",
                           data:{'api_key':appKey,'id':elementId},
                           cache: false,
                           success:function(response){
                             var datatag1=response;
-                          console.log(response);
-                          if(response.length==0){
-                          $scope.tags='';
-                          console.log(response.length);
-                          }
-                          else{
-                          for(var i=0;i<datatag1.length;i++){
+                       console.log(response);
+                       if(response.length==0){
+                       $scope.tags='';
+                       console.log(response.length);
+                       }
+                       else{
+                       for(var i=0;i<datatag1.length;i++){
                          
                           if(i==0){
                           
@@ -13182,15 +14608,15 @@ navigator.notification.alert(
                           
                           }
                           
-                          }
-                          
+                       }
+                       
                           $scope.tags = amenities1.split(",");
                           $ionicLoading.hide();
-                          }
+                       }
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -13201,7 +14627,7 @@ navigator.notification.alert(
 ); 
                           }
                           });
-                   
+                                
 
  $scope.tinymceOptions = {
         
@@ -13216,95 +14642,15 @@ navigator.notification.alert(
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
         
-	};
-                  
-});
-
-control.controller('previewwebCtrl',function($scope,$state,$ionicLoading,$http){
-
- $scope.backprevweb=function(){
-      $state.go('chapterlist');
-  }
-  $scope.homeprevweb=function(){
-      $state.go('sample');
-  }
-  $scope.logprevweb=function(){
-      $state.go('webdisplay');
-  }
-
-$scope.appTitle = appTitle;	
-
-if(colour == 'undefined'){	
-$scope.bar_color = 'bar-positive';
-}
-else
-{
-$scope.bar_color = 'bar-'+colour;
-}
-
-if(buttoncolour == 'undefined'){
-$scope.bar_button_color ='button-positive'; 
-}
-else
-{
-$scope.bar_button_color ='button-'+buttoncolour;
-}
-
-if(button == 'undefined'){
-$scope.button_color = 'button-positive';
-}
-else
-{
-$scope.button_color='button-'+button;
-}
-
-$scope.elementtitle = elementtitle;
-$scope.elementurl= elementurl;
-$scope.elementtext=elementtext;
-
- $scope.tinymceOptions = {
-        
-
-        menubar: false,
-        theme: "modern",
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace wordcount visualblocks visualchars code fullscreen",
-            "insertdatetime table contextmenu ",
-            "emoticons textcolor"
-        ],
-        toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
-        
-	};
-	$.ajax({
-                        type: "GET",
-                        url: "http://build.myappbuilder.com/api/custom_values.json",
-                        data:{'api_key':appKey,'element_id':elementId},
-                        cache: false,
-                        success:function(response){
-                          $ionicLoading.hide();
-						   $scope.diswebpage = response;
-						   $state.reload();   			                           
-                        },
-                        error:function(error,status){
-                           $ionicLoading.hide();
-                          navigator.notification.alert(error.responseText);
-                        }
-              });      
-          
-                   $scope.clickweb =function() {
-                   
-                   var ref = window.open(elementurl, '_blank', 'location=yes');
-                   ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
-
-                   }
+  };
 
 });
+
 
 control.controller('previewtaskCtrl',function($scope,$state,$ionicLoading){ 
   
   $scope.logprevtask=function(){
-	  $state.go('taskdisplay');
+    $state.go('taskdisplay');
   }
   $scope.backprevtask=function(){
       $state.go('chapterlist');
@@ -13313,9 +14659,9 @@ control.controller('previewtaskCtrl',function($scope,$state,$ionicLoading){
        $state.go('sample');
   }
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -13347,12 +14693,12 @@ $scope.button_color='button-'+button;
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();   
-						     $scope.taskdisplaypage = response;
-						   $state.reload();   	  
+                 $scope.taskdisplaypage = response;
+               $state.reload();       
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -13371,8 +14717,8 @@ navigator.notification.alert(
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.taskdisplay = response;
-						   $state.reload();    
+                $scope.taskdisplay = response;
+               $state.reload();    
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
@@ -13394,7 +14740,7 @@ navigator.notification.alert(
 control.controller('previewrssCtrl',function($scope,$state,$ionicLoading){ 
   
   $scope.logprevrss=function(){
-	  $state.go('rssdisplay');
+    $state.go('rssdisplay');
   }
   $scope.backprevrss=function(){
        $state.go('chapterlist');
@@ -13403,9 +14749,9 @@ control.controller('previewrssCtrl',function($scope,$state,$ionicLoading){
         $state.go('sample');
 }
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -13446,7 +14792,7 @@ $scope.tinymceOptions = {
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
         
-	};
+  };
 
  $.ajax({
                         type: "GET",
@@ -13455,30 +14801,18 @@ $scope.tinymceOptions = {
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();                        
-						    $scope.disrsspage = response;
-						   $state.reload();   
+                $scope.disrsspage = response;
+               $state.reload();   
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Rss Feed'                     
-); 
+                          navigator.notification.alert(error.responseText);
                         }
               });                          
   
                    $scope.clickrss =function() {
-                  
-                   
-                   var ref = window.open('http://feeds.bbci.co.uk/news/rss.xml?edition=int', '_blank', 'location=yes');
-                    ref.addEventListener('loadstart', function(event) { alert('start: ' + event.url); });
-                   ref.addEventListener('loadstop', function(event) { alert('stop: ' + event.url); });
-                   ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
+                   // external url
+                   var ref = window.open(elementurl, '_blank', 'location=yes');
                    }
                    
 });
@@ -13486,7 +14820,7 @@ navigator.notification.alert(
 control.controller('previewmapCtrl',function($scope,$state,$ionicLoading){ 
   
   $scope.logprevmap = function(){
-	  $state.go('mapdisplay');
+    $state.go('mapdisplay');
   }
   $scope.backprevmap = function(){
        $state.go('chapterlist');
@@ -13495,9 +14829,9 @@ control.controller('previewmapCtrl',function($scope,$state,$ionicLoading){
         $state.go('sample');
    }
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -13529,7 +14863,7 @@ $scope.button_color='button-'+button;
                         success:function(response){                       
                           $ionicLoading.hide();
                            $scope.addressess = response; 
-						   $state.reload();               
+               $state.reload();               
 
                         },
                         error:function(error,status){
@@ -13545,8 +14879,8 @@ $scope.button_color='button-'+button;
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.dismappage = response;
-						   $state.reload();   	  
+                $scope.dismappage = response;
+               $state.reload();       
                           
                         },
                         error:function(error,status){
@@ -13559,7 +14893,7 @@ $scope.button_color='button-'+button;
 control.controller('previewformCtrl',function($scope,$state,$ionicLoading){ 
   
   $scope.logprevform=function(){
-	  $state.go('formdisplay');
+    $state.go('formdisplay');
   }
   $scope.backprevform=function(){
       $state.go('chapterlist');
@@ -13570,9 +14904,9 @@ control.controller('previewformCtrl',function($scope,$state,$ionicLoading){
 
 $scope.elementemail = elementemail;
 
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -13604,13 +14938,13 @@ $scope.button_color='button-'+button;
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-						    $scope.disformtype = response;
-						   $state.reload();   	  
+                $scope.disformtype = response;
+               $state.reload();       
                           
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -13625,8 +14959,8 @@ navigator.notification.alert(
 });
 
 control.controller('previewaudioCtrl',function($scope,$state,$ionicLoading){
-  
-
+                   
+                   
                    $scope.appTitle = appTitle;
                    
                    if(colour == 'undefined'){
@@ -13689,7 +15023,6 @@ control.controller('previewaudioCtrl',function($scope,$state,$ionicLoading){
                    
                    $scope.elementtitle = elementtitle;
                    $scope.elementtext = elementtext;
-             
                    
                    $('#audioprevimg').attr({'src':contentimg});
                    $('#audioprevimg').css({'width':'50px','height':'50px'});
@@ -13717,9 +15050,6 @@ control.controller('previewaudio1Ctrl',function($scope,$state,$ionicLoading){
                    
                    $scope.appTitle = appTitle;
                    
-                   $scope.elementAppwallgoFun=function(){
-                   $state.go('elementAppWall1');
-                   }
                    
                    if(barcolor == 'undefined'){
                    $scope.bar_color = 'bar-positive';
@@ -13745,6 +15075,9 @@ control.controller('previewaudio1Ctrl',function($scope,$state,$ionicLoading){
                    $scope.button_color='button-'+buttoncolor;
                    }
                    
+                   $scope.elementAppwallgoFun=function(){
+                   $state.go('elementAppWall1');
+                   }
                    
                    $.ajax({
                           type: "GET",
@@ -13872,10 +15205,10 @@ control.controller('previewaudio2Ctrl',function($scope,$state,$ionicLoading){
                    $scope.elementtext = elementtext;
                    
                    $('#audioprevimg').attr({'src':contentimg});
-                   $('#audioprevimg').css({'width':'50px','height':'50px'}); 		
+                   $('#audioprevimg').css({'width':'50px','height':'50px'});
                    
                    $('#audioprevurlimg').attr({'src':'img/audio.png'});
-                   $('#audioprevurlimg').css({'width':'50px','height':'50px'});   	
+                   $('#audioprevurlimg').css({'width':'50px','height':'50px'});
                    
                    
                    $scope.backprevaudio=function(){
@@ -13893,12 +15226,10 @@ control.controller('previewaudio2Ctrl',function($scope,$state,$ionicLoading){
                    
                    });
 
-
-
 control.controller('previewvideoCtrl',function($scope,$state,$ionicLoading,$http){
   
 $scope.logprevvideo=function(){
-	  $state.go('videodisplay');
+    $state.go('videodisplay');
   }  
 $scope.backprevvideo = function(){
    $state.go('chapterlist');
@@ -13907,9 +15238,9 @@ $scope.homeprevvideo = function(){
    $state.go('sample');
  }
  
-$scope.appTitle = appTitle;	
+$scope.appTitle = appTitle; 
 
-if(colour == 'undefined'){	
+if(colour == 'undefined'){  
 $scope.bar_color = 'bar-positive';
 }
 else
@@ -13932,20 +15263,20 @@ else
 {
 $scope.button_color='button-'+button;
 }
- 	
- 	  $.ajax({
+  
+    $.ajax({
                         type: "GET",
                         url: "http://build.myappbuilder.com/api/custom_values.json",
                         data:{'api_key':appKey,'element_id':elementId},
                         cache: false,
                         success:function(response){
                           $ionicLoading.hide();
-							$scope.disvideopage = response;
-						   $state.reload();       
+              $scope.disvideopage = response;
+               $state.reload();       
                         },
                         error:function(error,status){
                            $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                            var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -13971,16 +15302,14 @@ navigator.notification.alert(
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
         
-	};
-	
+  };
+  
  
 $scope.elementtitle = elementtitle;
 $scope.elementtext = elementtext;
-$scope.contentvideothumb=contentvideothumb;
-$scope.contentvideoframe=contentvideoframe;
-                   
+
     $('#videoprevimg').attr({'src':contentvideothumb});
-    $('#videoprevimg').css({'width':'50px','height':'50px'}); 		
+    $('#videoprevimg').css({'width':'50px','height':'50px'});     
 
                    $('#videoprevurlimg').attr({'src':'img/video.png'});
                    $('#videoprevurlimg').css({'width':'50px','height':'50px'});
@@ -13990,930 +15319,6 @@ $scope.contentvideoframe=contentvideoframe;
                    $scope.videoclick=function(){
                    cordova.exec(null, null, "Echo", "echo", [contentvideo,"YES"]);
                    }
-                   
-                   });
-
-
-var avatarimg='';
-var avatarimg11='';
-var avatarimg1='';
-var subid='';
-var subeditid='';
-var subfullname='';
-var subemail='';
-var subphone='';
-var subusername='';
-var subpass='';
-var subconfirmpass='';
-
-var subid1='';
-var subeditid1='';
-var subfullname1='';
-var subemail1='';
-var subphone1='';
-var subusername1='';
-var subpass1='';
-var subconfirmpass1='';
-
-control.controller('sublistCtrl',function($scope,$state,$ionicLoading,$http, $ionicModal, $ionicActionSheet){
-                                      
-                                      $scope.backsublist=function(){
-                                      $state.go('app');
-                                      }
-                                      $scope.avatar123=function(val){
-                                      if(val==null){
-                                      return 'img/btn_avatar.png';
-                                      }
-                                      else{
-                                      return val;
-                                      }
-                                      
-                                      }
-                                      
-                                      $scope.nextpage = function(id,avatar,fullname,email,phone,user) {
-                                      subeditid1=id;
-                                      subavatar1=avatar;
-                                      subfullname1=fullname;
-                                      subemail1=email;
-                                      subphone1=phone;
-                                      subusername1=user;
-                                      $state.go('viewdetails');
-                                      }
-                                      
-                                      $scope.appTitle = appTitle;
-                                      
-                                      $.ajax({
-                                             type: "GET",
-                                             url: "http://build.myappbuilder.com/api/subscribers.json",
-                                             data:{'api_key':appKey},
-                                             cache: false,
-                                             success:function(response){
-                                            
-                                             $scope.subscriber = response;
-                                             $ionicLoading.hide();
-                                             },
-                                             error:function(error,status){
-                                             $ionicLoading.hide();
-                                            var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Subscriber'                     
-); 
-                                             }
-                                             });
-                                      
-                                      $ionicModal.fromTemplateUrl('my-modal.html', {
-                                                                  scope: $scope,
-                                                                  animation: 'slide-in-right'
-                                                                  }).then(function(modal) {
-                                                                          $scope.registerpop = modal;
-                                                                          });
-                                      
-                                      $scope.addsubs = function() {
-                                      $('#avatar').attr({'src':"img/add_image.png"});
-                                      $scope.data2.firstname='';
-                                      $scope.data2.lastname='';
-                                      $scope.data2.email='';
-                                      $scope.data2.username='';
-                                      $scope.data2.phone='';
-                                      $scope.data2.password='';
-                                      $scope.data2.confirmpassword='';
-                                      $scope.registerpop.show();
-                                      
-                                      };
-                                      
-                                      $scope.removesubs=function(){
-                                      $.ajax({
-                                             type: "GET",
-                                             url: "http://build.myappbuilder.com/api/subscribers.json",
-                                             data:{'api_key':appKey},
-                                             cache: false,
-                                             success:function(response){
-                                             
-                                             $scope.subscriber = response;
-                                             $ionicLoading.hide();
-                                             },
-                                             error:function(error,status){
-                                             $ionicLoading.hide();
-                                             var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Subscriber'                     
-); 
-                                             }
-                                             });
-                                      $scope.registerpop.hide();
-                                      }
-                                      
-                                      $scope.avatar = function(){
-                                      
-                                      $ionicActionSheet.show({
-                                                             
-                                                             titleText: '<b><font size="4">Choose</font></b>',
-                                                             buttons: [
-                                                                       { text: 'Camera' },
-                                                                       { text: 'PhotoAlbum' },
-                                                                       ],
-                                                             
-                                                             cancelText: 'Cancel',
-                                                             cancel: function() {
-                                                             },
-                                                             
-                                                             buttonClicked: function(index) {
-                                                             
-                                                             if(index==0){
-                                                             
-                                                             navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-                                                                                         
-                                                                                         destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
-                                                             
-                                                             return true;
-                                                             
-                                                             }
-                                                             
-                                                             else{
-                                                             
-                                                             navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-                                                                                         
-                                                                                         destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
-                                                             
-                                                             return true;
-                                                             
-                                                             }
-                                                             
-                                                             }
-                                                             
-                                                             });
-                                      
-                                      };
-                                      
-                                      function onSuccess(imageURI) {
-                                      check=true;
-                                      avatarimg = imageURI;
-                                      $('#avatar').attr('src', avatarimg);
-                                      $('#avatar').css({'width':'90px','height':'90px'});
-                   
-                                      
-                                      }
-                                      
-                                      function onFail(message) {
-                                      
-                                      navigator.notification.alert('Failed because: ' + message);
-                                      
-                                      }
-                                      
-                                      $scope.data2={}
-                                      
-                                      $scope.createsubs=function(){
-                                      
-                                      $ionicLoading.show({
-                                                         content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                                         animation: 'fade-in',
-                                                         showBackdrop: true,
-                                                         maxWidth: 200,
-                                                         showDelay: 0
-                                                         });
-                                      
-                                      var formData = new FormData();
-                                      formData.append('api_key',appKey);
-                                      formData.append('subscriber[firstname]',$scope.data2.firstname);
-                                      formData.append('subscriber[lastname]',$scope.data2.lastname);
-                                      formData.append('subscriber[username]',$scope.data2.username);
-                                      formData.append('subscriber[email]',$scope.data2.email);
-                                      formData.append('subscriber[phone]',$scope.data2.phone);
-                                      formData.append('subscriber[password]',$scope.data2.password);
-                                      formData.append('subscriber[password_confirmation]',$scope.data2.confirmpassword);
-                                      
-                                      if(avatarimg){
-                                      
-                                      $.ajax({
-                                             type: "POST",
-                                             url: "http://build.myappbuilder.com/api/subscribers.json",
-                                             data: formData,
-                                             cache: false,
-                                             contentType: false,
-                                             processData: false,
-                                             success:function(response){
-                                            
-                                             subid=response.id;
-                                             cordova.exec(function(response){
-                                                          
-                                                      
-                                                          avatarimg='';
-                                                          $ionicLoading.hide();
-                                                          },
-                                                          function(e){var total = JSON.parse(e);
-                                                          
-                                                          function alertDismissed() {
-                                                          }
-                                                          
-                                                          navigator.notification.alert(
-                                                                                       total.error,
-                                                                                       alertDismissed,
-                                                                                       'Subscriber'
-                                                                                       ); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["90", "90", "avatar", avatarimg, "http://build.myappbuilder.com/api/subscribers.json?", "put", {api_key:appKey,id:subid,firstname:$scope.data2.firstname,lastname:$scope.data2.lastname,email:$scope.data2.email,phone:$scope.data2.phone,username:$scope.data2.username,password:$scope.data2.password,password_confirm:$scope.data2.confirmpassword}])
-                                             
-                                             
-                                             },error:function(error){
-                                             $ionicLoading.hide();
-                                             var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Subscriber'                     
-); 
-                                             }
-                                             });
-                                      
-                                      }
-                                      else{
-                                      
-                                      $.ajax({
-                                             type: "POST",
-                                             url: "http://build.myappbuilder.com/api/subscribers.json",
-                                             data: formData,
-                                             cache: false,
-                                             contentType: false,
-                                             processData: false,
-                                             success:function(response){
-                                        
-                                             $ionicLoading.hide();
-                                             },error:function(error){
-                                             $ionicLoading.hide();
-                                            var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Subscriber'                     
-); 
-                                             }
-                                             });
-                                      
-                                      
-                                      
-                                      }
-                                      }
-                                      
-                                      
-                                      $ionicModal.fromTemplateUrl('my-modal1.html', {
-                                                                  scope: $scope,
-                                                                  animation: 'slide-in-right'
-                                                                  }).then(function(modal) {
-                                                                          $scope.registerpop1 = modal;
-                                                                          });
-                                      
-                                      $scope.editagent = function(id,avatar,fullname,email,phone,username,password,confirmpass) {
-                                      
-                                      subeditid=id;
-                                      subavatar=avatar;
-                                      subfullname=fullname;
-                                      subemail=email;
-                                      subphone=phone;
-                                      subusername=username;
-                                      subpass=password;
-                                      subconfirmpass=confirmpass;
-                                      
-                                      
-                                      $scope.registerpop1.show();
-                                      $scope.data3.email=subemail;
-                                      $scope.data3.phone=subphone;
-                                      $scope.data3.username=subusername;
-                                      $scope.data3.password=subpass;
-                                      $scope.data3.confirmpassword=subconfirmpass;
-                                      
-                                      var name=subfullname.split("   ");
-                                      $scope.data3.firstname=name[0];
-                                      $scope.data3.lastname=name[1];
-                                      if(subavatar){
-                                      $('#avatar1').attr('src', subavatar);
-                                      $('#avatar1').css({'width':'90px','height':'90px'});
-                                      }
-                                      else{
-                                      $('#avatar1').attr('src', 'img/add_image.png');
-                                      $('#avatar1').css({'width':'90px','height':'90px'});
-                                      }
-                                      
-                                      };
-                                      
-                                      $scope.removesubs1=function(){
-                                      $.ajax({
-                                             type: "GET",
-                                             url: "http://build.myappbuilder.com/api/subscribers.json",
-                                             data:{'api_key':appKey},
-                                             cache: false,
-                                             success:function(response){
-                                            
-                                             $scope.subscriber = response;
-                                             $ionicLoading.hide();
-                                             },
-                                             error:function(error,status){
-                                             $ionicLoading.hide();
-                                             var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Subscriber'                     
-); 
-                                             }
-                                             });
-                                      $scope.registerpop1.hide();
-                                      }
-                                      
-                                      
-                                      $scope.avatar1 = function(){
-                                      
-                                      $ionicActionSheet.show({
-                                                             
-                                                             titleText: '<b><font size="4">Choose</font></b>',
-                                                             buttons: [
-                                                                       { text: 'Camera' },
-                                                                       { text: 'PhotoAlbum' },
-                                                                       ],
-                                                             
-                                                             cancelText: 'Cancel',
-                                                             cancel: function() {
-                                                             },
-                                                             
-                                                             buttonClicked: function(index) {
-                                                             
-                                                             if(index==0){
-                                                             
-                                                             navigator.camera.getPicture(onSuccess5, onFail5, { quality: 50,
-                                                                                         
-                                                                                         destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
-                                                             
-                                                             return true;
-                                                             
-                                                             }
-                                                             
-                                                             else{
-                                                             
-                                                             navigator.camera.getPicture(onSuccess5, onFail5, { quality: 50,
-                                                                                         
-                                                                                         destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
-                                                             
-                                                             return true;
-                                                             
-                                                             }
-                                                             
-                                                             }
-                                                             
-                                                             });
-                                      
-                                      };
-                                      
-                                      function onSuccess5(imageURI) {
-                                      check=true;
-                                      avatarimg1 = imageURI;
-                                      $('#avatar1').attr('src', avatarimg1);
-                                      $('#avatar1').css({'width':'90px','height':'90px'});
-                   
-                                      
-                                      }
-                                      
-                                      function onFail5(message) {
-                                      
-                                      navigator.notification.alert('Failed because: ' + message);
-                                      
-                                      }
-                                      
-                                      
-                                      $scope.data3={}
-                                      
-                                      $scope.updatesubs=function(){
-                                      
-                                      $ionicLoading.show({
-                                                         content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                                         animation: 'fade-in',
-                                                         showBackdrop: true,
-                                                         maxWidth: 200,
-                                                         showDelay: 0
-                                                         });
-                                      
-                                      var formData = new FormData();
-                                      formData.append('api_key',appKey);
-                                      formData.append('id',subeditid);
-                                      formData.append('firstname',$scope.data3.firstname);
-                                      formData.append('lastname',$scope.data3.lastname);
-                                      formData.append('username',$scope.data3.username);
-                                      formData.append('email',$scope.data3.email);
-                                      formData.append('phone',$scope.data3.phone);
-                                      formData.append('password',$scope.data3.password);
-                                      formData.append('password_confirm',$scope.data3.confirmpassword);
-                                      
-                                      if(check==true){
-                                      
-                                      $.ajax({
-                                             type: "PUT",
-                                             url: "http://build.myappbuilder.com/api/subscribers.json",
-                                             data: formData,
-                                             cache: false,
-                                             contentType: false,
-                                             processData: false,
-                                             success:function(response){
-                                           
-                                             subid1=response.id;
-                                             cordova.exec(function(response){
-                                                        
-                                                          $ionicLoading.hide();
-                                                          },
-                                                          function(e){var total = JSON.parse(e);
-                                                          
-                                                          function alertDismissed() {
-                                                          }
-                                                          
-                                                          navigator.notification.alert(
-                                                                                      total.error,
-                                                                                       alertDismissed,
-                                                                                       'Subscriber'
-                                                                                       ); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["90", "90", "avatar", avatarimg1, "http://build.myappbuilder.com/api/subscribers.json?", "put", {api_key:appKey,id:subid1,firstname:$scope.data3.firstname,lastname:$scope.data3.lastname,email:$scope.data3.email,phone:$scope.data3.phone,username:$scope.data2.username,password:$scope.data2.password,password_confirm:$scope.data2.confirmpassword}])
-                                             
-                                             
-                                             },error:function(error){
-                                             $ionicLoading.hide();
-                                            var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Subscriber'                     
-); 
-                                             }
-                                             });
-                                      
-                                      }
-                                      else
-                                      {
-                                      $.ajax({
-                                             type: "PUT",
-                                             url: "http://build.myappbuilder.com/api/subscribers.json",
-                                             data: formData,
-                                             cache: false,
-                                             contentType: false,
-                                             processData: false,
-                                             success:function(response){
-                                        
-                                             
-                                             $ionicLoading.hide();
-                                             },error:function(error){
-                                             $ionicLoading.hide();
-                                             var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Subscriber'                     
-); 
-                                             }
-                                             });
-                                      
-                                      }
-                                      
-                                      }
-                                      
-                                      
-                                      });
-
-control.controller('homeCtrl', ['$ionicPlatform', '$scope', '$rootScope', '$cordovaNetwork', '$ionicLoading', '$location', function($ionicPlatform, $scope, $rootScope, $cordovaNetwork, $ionicLoading, $location) {
-            
-                                
-                         $ionicLoading.show({
-                                            template: 'Loading...'
-                                            });
-                         
-                         function initialize() {
-                     
-                         var feed = new google.feeds.Feed($rootScope.RSS);
-                         
-                         feed.setNumEntries(30);
-                         feed.load(function(result) {
-                                   $ionicLoading.hide();
-                                   if(!result.error) {
-                                   $rootScope.entries = result.feed.entries;
-                                  
-                                   $location.path('/entries');
-                                   } else {
-                                   function alertDismissed() {
-}
-
-navigator.notification.alert(
-    result.error.message,  
-    alertDismissed,        
-     'Rss Feed'                     
-); 
-                                  $location.path('chapterlist');
-                                   }
-                                   });
-                         
-                         }
-                         
-                         $ionicPlatform.ready(function() {
-                                              
-                                              
-                                              if($cordovaNetwork.isOnline()) {
-                                              google.load("feeds", "1",{callback:initialize});
-                                              } else {
-                                              alert("offline, push to error");
-                                              $ionicLoading.hide();
-                                              $location.path('/offline');
-                                              
-                                              }
-                                              
-                                              });
-                                
-                                $rootScope.TITLE = "Raymond Camden's Blog";
-                                
-                                $rootScope.RSS = elementrssurl;
-
-                         
-                         }])
-
-control.controller('entriesCtrl', ['$scope', '$rootScope', '$location', function($scope,$rootScope,$location) {
-                         
-                          
-                                   $scope.backprevfeed=function(){
-                                      $location.path('chapterlist');
-                                   }
-                                   
-                                   $scope.editrss=function(){
-                                   $location.path('rssdisplay');
-                                   }
-                                
-                                   
-                            if(!$rootScope.entries) $location.path('/');
-                            
-                            $rootScope.notHome = false;
-                            
-                            $scope.entries = $rootScope.entries;
-                                   
-                                   $scope.AppEditor = false;
-                                   
-                                   $scope.eyefeed = function(){
-                                   if($scope.AppEditor == false){
-                                   $scope.AppEditor = true;
-                                   }else{
-                                   $scope.AppEditor =false;
-                                   }
-                                   }
-                                   
-                                   $scope.elementrssurl = elementrssurl;
-                                   $scope.elementtext = elementtext;
-                                   
-                            }])
-
-
-control.controller('entryCtrl', ['$scope', '$rootScope', '$location', '$stateParams', function($scope, $rootScope, $location, $stateParams) {
-                       
-                          
-                                 $scope.backpreventry=function(){
-                                 $location.path('entries');
-                                 }
-                          
-                          if(!$rootScope.entries) $location.path('/');
-                          
-                          $rootScope.notHome = true;
-                          
-                          $scope.index = $stateParams.index;
-                          $scope.entry = $rootScope.entries[$scope.index];
-                          
-                          $scope.readEntry = function(e) {
-                          window.open(e.link, "_blank");
-                          };
-                          
-                          }]);
-
-control.controller('viewdetailsCtrl',function($scope,$state,$ionicLoading,$http, $ionicModal, $ionicActionSheet){
-                   
-                   $scope.subfullname1=subfullname1;
-                   $scope.subemail1=subemail1;
-                   $scope.subphone1=subphone1;
-                   $scope.subavatar1=subavatar1;
-                   $scope.subusername1=subusername1;
-                   
-                   $scope.backviewdetails=function(){
-                   $state.go('sublist');
-                   }
-                   
-                   $scope.appTitle = appTitle;
-                   
-                   if(subavatar1 == null){
-                   $('#checkavatar21').attr({'src':'img/btn_avatar.png'});
-                   }
-                   
-                   });
-
-control.controller('viewdetails2Ctrl',function($scope,$state,$ionicLoading,$http, $ionicModal, $ionicActionSheet){
-                   
-                   $scope.subfullname1=subfullname1;
-                   $scope.subemail1=subemail1;
-                   $scope.subphone1=subphone1;
-                   $scope.subavatar1=subavatar1;
-                   $scope.subusername1=subusername1;
-                   
-                   $scope.backviewdetails=function(){
-                   $state.go('sublist2');
-                   }
-                   
-                   $scope.appTitle = appTitle;
-                   
-                   if(subavatar1 == null){
-                   $('#checkavatar21').attr({'src':'img/btn_avatar.png'});
-                   }
-                   
-                   });
-
-control.controller('sample1Ctrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicScrollDelegate){
-                   
-                   $scope.appKey = appList.apps;
-                   
-                   $ionicScrollDelegate.scrollTop();
-                   
-                   $scope.AppEditor =false;
-                   
-                   for(var i =0;i<(appList.apps).length;i++){
-                   if((appList.apps[i]).app_image == null){
-                   (appList.apps[i]).app_image = "img/no_image.png";
-                   
-                   }
-                   }
-                   
-                   $scope.listViewClickFtn = function(appId,appTit){
-                   
-                   $scope.appKey = appList.apps;
-                   
-                   appKey = appId;
-                   appTitle = appTit;
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/buttons.json",
-                          data:{'api_key':appId},
-                          cache: false,
-                          success:function(response){
-                          
-                         
-                          buttonArray = response;
-                          
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/apps/general.json",
-                                 data:{'api_key':appId},
-                                 cache: false,
-                                 success:function(response1){
-                                 console.log('**************123456*************'+response1.bar_color);
-                                 console.log(JSON.stringify(response1));
-                                 
-                                 barcolor = response1.bar_color;
-                                 buttoncolor= response1.button_color;
-                                 barbuttoncolor= response1.bar_button_color;
-                                 
-                                 $scope.bar_color=barcolor;
-                                 $scope.button_color=buttoncolor;
-                                 $scope.bar_button_color=barbuttoncolor;
-                                 
-                                 $.ajax({url:'http://build.myappbuilder.com/api/app_wall_settings.json', type:"GET",data:{'api_key':appKey},
-                                        success:function(response){
-                                        bookAppwall = response;
-                                        $ionicLoading.hide();
-                                        $state.go('app1');
-                                        },
-                                        error:function(){
-                                        $ionicLoading.hide();
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-   'Failure',  
-    alertDismissed,        
-   'FrontEndBuilder'                 
-);
-                                        }
-                                        });
-                                 
-                                 },
-                                 error:function(error,status){
-                                 
-                                  var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'FrontEndBuilder'                 
-);
-                                 }
-                                 });
-                          
-                          
-                          
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'FrontEndBuilder'                 
-);
-                          }
-                          });
-                   }
-                   
-                   
-                   
-                   $scope.logout1 = function(){
-                   localStorage["login"] = [];
-                   openFB.revokePermissions(function() {console.log('Permissions revoked');},function(error){console.log(error.message);});
-                   window.localStorage.removeItem(twitterKey);
-                   $state.go('login');
-                   };
-                   
-                   });
-
-control.controller('home1Ctrl', ['$ionicPlatform', '$scope', '$rootScope', '$cordovaNetwork', '$ionicLoading', '$location', function($ionicPlatform, $scope, $rootScope, $cordovaNetwork, $ionicLoading, $location) {
-                                 
-                               
-                                 
-                                 $ionicLoading.show({
-                                                    template: 'Loading...'
-                                                    });
-                                 
-                                 function initialize() {
-                                
-                                 var feed = new google.feeds.Feed($rootScope.RSS);
-                                 
-                                 feed.setNumEntries(30);
-                                 feed.load(function(result) {
-                                           $ionicLoading.hide();
-                                           if(!result.error) {
-                                           $rootScope.entries = result.feed.entries;
-                                        
-                                           $location.path('/entries1');
-                                           } else {
-                                         function alertDismissed() {
-}
-
-navigator.notification.alert(
-    result.error.message,  
-    alertDismissed,        
-     'Rss Feed'                     
-); 
-                                           $location.path('chapterlist1');
-                                           }
-                                           });
-                                 
-                                 }
-                                 
-                                 $ionicPlatform.ready(function() {
-                                                      
-                                                      
-                                                      if($cordovaNetwork.isOnline()) {
-                                                      google.load("feeds", "1",{callback:initialize});
-                                                      } else {
-                                                      alert("offline, push to error");
-                                                      $ionicLoading.hide();
-                                                      $location.path('/offline');
-                                                      
-                                                      }
-                                                      
-                                                      });
-                                 
-                                 $rootScope.TITLE = "Raymond Camden's Blog";
-                                
-                                 $rootScope.RSS = elementrssurl;
-                                 
-                                 
-                                 }])
-
-control.controller('entries1Ctrl', ['$scope', '$rootScope', '$location', function($scope,$rootScope,$location) {
-                                   
-                                    
-                                    $scope.backprevfeed=function(){
-                                    $location.path('chapterlist1');
-                                    }
-                                    
-                                    
-                                    if(!$rootScope.entries) $location.path('/');
-                                    
-                                    $rootScope.notHome = false;
-                                    
-                                    $scope.entries = $rootScope.entries;
-                                    
-                                    $scope.AppEditor = false;
-                                    
-                                    $scope.eyefeed = function(){
-                                    if($scope.AppEditor == false){
-                                    $scope.AppEditor = true;
-                                    }else{
-                                    $scope.AppEditor =false;
-                                    }
-                                    }
-                                    
-                                    $scope.elementrssurl = elementrssurl;
-                                    $scope.elementtext = elementtext;
-                                    
-                                    }])
-
-
-control.controller('entry1Ctrl', ['$scope', '$rootScope', '$location', '$stateParams', function($scope, $rootScope, $location, $stateParams) {
-                                  
-                                  
-                                  $scope.backpreventry=function(){
-                                  $location.path('entries1');
-                                  }
-                                  
-                                  if(!$rootScope.entries) $location.path('/');
-                                  
-                                  $rootScope.notHome = true;
-                                  
-                                  $scope.index = $stateParams.index;
-                                  $scope.entry = $rootScope.entries[$scope.index];
-                                  
-                                  $scope.readEntry = function(e) {
-                                  window.open(e.link, "_blank");
-                                  };
-                                  
-                                  }]);
-
-
-
-control.controller('sublist1Ctrl',function($scope,$state,$ionicLoading,$http, $ionicModal, $ionicActionSheet){
-                   
-                   $scope.backsublist=function(){
-                   $state.go('app1');
-                   }
-                   $scope.avatar123=function(val){
-                   if(val==null){
-                   return 'img/btn_avatar.png';
-                   }
-                   else{
-                   return val;
-                   }
-                   
-                   }
-                   
-                   $scope.appTitle = appTitle;
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/subscribers.json",
-                          data:{'api_key':appKey},
-                          cache: false,
-                          success:function(response){
-                        
-                          $scope.subscriber = response;
-                          $ionicLoading.hide();
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'Subscriber'                 
-);
-                          }
-                          });
-                   
-                   
                    
                    });
 
@@ -14957,7 +15362,7 @@ control.controller("appWall1Ctrl",function($scope,$state, $ionicLoading,$http,$i
                    $scope.backappwall = function(){
                    $state.go('app1');
                    }
-                   
+
                    $scope.messages = "";
                    $scope.messages.data="";
                    
@@ -14967,17 +15372,17 @@ control.controller("appWall1Ctrl",function($scope,$state, $ionicLoading,$http,$i
                           data:{'api_key':appKey},
                           cache: false,
                           success:function(response){
-                         
-                          $ionicLoading.hide();
+                          //  alert(JSON.stringify(response));
+                        $ionicLoading.hide();
                           messages = response;
                           appWallPostFun();
                           },
                           error:function(error,status){
-                          
+                         
                           $ionicLoading.hide();
                           var error = JSON.parse(error.responseText);
                           if(error.error == "Unauthorized"){
-                          function alertDismissed() {
+                           function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -14986,7 +15391,7 @@ navigator.notification.alert(
    'Messages'                 
 );
                           }else {
-                        							  function alertDismissed() {
+                        function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -14998,7 +15403,7 @@ navigator.notification.alert(
                           }
                           });
                    
-                   });
+                   }); 
 
 control.controller('buttonAppWall1Ctrl',function($scope,$state,$ionicLoading){
                    
@@ -15045,14 +15450,14 @@ control.controller('buttonAppWall1Ctrl',function($scope,$state,$ionicLoading){
                           data:{'api_key':appKey,'button_id':buttonId},
                           cache: false,
                           success:function(response){
-                          $ionicLoading.hide();
+                         $ionicLoading.hide();
                           messages = response;
                           ButtonAppWallPostFun();
                           },
                           error:function(error,status){
-                          $ionicLoading.hide();
+                        $ionicLoading.hide();
                           var error = JSON.parse(error.responseText);
-                        
+                          // alert(JSON.stringify(error));
                           if(error.error == "Unauthorized"){
                           function alertDismissed() {
 }
@@ -15063,7 +15468,7 @@ navigator.notification.alert(
    'Messages'                 
 );
                           }else {
-                           function alertDismissed() {
+                        function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -15115,19 +15520,19 @@ control.controller('elementAppWall1Ctrl',function($scope,$state,$ionicLoading,$i
                    }
                    
                    messages = '';
-                   
+                  
                    $.ajax({url:'http://build.myappbuilder.com/api/messages.json',type:"GET",data:{"api_key":appKey,"element_id":elementId},
                           success:function(response){
-                        
-                          $ionicLoading.hide();
+                          //alert(JSON.stringify(response));
+                           $ionicLoading.hide();
                           messages = response;
                           ElementAppWallPostFun();
                           },
                           error:function(error,status){
-                          $ionicLoading.hide();
+                            $ionicLoading.hide();
                           var error = JSON.parse(error.responseText);
                           if(error.error == "Unauthorized"){
-                          function alertDismissed() {
+                         function alertDismissed() {
 }
 
 navigator.notification.alert(
@@ -15207,9 +15612,7 @@ control.controller('previewpic1Ctrl',function($scope,$state,$ionicLoading,$http)
                    }
                    
                    
-    
-        $scope.editpicpage = previewpic;
-          
+                   $scope.editpicpage = previewpic;
                    
                    $.ajax({
                           type: "GET",
@@ -15219,12 +15622,12 @@ control.controller('previewpic1Ctrl',function($scope,$state,$ionicLoading,$http)
                           success:function(response){
                           $ionicLoading.hide();
                           $scope.edittxtpage = response;
-                        
+                          //  alert(JSON.stringify($scope.distxtpage));
                           $state.reload();
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -15265,6 +15668,7 @@ navigator.notification.alert(
                           }
                           
                           }
+                        
                           
                           $scope.tags = amenities1.split(",");
                           $ionicLoading.hide();
@@ -15272,7 +15676,7 @@ navigator.notification.alert(
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -15285,7 +15689,7 @@ navigator.notification.alert(
                           }
                           });
                    
-                   
+
                    
                    $scope.tinymceOptions = {
                    
@@ -15304,9 +15708,89 @@ navigator.notification.alert(
                    
                    });
 
+control.controller('previewweb1Ctrl',function($scope,$state,$ionicLoading,$http){
+                   
+   
+                   $scope.homeprevweb=function(){
+                   $state.go('sample1');
+                   }
+                   
+                   $scope.backprevweb=function(){
+                   $state.go('chapterlist1');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   
+                   if(barcolor == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+barcolor;
+                   }
+                   
+                   if(barbuttoncolor == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+barbuttoncolor;
+                   }
+                   
+                   if(buttoncolor == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+buttoncolor;
+                   }
+
+                   
+                   $scope.elementtitle = elementtitle;
+                   $scope.elementurl= elementurl;
+                   $scope.elementtext=elementtext;
+                   
+                   $scope.tinymceOptions = {
+                   
+                   
+                   menubar: false,
+                   theme: "modern",
+                   plugins: [
+                             "advlist autolink lists link image charmap print preview anchor",
+                             "searchreplace wordcount visualblocks visualchars code fullscreen",
+                             "insertdatetime table contextmenu ",
+                             "emoticons textcolor"
+                             ],
+                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
+                   
+                   };
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.diswebpage = response;
+                          $state.reload();
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          navigator.notification.alert(error.responseText);
+                          }
+                          });
+                   
+                   $scope.clickweb =function() {
+                   // external url
+                   var ref = window.open(elementurl, '_blank', 'location=yes');
+                   }
+
+                   
+                   });
 
 control.controller('previewtask1Ctrl',function($scope,$state,$ionicLoading){
-                   
+           
                    $scope.backprevtask=function(){
                    $state.go('chapterlist1');
                    }
@@ -15358,7 +15842,7 @@ control.controller('previewtask1Ctrl',function($scope,$state,$ionicLoading){
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                        var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -15383,7 +15867,7 @@ navigator.notification.alert(
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -15399,17 +15883,168 @@ navigator.notification.alert(
                    
                    });
 
-control.controller('previewform1Ctrl',function($scope,$state,$ionicLoading){
-                   
-                   $scope.elementAppwallgoFun=function(){
-                   $state.go('elementAppWall1');
+control.controller('previewrss1Ctrl',function($scope,$state,$ionicLoading){
+      
+                   $scope.backprevrss=function(){
+                   $state.go('chapterlist1');
                    }
                    
+                   $scope.homeprevrss=function(){
+                   $state.go('sample1');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   
+                   if(barcolor == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+barcolor;
+                   }
+                   
+                   if(barbuttoncolor == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+barbuttoncolor;
+                   }
+                   
+                   if(buttoncolor == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+buttoncolor;
+                   }
+                   
+                   $scope.elementtitle = elementtitle;
+                   $scope.elementrssurl = elementrssurl;
+                   $scope.elementtext = elementtext;
+                   
+                   $scope.tinymceOptions = {
+                   
+                   
+                   menubar: false,
+                   theme: "modern",
+                   plugins: [
+                             "advlist autolink lists link image charmap print preview anchor",
+                             "searchreplace wordcount visualblocks visualchars code fullscreen",
+                             "insertdatetime table contextmenu ",
+                             "emoticons textcolor"
+                             ],
+                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
+                   
+                   };
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.disrsspage = response;
+                          $state.reload();
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          navigator.notification.alert(error.responseText);
+                          }
+                          });
+                   
+                   $scope.clickrss =function() {
+                   // external url
+                   var ref = window.open(elementurl, '_blank', 'location=yes');
+                   }
+                   
+                   });
+
+control.controller('previewmap1Ctrl',function($scope,$state,$ionicLoading){
+       
+                   $scope.backprevmap = function(){
+                   $state.go('chapterlist1');
+                   }
+                   $scope.homeprevmap=function(){
+                   $state.go('sample1');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   
+                   if(barcolor == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+barcolor;
+                   }
+                   
+                   if(barbuttoncolor == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+barbuttoncolor;
+                   }
+                   
+                   if(buttoncolor == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+buttoncolor;
+                   }
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/elements/addresses.json",
+                          data:{'api_key':appKey,'id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.addressess = response;
+                          $state.reload();
+                          
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          navigator.notification.alert(error.responseText);
+                          }
+                          });
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.dismappage = response;
+                          $state.reload();
+                          
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          navigator.notification.alert(error.responseText);
+                          }
+                          });
+                   });
+
+control.controller('previewform1Ctrl',function($scope,$state,$ionicLoading){
+                   
+         
                    $scope.backprevform=function(){
                    $state.go('chapterlist1');
                    }
                    $scope.homeprevform=function(){
                    $state.go('sample1');
+                   }
+                   
+                   $scope.elementAppwallgoFun=function(){
+                   $state.go('elementAppWall1');
                    }
                    
                    $scope.elementemail = elementemail;
@@ -15449,32 +16084,23 @@ control.controller('previewform1Ctrl',function($scope,$state,$ionicLoading){
                           success:function(response){
                           $ionicLoading.hide();
                           $scope.disformtype = response;
-                          $state.reload();
+                          $state.reload();      
                           
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'Contact Form'                 
-);
+                          navigator.notification.alert(error.responseText);
                           }
-                          });
+                          });     
                    
                    });
 
 
 control.controller('previewvideo1Ctrl',function($scope,$state,$ionicLoading,$http){
-                   
+                 
                    $scope.backprevvideo = function(){
                    $state.go('chapterlist1');
-                   }
+                   } 
                    $scope.homeprevvideo = function(){
                    $state.go('sample1');
                    }
@@ -15518,873 +16144,11 @@ control.controller('previewvideo1Ctrl',function($scope,$state,$ionicLoading,$htt
                           success:function(response){
                           $ionicLoading.hide();
                           $scope.disvideopage = response;
-                          $state.reload();
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-                          
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,
-                                                       alertDismissed,
-                                                       'Video'
-                                                       );
-                          }
-                          });
-                   
-                   
-                   $scope.tinymceOptions = {
-                   
-                   
-                   menubar: false,
-                   theme: "modern",
-                   plugins: [
-                             "advlist autolink lists link image charmap print preview anchor",
-                             "searchreplace wordcount visualblocks visualchars code fullscreen",
-                             "insertdatetime table contextmenu ",
-                             "emoticons textcolor"
-                             ],
-                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
-                   
-                   };
-                   
-                   
-                   $scope.elementtitle = elementtitle;
-                   $scope.elementtext = elementtext;
-                   $scope.contentvideothumb=contentvideothumb;
-                   $scope.contentvideoframe=contentvideoframe;
-                   
-                   $('#videoprevimg').attr({'src':contentvideothumb});
-                   $('#videoprevimg').css({'width':'50px','height':'50px'});
-                   
-                   $('#videoprevurlimg').attr({'src':'img/video.png'});
-                   $('#videoprevurlimg').css({'width':'50px','height':'50px'});
-                   
-                   console.log(contentvideo);
-                   
-                   $scope.videoclick1=function(){
-                   cordova.exec(null, null, "Echo", "echo", [contentvideo,"YES"]);
-                   }
-                   
-                   });
-
-control.controller('app1Ctrl',function($scope,$state,$ionicModal,$ionicLoading,$ionicPopup,$http){
-                   
-                   if(Appwall.element_wall == '0'){
-                   $scope.elementAppWall = false;
-                   }else if(Appwall.element_wall == '1'){
-                   $scope.elementAppWall = true;
-                   }
-                   
-                   $scope.appwallgoFun = function(){
-                   $state.go('appWall1');
-                   }
-                   
-                   var chapterArray = [];
-                   for (var i = 0; i < buttonArray.length; i++) {
-                  
-                   chapterArray.push(buttonArray[i]);
-                   }
-                   
-                   $scope.items = chapterArray;
-                   
-                   $scope.appTitle = appTitle;
-                   if(barcolor == 'undefined'){
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+barcolor;
-                   }
-                   
-                   if(barbuttoncolor == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+barbuttoncolor;
-                   }
-                   
-                   if(buttoncolor == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+buttoncolor;
-                   }
-                   
-                   $scope.chapterClick = function(id,title){
-                   
-                   buttonId = id;
-                   buttonTitle = title;
-                   
-                   $state.go('chapterlist1');
-                   }
-                   
-                   $scope.backbuttonlist = function(){
-                   
-                   $state.go('sample1');
-                   }
-                   
-                   });
-
-control.controller('chapterlist1Ctrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicScrollDelegate){
-                   
-                   $scope.homechapterlist = function(){
-                   $state.go('sample1');
-                   }
-                   $scope.backchapterlist = function(){
-                   $state.go('app1');
-                   }
-                   
-                   
-                   for (var i = 0; i < buttonArray.length; i++) {
-                   if(buttonId == buttonArray[i].id){
-                   elementArray = buttonArray[i].elements;
-                   }
-                   }
-                   
-                   $scope.elementArray = elementArray;
-                   
-                   $scope.appTitle = appTitle;
-                   
-                   if(barcolor == 'undefined'){
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+barcolor;
-                   }
-                   
-                   if(barbuttoncolor == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+barbuttoncolor;
-                   }
-                   
-                   if(buttoncolor == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+buttoncolor;
-                   }
-                   $scope.buttonTitle = buttonTitle;
-                   
-                   $scope.subTitClickFtn = function(id,title,type,email,text,url,rssurl,audioimg,audiourl,videoimg,videourl,tags,frame){
-                   
-                   elementId = id;
-                   elementtype=type;
-                   elementemail = email;
-                   elementurl = url;
-                   elementtext= text;
-                   elementtitle= title;
-                   elementrssurl = rssurl;
-                   contentimg = audioimg;
-                   contentaudio = audiourl;
-                   contentvideo = videourl;
-                   contentvideothumb = videoimg;
-                      contentvideoframe=frame;
-                   tagging=tags;
-                   
-                   for (var i = 0; i < elementArray.length; i++) {
-                   if(elementtype == "audio"){
-                  $state.go('previewaudio1');
-                   }
-                   
-                   if(elementtype == "rss_feed"){
-                   $state.go('home1');
-                   }
-                   
-                   if(elementtype == "default"){
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/elements/images.json",
-                          data:{'api_key':appKey,'id':elementId},
-                          cache: false,
-                          success:function(response){
-                          
-                          $ionicLoading.hide();
-                          previewpic = response;
-                          $state.go('previewpic1');
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,
-                                                       alertDismissed,
-                                                       'Picture and Text'
-                                                       );
-                          }
-                          });
-
-            
-                   }
-                   
-                   if(elementtype == "tasks_list"){
-                   $state.go('previewtask1');
-                   }
-                   
-                   if(elementtype == "web_page"){
-                   var ref = window.open(elementurl, '_blank', 'location=yes');
-                   ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
-                  
-                   }
-                   
-                   if(elementtype == "contact_form"){
-                   $state.go('previewform1');
-                   }
-                   
-                   if(elementtype == "map"){
-                   $state.go('showmap1');
-                   }
-                   
-                   if(elementtype == "video"){
-                   $state.go('previewvideo1');
-                   }
-                   }
-                   }
-                   
-                   $scope.buttonAppwallgoFun = function(){
-                   $state.go('buttonAppWall1');
-                   }
-                   
-                   if(Appwall.button_wall == '0'){
-                   $scope.buttonAppWall = false;
-                   }else if(Appwall.button_wall == '1'){
-                   $scope.buttonAppWall = true;
-                   }
-                   
-                   });
-
-control.controller('app2Ctrl',function($scope,$state,$ionicModal,$ionicLoading,$ionicPopup,$http){
-                   
-                   if(Appwall.element_wall == '0'){
-                   $scope.elementAppWall = false;
-                   }else if(Appwall.element_wall == '1'){
-                   $scope.elementAppWall = true;
-                   }
-                   
-                   $scope.appwallgoFun = function(){
-                   $state.go('appWall2');
-                   }
-                   
-                   var chapterArray = [];
-                   for (var i = 0; i < buttonArray.length; i++) {
-                 
-                   chapterArray.push(buttonArray[i]);
-                   
-                   }
-                   
-                   $scope.items = chapterArray;
-                   
-                   $scope.appTitle = appTitle;
-                   if(colour == 'undefined'){
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   $scope.AppEditor = false;
-                   
-                   $scope.logbuttonlist = function(){
-                   if($scope.AppEditor == false){
-                   $scope.AppEditor = true;
-                   }else{
-                   $scope.AppEditor =false;
-                   }
-                   }
-                   $scope.chapterClick = function(id,title){
-                   
-                   buttonId = id;
-                   buttonTitle = title;
-                   
-                   $state.go('chapterlist2');
-                   }
-                   $scope.editButton = function(id,title,image){
-                   
-                   buttonId = id;
-                   buttonTitle = title;
-                   chapterImage = image;
-                   
-                   $state.go('buttonlist2');
-                   }
-                   $scope.newchapterGo = function(){
-                   chapterEdit = '';
-                   $state.go('newbutton');
-                   }
-                   
-                   $scope.backbuttonlist = function(){
-                   
-                   $state.go('sample');
-                   }
-                   
-                   $scope.subs=function(){
-                   
-                   $state.go('sublist2');
-                   
-                   }
-                   
-                   $scope.moveItem = function(item, fromIndex, toIndex) {
-                 
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   $scope.items.splice(fromIndex, 1);
-                   $scope.items.splice(toIndex, 0, item);
-                   var ids = $scope.items.map(function(btn){return btn.id});
-                   
-                   $http.post('http://build.myappbuilder.com/api/buttons/reorder.json', {api_key: appKey, ids: ids})
-                   .success(function(data,status,headers,config){
-                            $ionicLoading.hide();
-                            })
-                   .error(function(data,status,headers,config){
-                          var total = JSON.parse(data);
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,
-                                                       alertDismissed,
-                                                       'Button'
-                                                       );
-                          $ionicLoading.hide();
-                          })
-                 
-                   };
-                   
-                   $scope.deleteButton = function(id){
-                   
-                   var confirmPopup = $ionicPopup.confirm({
-                                                          title: 'Button Delete!',
-                                                          template: 'Are you sure you want to delete this Button?'
-                                                          });
-                   
-                   confirmPopup.then(function(res,event) {
-                                     
-                                     if(res) {
-                                     
-                                     $ionicLoading.show({
-                                                        content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                                        animation: 'fade-in',
-                                                        showBackdrop: true,
-                                                        maxWidth: 200,
-                                                        showDelay: 0
-                                                        });
-                                     $.ajax({
-                                            type: "DELETE",
-                                            url: "http://build.myappbuilder.com/api/buttons.json",
-                                            data: {"api_key":appKey,"id":id},
-                                            cache: false,
-                                            success:function(response){
-                                            $.ajax({
-                                                   type: "GET",
-                                                   url: "http://build.myappbuilder.com/api/buttons.json",
-                                                   data:{'api_key':appKey},
-                                                   cache: false,
-                                                   success:function(response){
-                                                   
-                                                   buttonArray= response;
-                                                   chapterArray = [];
-                                                   for (var i = 0; i < buttonArray.length; i++) {
-                                                  
-                                                   chapterArray.push(buttonArray[i]);
-                                                   
-                                                   
-                                                   }
-                                                   $scope.items = chapterArray;
-                                                   $state.reload();
-                                                   setTimeout(function(){  $ionicLoading.hide();}, 1000);
-                                                   
-                                                   },
-                                                   error:function(error,status){
-                                                   $ionicLoading.hide();
-                                                   var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'Button'                     
-);
-                                                   }
-                                                   });
-                                            },
-                                            error:function(error,status){
-                                            $ionicLoading.hide();
-                                            var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'Button'                 
-);
-                                            }
-                                            });
-                                     } else {
-                                     
-                                     }
-                                     });
-                   
-                   }
-                   
-                   });
-
-
-control.controller('chapterlist2Ctrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicScrollDelegate){
-                   
-                   $scope.newContentGo = function(){
-                   $state.go('elements');
-                   }
-                   $scope.homechapterlist = function(){
-                   $state.go('sample');
-                   }
-                   $scope.backchapterlist = function(){
-                   $state.go('app2');
-                   }
-                   
-                   
-                   for (var i = 0; i < buttonArray.length; i++) {
-                   if(buttonId == buttonArray[i].id){
-                   elementArray = buttonArray[i].elements;
-                 
-                   }
-                   }
-                   
-                   $scope.deleteContent = function(id){
-                   
-                   elementId = id;
-                   var confirmPopup = $ionicPopup.confirm({
-                                                          title: 'Element Delete!',
-                                                          template: 'Are you sure you want to delete this Element?'
-                                                          });
-                   confirmPopup.then(function(res) {
-                                     if(res) {
-                                     $ionicLoading.show({
-                                                        content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                                        animation: 'fade-in',
-                                                        showBackdrop: true,
-                                                        maxWidth: 200,
-                                                        showDelay: 0
-                                                        });
-                                     $.ajax({
-                                            type: "DELETE",
-                                            url: "http://build.myappbuilder.com/api/elements.json",
-                                            data: {"api_key":appKey,"id":elementId},
-                                            cache: false,
-                                            success:function(response){
-                                            $.ajax({
-                                                   type: "GET",
-                                                   url: "http://build.myappbuilder.com/api/buttons.json",
-                                                   data:{'api_key':appKey},
-                                                   cache: false,
-                                                   success:function(response){
-                                                   buttonArray = response;
-                                                   $ionicLoading.hide();
-                                                
-                                                   for (var i = 0; i < buttonArray.length; i++) {
-                                                   if(buttonId == buttonArray[i].id){
-                                                   elementArray = buttonArray[i].elements;
-                                                   
-                                                   }
-                                                   }
-                                                   $scope.elementArray = elementArray;
-                                                   $state.reload();
-                                                   },
-                                                   error:function(error,status){
-                                                   $ionicLoading.hide();
-                                                   var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'Chapter'                     
-);
-                                                   }
-                                                   });
-                                            },
-                                            error:function(error,status){
-                                            $ionicLoading.hide();
-                                           var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'Chapter'                     
-);
-                                            }
-                                            });
-                                     } else {
-                                     console.log('You are not sure');
-                                     }
-                                     });
-                   }
-                   
-                   
-                   $scope.elementArray = elementArray;
-                   
-                   $scope.appTitle = appTitle;
-                   if(colour == 'undefined'){
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   $scope.buttonTitle = buttonTitle;
-                   $scope.AppEditor = false;
-                   
-                   $scope.logtextlist = function(){
-                   if($scope.AppEditor == false){
-                   $scope.AppEditor = true;
-                   }else{
-                   $scope.AppEditor =false;
-                   }
-                   }
-                   
-                   $scope.subTitClickFtn = function(id,title,type,email,text,url,rssurl,audioimg,audiourl,videoimg,videourl,tags,frame){
-                   
-                   elementId = id;
-                   elementtype=type;
-                   elementemail = email;
-                   elementurl = url;
-                   elementtext= text;
-                   elementtitle= title;
-                   elementrssurl = rssurl;
-                   contentimg = audioimg;
-                   contentaudio = audiourl;
-                   contentvideo = videourl;
-                   contentvideothumb = videoimg;
-                   contentvideoframe=frame;
-                   tagging=tags;
-                   
-                   for (var i = 0; i < elementArray.length; i++) {
-                   if(elementtype == "audio"){
-                    $state.go('previewaudio2');
-                   }
-                   
-                   if(elementtype == "rss_feed"){
-                   $state.go('home2');
-                   }
-                   
-                   if(elementtype == "default"){
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/elements/images.json",
-                          data:{'api_key':appKey,'id':elementId},
-                          cache: false,
-                          success:function(response){
-                          
-                          $ionicLoading.hide();
-                          previewpic = response;
-                          $state.go('previewpic2');
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,
-                                                       alertDismissed,
-                                                       'Picture and Text'
-                                                       );
-                          }
-                          });
-                
-                   }
-                   
-                   if(elementtype == "tasks_list"){
-                   $state.go('previewtask2');
-                   }
-                   
-                   if(elementtype == "web_page"){
-                   var ref = window.open(elementurl, '_blank', 'location=yes');
-                   ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
-                 
-                   }
-                   
-                   if(elementtype == "contact_form"){
-                   $state.go('previewform2');
-                   }
-                   
-                   if(elementtype == "map"){
-                   $state.go('showmap2');
-                   }
-                   
-                   if(elementtype == "video"){
-                   $state.go('previewvideo2');
-                   }
-                   }
-                   }
-                   
-                   $scope.buttonAppwallgoFun = function(){
-                   $state.go('buttonAppWall2');
-                   }
-                   
-                   if(Appwall.button_wall == '0'){
-                   $scope.buttonAppWall = false;
-                   }else if(Appwall.button_wall == '1'){
-                   $scope.buttonAppWall = true;
-                   }
-                   
-                   });
-
-control.controller('previewpic2Ctrl',function($scope,$state,$ionicLoading,$http,$ionicModal,$ionicActionSheet){
-                   
-                   $scope.data2={}
-                   $scope.elementTitle = elementtitle;
-                   $scope.description = elementtext;
-                   
-                   $scope.logprevtext = function(){
-                   $state.go('picdisplay2');
-                   }
-                   $scope.homeprevtext = function(){
-                   $state.go('sample');
-                   }
-                   $scope.backprevtext = function(){
-                   $state.go('chapterlist2');
-                   }
-                   
-                   $scope.appTitle = appTitle;
-                   
-                   if(colour == 'undefined'){
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   $scope.AppEditor = false;
-                   
-                   $scope.logedittext = function(){
-                   if($scope.AppEditor == false){
-                   $scope.AppEditor = true;
-                   }else{
-                   $scope.AppEditor =false;
-                   }
-                   }
-                   
-          
-            $scope.editpicpage = previewpic;
-            
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId},
-                          cache: false,
-                          success:function(response){
-                          $ionicLoading.hide();
-                          $scope.edittxtpage = response;
-                          
-                          $state.reload();
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'Picture and Text'                     
-);
-                          }
-                          });
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/elements/tags.json",
-                          data:{'api_key':appKey,'id':elementId},
-                          cache: false,
-                          success:function(response){
-                          
-                          var datatag1=response;
-                          if(response.length==0){
-                          $scope.tags='';
-                          console.log(response.length);
-                          }
-                          else{
-                          for(var i=0;i<datatag1.length;i++){
-                          if(i==0){
-                          amenities1 = datatag1[i].name;
-                          
-                          }
-                          else{
-                          amenities1 = amenities1+','+datatag1[i].name;
-                          }
-                          }
-                          $scope.tags = amenities1.split(",");
-                          $ionicLoading.hide();
-                          }
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'Picture and Text'                     
-);
-                          }
-                          });
-                   
-                   $scope.tinymceOptions = {
-                   
-                   
-                   menubar: false,
-                   theme: "modern",
-                   plugins: [
-                             "advlist autolink lists link image charmap print preview anchor",
-                             "searchreplace wordcount visualblocks visualchars code fullscreen",
-                             "insertdatetime table contextmenu ",
-                             "emoticons textcolor"
-                             ],
-                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
-                   
-                   };
-                   
-                   });
-
-
-
-control.controller('previewvideo2Ctrl',function($scope,$state,$ionicLoading,$http){
-                   
-                   $scope.logprevvideo=function(){
-                   $state.go('videodisplay2');
-                   }  
-                   $scope.backprevvideo = function(){
-                   $state.go('chapterlist2');
-                   } 
-                   $scope.homeprevvideo = function(){
-                   $state.go('sample');
-                   }
-                   
-                   $scope.appTitle = appTitle;	
-                   
-                   if(colour == 'undefined'){	
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive'; 
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId},
-                          cache: false,
-                          success:function(response){
-                          $ionicLoading.hide();
-                          $scope.disvideopage = response;
                           $state.reload();       
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
 
                   function alertDismissed() {
 }
@@ -16392,7 +16156,7 @@ control.controller('previewvideo2Ctrl',function($scope,$state,$ionicLoading,$htt
 navigator.notification.alert(
     total.error,  
     alertDismissed,        
-   'Video'                     
+   'Video'                 
 );
                           }
                           });  
@@ -16416,712 +16180,77 @@ navigator.notification.alert(
                    
                    $scope.elementtitle = elementtitle;
                    $scope.elementtext = elementtext;
-                   $scope.contentvideothumb=contentvideothumb;
-                   $scope.contentvideoframe=contentvideoframe;
                    
                    $('#videoprevimg').attr({'src':contentvideothumb});
-                   $('#videoprevimg').css({'width':'50px','height':'50px'}); 		
+                   $('#videoprevimg').css({'width':'50px','height':'50px'});    
+
                    
                    $('#videoprevurlimg').attr({'src':'img/video.png'});
-                   $('#videoprevurlimg').css({'width':'50px','height':'50px'});  
+                   $('#videoprevurlimg').css({'width':'50px','height':'50px'});
                    
                    console.log(contentvideo);
                    
-                   $scope.videoclick2=function(){
+                   $scope.videoclick1=function(){
                    cordova.exec(null, null, "Echo", "echo", [contentvideo,"YES"]);
                    }
                    
                    });
 
-control.controller('previewtask2Ctrl',function($scope,$state,$ionicLoading){ 
-                   
-                   $scope.logprevtask=function(){
-                   $state.go('taskdisplay2');
-                   }
-                   $scope.backprevtask=function(){
-                   $state.go('chapterlist2');
-                   }
-                   $scope.homeprevtask=function(){
-                   $state.go('sample');
-                   }
-                   
-                   $scope.appTitle = appTitle;	
-                   
-                   if(colour == 'undefined'){	
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive'; 
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId},
-                          cache: false,
-                          success:function(response){
-                          $ionicLoading.hide();   
-                          $scope.taskdisplaypage = response;
-                          $state.reload();   	  
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+var avatarimg='';
+var avatarimg1='';
+var subid='';
+var subeditid='';
+var subfullname='';
+var subemail='';
+var subphone='';
+var subpass='';
+var subconfirmpass='';
 
-                  function alertDismissed() {
-}
+var subid1='';
+var subeditid1='';
+var subfullname1='';
+var subemail1='';
+var subphone1='';
+var subusername1='';
+var subpass1='';
+var subconfirmpass1='';
 
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'Task List'                     
-);
-                          }
-                          });             
+control.controller('sublistCtrl',function($scope,$state,$ionicLoading,$http, $ionicModal, $ionicActionSheet){
                    
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/elements/tasks.json",
-                          data:{'api_key':appKey,'id':elementId},
-                          cache: false,
-                          success:function(response){
-                          $ionicLoading.hide();
-                          $scope.taskdisplay = response;
-                          $state.reload();    
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'Task List'                     
-);
-                          }
-                          });               
-                   
-                   });
-
-control.controller('previewform2Ctrl',function($scope,$state,$ionicLoading){ 
-                   
-                   $scope.logprevform=function(){
-                   $state.go('formdisplay2');
+                   $scope.backsublist=function(){
+                   $state.go('app');
                    }
-                   $scope.backprevform=function(){
-                   $state.go('chapterlist2');
+                   $scope.avatar123=function(val){
+                   if(val==null){
+                   return 'img/btn_avatar.png';
                    }
-                   $scope.homeprevform=function(){
-                   $state.go('sample');
+                   else{
+                   return val;
                    }
                    
-                   $scope.elementemail = elementemail;
-                   
-                   $scope.appTitle = appTitle;	
-                   
-                   if(colour == 'undefined'){	
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
                    }
                    
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive'; 
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId},
-                          cache: false,
-                          success:function(response){
-                          $ionicLoading.hide();
-                          $scope.disformtype = response;
-                          $state.reload();   	  
-                          
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-   'Contact Form'                     
-);
-                          }
-                          });     
-                   
-                   });
-
-control.controller('home2Ctrl', ['$ionicPlatform', '$scope', '$rootScope', '$cordovaNetwork', '$ionicLoading', '$location', function($ionicPlatform, $scope, $rootScope, $cordovaNetwork, $ionicLoading, $location) {
-                                 
-                                 $ionicLoading.show({
-                                                    template: 'Loading...'
-                                                    });
-                                 
-                                 function initialize() {
-                               
-                                 var feed = new google.feeds.Feed($rootScope.RSS);
-                                 
-                                 feed.setNumEntries(30);
-                                 feed.load(function(result) {
-                                           $ionicLoading.hide();
-                                           if(!result.error) {
-                                           $rootScope.entries = result.feed.entries;
-                                         
-                                           $location.path('/entries2');
-                                           } else {
-
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    result.error.message,  
-    alertDismissed,        
-   'Rss Feed'                     
-);
-                                          $location.path('chapterlist2');
-                                           }
-                                           });
-                                 
-                                 }
-                                 
-                                 $ionicPlatform.ready(function() {
-                                                      
-                                                      
-                                                      if($cordovaNetwork.isOnline()) {
-                                                      google.load("feeds", "1",{callback:initialize});
-                                                      } else {
-                                                      alert("offline, push to error");
-                                                      $ionicLoading.hide();
-                                                      $location.path('/offline');
-                                                      
-                                                      }
-                                                      
-                                                      });
-                                 
-                                 $rootScope.TITLE = "Raymond Camden's Blog";
-                                
-                                 $rootScope.RSS = elementrssurl;
-                                 
-                                 
-                                 }])
-
-control.controller('entries2Ctrl', ['$scope', '$rootScope', '$location', function($scope,$rootScope,$location) {
-                                  
-                                    
-                                    $scope.backprevfeed=function(){
-                                    $location.path('chapterlist2');
-                                    }
-                                    
-                                    $scope.editrss=function(){
-                                    $location.path('rssdisplay2');
-                                    }
-                                    
-                                    
-                                    if(!$rootScope.entries) $location.path('/');
-                                    
-                                    $rootScope.notHome = false;
-                                    
-                                    $scope.entries = $rootScope.entries;
-                                    
-                                    $scope.AppEditor = false;
-                                    
-                                    $scope.eyefeed = function(){
-                                    if($scope.AppEditor == false){
-                                    $scope.AppEditor = true;
-                                    }else{
-                                    $scope.AppEditor =false;
-                                    }
-                                    }
-                                    
-                                    $scope.elementrssurl = elementrssurl;
-                                    $scope.elementtext = elementtext;
-                                    
-                                    }])
-
-
-control.controller('entry2Ctrl', ['$scope', '$rootScope', '$location', '$stateParams', function($scope, $rootScope, $location, $stateParams) {
-                                 
-                                  
-                                  $scope.backpreventry=function(){
-                                  $location.path('entries2');
-                                  }
-                                  
-                                  if(!$rootScope.entries) $location.path('/');
-                                  
-                                  $rootScope.notHome = true;
-                                  
-                                  $scope.index = $stateParams.index;
-                                  $scope.entry = $rootScope.entries[$scope.index];
-                                  
-                                  $scope.readEntry = function(e) {
-                                  window.open(e.link, "_blank");
-                                  };
-                                  
-                                  }]);
-
-control.controller('elementAppWall2Ctrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicModal,$ionicScrollDelegate){
-                   
-                   $scope.backelementAppwall = function(){
-                   $state.go('chapterlist2');
-                   }
-                   
-                   $scope.homeelementAppwall = function(){
-                   $state.go('sample');
+                   $scope.nextpage = function(id,avatar,fullname,email,phone,user) {
+                   subeditid1=id;
+                   subavatar1=avatar;
+                   subfullname1=fullname;
+                   subemail1=email;
+                   subphone1=phone;
+                   subusername1=user;
+                   $state.go('viewdetails');
                    }
                    
                    $scope.appTitle = appTitle;
                    
-                   if(colour == 'undefined'){
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   messages = '';
-                   window.wizSpinner.show(options);
-                   $.ajax({url:'http://build.myappbuilder.com/api/messages.json',type:"GET",data:{"api_key":appKey,"element_id":elementId},
-                          success:function(response){
-                         
-                          window.wizSpinner.hide();
-                          messages = response;
-                          ElementAppWallPostFun();
-                          },
-                          error:function(error,status){
-                          window.wizSpinner.hide();
-                          var error = JSON.parse(error.responseText);
-                          if(error.error == "Unauthorized"){
-                         function alertDismissed() {
-}
-
-navigator.notification.alert(
-    'Please Login',  
-    alertDismissed,        
-   'Messages'                     
-);
-                          }else {
-                         function alertDismissed() {
-}
-
-navigator.notification.alert(
-    'Login Error!',  
-    alertDismissed,        
-   'Messages'                     
-);
-                          }
-                          }
-                          });
-                   
-                   });
-
-control.controller("appWall2Ctrl",function($scope,$state, $ionicLoading,$http,$ionicPopup){
-                   
-                   $scope.appTitle = appTitle;
-                   
-                   if(colour == 'undefined'){
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   
-                   var button_wall = '';
-                   var element_wall = '';
-                   
-                   $scope.homeappwall = function(){
-                   $state.go('sample');
-                   }
-                   
-                   $scope.backappwall = function(){
-                   $state.go('app2');
-                   }
-                   
-                   
-                   $scope.checkBox = [];
-                   if((Appwall.button_wall == "0")&&(Appwall.element_wall == "0")){
-                   $scope.checkBox.button = false;
-                   $scope.checkBox.element = false;
-                   }else if(Appwall.button_wall == "0"){
-                   $scope.checkBox.button = false;
-                   $scope.checkBox.element = true;
-                   }else if(Appwall.element_wall == "0"){
-                   $scope.checkBox.button = true;
-                   $scope.checkBox.element = false;
-                   }else{
-                   $scope.checkBox.button = true;
-                   $scope.checkBox.element = true;
-                   }
-                   
-                   $scope.appwallSettings = function(){
-                   var myPopup = $ionicPopup.show({
-                                                  template: '<div class="card"><div class="item item-checkbox"><label class="checkbox" ><input type="checkbox" ng-model="checkBox.button" value=""></label>Each Chapter Can Have a Unique Wall </div><div class="item item-checkbox"><label class="checkbox" ><input type="checkbox" ng-model="checkBox.element" value=""></label>Each Content Can Have a Unique Wall  </div></div><div style="width:100%;"><div style="width:50%;float:left;"><div style="width:50%;" class="button button-clear" ng-click="popupClose();"><img src="img/btn_cancel.png" style="width:100%;height:auto;"/></div></div><div style="width:50%;float:left;" ><div style="width:50%;float:right;" class="button button-clear " ng-click="popoupSave();"><img src="img/save.png" style="width:100%;height:auto;"/></div></div></div>',
-                                                  title: 'AppWall Setting',
-                                                  subTitle: $scope.appTitle,
-                                                  scope: $scope,
-                                                  
-                                                  });
-                   
-                   $scope.popupClose=function() {
-                  
-                   myPopup.close();
-                   }
-                   
-                   $scope.popoupSave = function(){
-                   if(($scope.checkBox.button != false) && ($scope.checkBox.element != false)){
-                   button_wall = "1";
-                   element_wall = "1";
-                   }else if($scope.checkBox.button != false){
-                   button_wall = "1";
-                   element_wall = "0";
-                   }else if($scope.checkBox.element != false){
-                   button_wall = "0";
-                   element_wall = "1";
-                   }else{
-                   button_wall = "0";
-                   element_wall = "0";
-                   }
-                   
-                   $ionicLoading.show({template: '<i class="icon ion-loading-a"></i>&nbsp;Please wait...'});
-                   $http.post('http://build.myappbuilder.com/api/app_wall_settings.json',{api_key: appKey,button_wall:button_wall,element_wall:element_wall})
-                   .success(function(data,status,headers,config){
-                         
-                            $.ajax({url:'http://build.myappbuilder.com/api/app_wall_settings.json', type:"GET",data:{'api_key':appKey},
-                                   success:function(response){
-                                  
-                                   Appwall = response;
-                                   $ionicLoading.hide();
-                                   myPopup.close();
-                                   },
-                                   error:function(){
-                                   $ionicLoading.hide();
-                                   myPopup.close();
-                                   }
-                                   });
-                            
-                            })
-                   .error(function(data,status,headers,config){
-                          $ionicLoading.hide();
-                          alert(JSON.stringify(data));
-                          myPopup.close();
-                          })
-                   
-                   }
-                   
-                   }
-                   
-                   $scope.messages = "";
-                   $scope.messages.data="";
-                   window.wizSpinner.show(options);
-                   
                    $.ajax({
                           type: "GET",
-                          url: "http://build.myappbuilder.com/api/messages.json",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
                           data:{'api_key':appKey},
                           cache: false,
                           success:function(response){
-                         
-                          window.wizSpinner.hide();
-                          messages = response;
-                          appWallPostFun();
-                          },
-                          error:function(error,status){
-                          window.wizSpinner.hide();
+                          // alert(JSON.stringify(response));
+                          $scope.subscriber = response;
                           $ionicLoading.hide();
-                          var error = JSON.parse(error.responseText);
-                          if(error.error == "Unauthorized"){
-                         function alertDismissed() {
-}
-
-navigator.notification.alert(
-    'Please Login',  
-    alertDismissed,        
-   'Messages'                     
-);
-                          }else {
-                         function alertDismissed() {
-}
-
-navigator.notification.alert(
-    'Login Error!',  
-    alertDismissed,        
-   'Messages'                     
-);
-                          }
-                          }
-                          });
-                   
-                   }); 
-
-control.controller('buttonAppWall2Ctrl',function($scope,$state,$ionicLoading){
-                   
-                   $scope.backbuttonAppwall = function(){
-                   $state.go('chapterlist2');
-                   }
-                   
-                   $scope.homebuttonAppwall = function(){
-                   $state.go('sample');
-                   }
-                   
-                   $scope.appTitle = appTitle;
-                   
-                   if(colour == 'undefined'){	
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive'; 
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   messages = '';
-                   window.wizSpinner.show(options);
-                   
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/messages.json",
-                          data:{'api_key':appKey,'button_id':buttonId},
-                          cache: false,
-                          success:function(response){
-                          window.wizSpinner.hide();
-                          messages = response;
-                          ButtonAppWallPostFun();
-                          },
-                          error:function(error,status){
-                          window.wizSpinner.hide();
-                          var error = JSON.parse(error.responseText);
-                         
-                          if(error.error == "Unauthorized"){
-                       function alertDismissed() {
-}
-
-navigator.notification.alert(
-    'Please Login',  
-    alertDismissed,        
-   'Messages'                     
-);
-                          }else {
-                          function alertDismissed() {
-}
-
-navigator.notification.alert(
-    'Login Error!',  
-    alertDismissed,        
-   'Messages'                     
-);
-                          }
-                          }
-                          });
-                   
-                   });
-
-control.controller('picdisplay2Ctrl',function($scope,$state,$ionicScrollDelegate,$ionicActionSheet,$ionicLoading,$ionicPopup,$ionicModal){
-                   
-                   $ionicScrollDelegate.scrollTop();
-                   
-                   if(Appwall.element_wall == '0'){
-                   $scope.elementAppWall = false;
-                   }else if(Appwall.element_wall == '1'){
-                   $scope.elementAppWall = true;
-                   }
-                   
-                   $scope.elementAppwallgoFun=function(){
-                   $state.go('elementAppWall2');
-                   }
-                   $scope.backdispic=function(){
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/elements/images.json",
-                          data:{'api_key':appKey,'id':elementId},
-                          cache: false,
-                          success:function(response){
-                          
-                          $ionicLoading.hide();
-                          previewpic = response;
-                          $state.go('previewpic2');
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,
-                                                       alertDismissed,
-                                                       'Picture and Text'
-                                                       );
-                          }
-                          });
-
-              
-                   }
-                   $scope.homedispic=function(){
-                   $state.go('sample');
-                   }
-                   
-                   
-                   $scope.textCreatedis = {}
-                   $scope.dispic={}
-                   $scope.contenteditCreate={}
-                   
-                   $scope.contenteditCreate.elementeditTag = tagging;
-                   $scope.textCreatedis.distitle=elementtitle;
-                   $scope.textCreatedis.distext=elementtext;
-                   
-                   $scope.appTitle = appTitle;
-                   
-                   if(colour == 'undefined'){
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   $scope.AppEditor = false;
-                   
-                   $scope.logedittext = function(){
-                   if($scope.AppEditor == false){
-                   $scope.AppEditor = true;
-                   }else{
-                   $scope.AppEditor =false;
-                   }
-                   }
-                   $scope.tinymceOptions = {
-                   
-                   
-                   menubar: false,
-                   theme: "modern",
-                   plugins: [
-                             "advlist autolink lists link image charmap print preview anchor",
-                             "searchreplace wordcount visualblocks visualchars code fullscreen",
-                             "insertdatetime table contextmenu ",
-                             "emoticons textcolor"
-                             ],
-                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
-                   
-                   };
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/elements/images.json",
-                          data:{'api_key':appKey,'id':elementId},
-                          cache: false,
-                          success:function(response){
-                          
-                          $ionicLoading.hide();
-                          $scope.dispicpage = response;
-                          $state.reload();
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
@@ -17132,628 +16261,41 @@ control.controller('picdisplay2Ctrl',function($scope,$state,$ionicScrollDelegate
 navigator.notification.alert(
     total.error,  
     alertDismissed,        
-     'Picture and Text'                     
+     'Subscriber'                     
 ); 
                           }
                           });
                    
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId},
-                          cache: false,
-                          success:function(response){
-                          $ionicLoading.hide();
-                          $scope.distxtpage = response;
-                      
-                          $state.reload();
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Picture and Text'                     
-); 
-                          }
-                          });
+                   $ionicModal.fromTemplateUrl('my-modal.html', {
+                                               scope: $scope,
+                                               animation: 'slide-in-right'
+                                               }).then(function(modal) {
+                                                       $scope.registerpop = modal;
+                                                       });
                    
-                   $scope.updatedistext = function(){
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   var formData = new FormData();
-                   formData.append('api_key',appKey);
-                   formData.append('id',elementId);
-                   formData.append('title',$scope.textCreatedis.distitle);
-                   formData.append('text',$scope.textCreatedis.distext);
-                   
-                   if((($scope.textCreatedis.distitle)!=elementtitle) || (($scope.textCreatedis.distext)!=elementtext)){
-                   
-                   $.ajax({
-                          type: "PUT",
-                          url: "http://build.myappbuilder.com/api/elements/update_default.json",
-                          data: formData,
-                          cache: false,
-                          contentType: false,
-                          processData: false,
-                          success:function(response){
-                    
-                          $ionicLoading.hide();
-                          },error:function(error){
-                          $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Picture and Text'                     
-); 
-                          }
-                          });
-                   }
-                   else
-                   {
-                   $ionicLoading.hide();
-                   }
-                   }
-                   
-                   $scope.picdisplayselect = function(){
-                   
-                   $ionicActionSheet.show({
-                                          
-                                          titleText: '<b><font size="4">Choose</font></b>',
-                                          buttons: [
-                                                    { text: 'Camera' },
-                                                    { text: 'PhotoAlbum' },
-                                                    ],
-                                          
-                                          cancelText: 'Cancel',
-                                          cancel: function() {
-                                         
-                                          },
-                                          
-                                          buttonClicked: function(index) {
-                                         
-                                          
-                                          if(index==0){
-                                          
-                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-                                                                      
-                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
-                                          
-                                          return true;
-                                          
-                                          }
-                                          
-                                          else{
-                                          
-                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-                                                                      
-                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
-                                          
-                                          return true;
-                                          
-                                          }
-                                          
-                                          }
-                                          
-                                          });
+                   $scope.addsubs = function() {
+                   $('#avatar').attr({'src':"img/add_image.png"});
+                   $scope.data2.firstname='';
+                   $scope.data2.lastname='';
+                   $scope.data2.email='';
+                   $scope.data2.username='';
+                   $scope.data2.phone='';
+                   $scope.data2.password='';
+                   $scope.data2.confirmpassword='';
+                   $scope.registerpop.show();
                    
                    };
                    
-                   function onSuccess(imageURI) {
-                   
-                   imagepicdis = imageURI;
-                   
-                   $('#dispictext').attr('src', imagepicdis);
-                   $('#dispictext').css({'width':'50px','height':'50px'});
-                   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
-                   
-                   }
-                   
-                   function onFail(message) {
-                   
-                   navigator.notification.alert('Failed because: ' + message);
-                   
-                   }
-                   $scope.uploaddisplay = function(){
-                   
-                   $('#dispictext').attr({'src':"img/no_image.png"});
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   cordova.exec(function(response){
-                                var result3 = response;
-                                
-                                picdiscustom =result3.id;
-                                imagepicdis='';
-                                $.ajax({
-                                       type: "GET",
-                                       url: "http://build.myappbuilder.com/api/elements/images.json",
-                                       data:{'api_key':appKey,'id':elementId},
-                                       cache: false,
-                                       success:function(response){
-                                       $ionicLoading.hide();
-                                       $scope.dispicpage = response;
-                                       $state.reload();
-                                       },
-                                       error:function(error,status){
-                                       $ionicLoading.hide();
-                                        var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Picture and Text'                     
-); 
-                                       }
-                                       });
-                                },
-                                function(e){var total = JSON.parse(e);
-                                
-                                function alertDismissed() {
-                                }
-                                
-                                navigator.notification.alert(
-                                                             total.error,
-                                                             alertDismissed,
-                                                             'Picture and Text'
-                                                             ); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["300", "280", "image", imagepicdis, "http://build.myappbuilder.com/api/elements/images.json?", "post", {api_key:appKey,id:elementId}])
-                   }
-                   
-                   $scope.removepicdisCustom = function(id){
-                   
-                   picdiscustom = id;
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   $.ajax({
-                          type: "DELETE",
-                          url: "http://build.myappbuilder.com/api/elements/images.json",
-                          data: {"api_key":appKey,"id":picdiscustom,'element_id':elementId},
-                          cache: false,
-                          success:function(response){
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/elements/images.json",
-                                 data:{'api_key':appKey,'id':elementId},
-                                 cache: false,
-                                 success:function(response){
-                                 $ionicLoading.hide();
-                                 $scope.dispicpage = response;
-                                 $state.reload();
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                  var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Picture and Text'                     
-); 
-                                 }
-                                 });
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Picture and Text'                     
-); 
-                          }
-                          });
-                   
-                   }
-                   $scope.AppEditor = false;
-                   
-                   $scope.createpicdis = function(){
-                   
-                   if($scope.dispic.customdisTitle){
-                   if($scope.dispic.customedisvalue){
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   $.ajax({
-                          type: "POST",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId,'title':$scope.dispic.customdisTitle,'value':$scope.dispic.customedisvalue},
-                          success:function(response){
-                          customdisid = response.id;
-                          
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/custom_values.json",
-                                 data:{'api_key':appKey,'element_id':elementId},
-                                 cache: false,
-                                 success:function(response){
-                                 $ionicLoading.hide();
-                                 $scope.distxtpage = response;
-                                 
-                                 $state.reload();                            
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                  var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Picture and Text'                     
-); 
-                                 }
-                                 });
-                          
-                          $scope.dispic.customdisTitle='';
-                          $scope.dispic.customedisvalue='';
-                          },
-                          error:function(error){
-                          $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Picture and Text'                     
-); 
-                          }
-                          });
-                   }
-                   }else{
-                    function alertDismissed() {
-   
-}
-
-navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
-    'Picture and Text'
-);
-                   }  
-                   }
-                   
-                   $scope.ok = function(){
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   var datatag=$scope.contenteditCreate.elementeditTag;
-                   if(datatag==''){
-                   amenities='';
-                   console.log(datatag);
-                   }
-                   else{
-                   for(var i=0;i<datatag.length;i++){
-                   
-                   if(i==0){
-                   
-                   amenities = datatag[i].text;
-                   
-                   }
-                   
-                   else{
-                   
-                   amenities = amenities+','+datatag[i].text;
-                   
-                   }
-                   
-                   }}
-                   
-                   $.ajax({
-                          type: "PUT",
-                          url: "http://build.myappbuilder.com/api/elements/tags.json",
-                          data:{'api_key':appKey,'element_id':elementId,'value':amenities},
-                          cache: false,
-                          success:function(response){
-                        
-                          $ionicLoading.hide();                        
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Picture and Text'                     
-); 
-                          }
-                          });             
-                   
-                   }
-                   
-                   $scope.removedistxtCustomValue = function(id){
-                   
-                   customdisid = id;
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   $.ajax({
-                          type: "DELETE",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data: {"api_key":appKey,"id":customdisid},
-                          cache: false,
-                          success:function(response){
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/custom_values.json",
-                                 data:{'api_key':appKey,'element_id':elementId},
-                                 cache: false,
-                                 success:function(response){
-                                 $ionicLoading.hide();
-                                 $scope.distxtpage = response;
-                                
-                                 $state.reload();                            
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Picture and Text'                     
-); 
-                                 }
-                                 });              
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Picture and Text'                     
-); 
-                          }
-                          });
-                   }
-                   
-                   });
-
-
-control.controller('videodisplay2Ctrl',function($scope,$state,$ionicScrollDelegate,$ionicLoading,$http,$ionicActionSheet){
-                   
-                   $ionicScrollDelegate.scrollTop();
-                   
-                   if(Appwall.element_wall == '0'){
-                   $scope.elementAppWall = false;
-                   }else if(Appwall.element_wall == '1'){
-                   $scope.elementAppWall = true;
-                   }
-                   
-                   $scope.elementAppwallgoFun=function(){
-                   $state.go('elementAppWall2');
-                   }
-                   function readURL26(input) {
-                   if (input.files && input.files[0]) {
-                   var reader = new FileReader();
-                   
-                   reader.onload = function (e) {
-                   $('#videodisurlimg').attr({'src':"img/btn_video.png"});
-                   $('#videodisurlimg').css({'width':'50px','height':'50px'});
-                   $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
-                  
-                   }
-                   
-                   reader.readAsDataURL(input.files[0]);
-                   }
-                   }
-                   
-                   $("#videodisplay").change(function(){
-                                             check=true;
-                                             
-                                             readURL26(this);
-                                             });
-                   
-                   if(contentvideothumb){
-                   $('#videodisplayimg').attr({'src':contentvideothumb});
-                   $('#videodisplayimg').css({'width':'50px','height':'50px'});
-                   }
-                   if(contentvideo){
-                   $('#videodisplay').attr({'url':contentvideo});
-                   $('#videodisurlimg').attr({'src':contentvideoframe});
-                   $('#videodisurlimg').css({'width':'50px','height':'50px'});
-                   }
-                   
-                   $scope.disvideoselect = function(){
-                   
-                   $ionicActionSheet.show({
-                                          
-                                          titleText: '<b><font size="4">Choose</font></b>',
-                                          buttons: [
-                                                    { text: 'Camera' },
-                                                    { text: 'PhotoAlbum' },
-                                                    ],
-                                          
-                                          cancelText: 'Cancel',
-                                          cancel: function() {
-                                       
-                                          },
-                                          
-                                          buttonClicked: function(index) {
-                                        
-                                          
-                                          if(index==0){
-                                          
-                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-                                                                      
-                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
-                                          
-                                          return true;
-                                          
-                                          }
-                                          
-                                          else{
-                                          
-                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-                                                                      
-                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
-                                          
-                                          return true;
-                                          
-                                          }
-                                          
-                                          }
-                                          
-                                          });
-                   
-                   };
-                   
-                   function onSuccess(imageURI) {
-                   check1=true;
-                   imagedisvideo = imageURI;
-                   $('#videodisplayimg').attr('src', imagedisvideo);
-                   $('#videodisplayimg').css({'width':'50px','height':'50px'});
-                 
-                   
-                   }
-                   
-                   function onFail(message) {
-                   
-                   navigator.notification.alert('Failed because: ' + message);
-                   
-                   }
-                   
-                   
-                   $scope.videodisplugin=function(){
-                   check=true;
-                   cordova.exec(function(response){
-                                
-                                var str=response.split("/var/mobile/Applications/F4AA2E12-B892-4EC7-8705-726EDD470ECF/Documents/");
-                                var getres=str[1];
-                                
-                                if(getres == '(null)'){
-                                
-                                
-                                function alertDismissed() {
-                                }
-                                
-                                navigator.notification.alert(
-                                                             'Please take a snapshot for the video',
-                                                             alertDismissed,
-                                                             'Video'
-                                                             );
-                                }
-
-                                
-                                else{ check=true;
-                                frameeditpassing=response;
-                                $('#videodisurlimg').attr('src', frameeditpassing);
-                                $('#videodisurlimg').css({'width':'50px','height':'50px'});
-                                }
-                                
-                                },
-                                function(e){ }, "ThumbnailImages", "thumbnailImages")
-                   
-                   }
-
-                   
-                   $scope.backdisplayvideo = function(){
-                   $state.go('previewvideo2');
-                   }
-                   $scope.homedisplayvideo = function(){
-                   $state.go('sample');
-                   }
-                   
-                   $scope.appTitle = appTitle;
-                   
-                   if(colour == 'undefined'){
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   
+                   $scope.removesubs=function(){
                    $.ajax({
                           type: "GET",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId},
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data:{'api_key':appKey},
                           cache: false,
                           success:function(response){
+                          // alert(JSON.stringify(response));
+                          $scope.subscriber = response;
                           $ionicLoading.hide();
-                          $scope.disvideopage = response;
-                          $state.reload();
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
@@ -17764,43 +16306,73 @@ control.controller('videodisplay2Ctrl',function($scope,$state,$ionicScrollDelega
 navigator.notification.alert(
     total.error,  
     alertDismissed,        
-     'Video'                     
+     'Subscriber'                     
 ); 
                           }
                           });
+                   $scope.registerpop.hide();
+                   }
                    
-                   $scope.createdisplayvideo={}
-                   $scope.cusdisplayvideo={}
+                   $scope.avatar = function(){
                    
-                   $scope.tinymceOptions = {
-                   
-                   
-                   menubar: false,
-                   theme: "modern",
-                   plugins: [
-                             "advlist autolink lists link image charmap print preview anchor",
-                             "searchreplace wordcount visualblocks visualchars code fullscreen",
-                             "insertdatetime table contextmenu ",
-                             "emoticons textcolor"
-                             ],
-                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
+                   $ionicActionSheet.show({
+                                          
+                                          titleText: '<b><font size="4">Choose</font></b>',
+                                          buttons: [
+                                                    { text: 'Camera' },
+                                                    { text: 'PhotoAlbum' },
+                                                    ],
+                                          
+                                          cancelText: 'Cancel',
+                                          cancel: function() {
+                                          },
+                                          
+                                          buttonClicked: function(index) {
+                                          
+                                          if(index==0){
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          else{
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          }
+                                          
+                                          });
                    
                    };
                    
+                   function onSuccess(imageURI) {
+                   check=true;
+                   avatarimg = imageURI;
+                   $('#avatar').attr('src', avatarimg);
+                   $('#avatar').css({'width':'90px','height':'90px'});
+                   //  $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
                    
-                   $scope.createdisplayvideo.displayvideotitle = elementtitle;
-                   $scope.createdisplayvideo.displayvideotext = elementtext;
+                   }
                    
-                   if(contentvideothumb){
-                   $('#videodisplayimg').attr({'src':contentvideothumb});
-                   $('#videodisplayimg').css({'width':'50px','height':'50px'});
+                   function onFail(message) {
+                   
+                   navigator.notification.alert('Failed because: ' + message);
+                   
                    }
-                   if(contentvideo){
-                   $('#videodisplay').attr({'url':contentvideo});
-                   $('#videodisurlimg').attr({'src':contentvideoframe});
-                   $('#videodisurlimg').css({'width':'50px','height':'50px'});
-                   }
-                   $scope.updatevideodisplay = function(){
+                   
+                   $scope.data2={}
+                   
+                   $scope.createsubs=function(){
                    
                    $ionicLoading.show({
                                       content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
@@ -17810,135 +16382,50 @@ navigator.notification.alert(
                                       showDelay: 0
                                       });
                    
-                   if(check ==true) {
-                   
-                   if((($scope.createdisplayvideo.displayvideotitle)!=elementtitle) || (($scope.createdisplayvideo.displayvideotext)!=elementtext) && (($scope.createdisplayvideo.displayvideotitle)==elementtitle) || (($scope.createdisplayvideo.displayvideotext)==elementtext) && (check1==true)){
-                   cordova.exec(function(response){
-                               
-                                $ionicLoading.hide();
-                                }, function(e){var total = JSON.parse(e);
-                                
-                                function alertDismissed() {
-                                }
-                                
-                                navigator.notification.alert(
-                                                             total.error,
-                                                             alertDismissed,
-                                                             'Video'
-                                                             ); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,elementId,$scope.createdisplayvideo.displayvideotitle,$scope.createdisplayvideo.displayvideotext,imagedisvideo,"put"])
-                   
-                   }
-                   else{
-                   
-                   cordova.exec(function(response){
-                               
-                                $ionicLoading.hide();
-                                },
-                                function(e){var total = JSON.parse(e);
-                                
-                                function alertDismissed() {
-                                }
-                                
-                                navigator.notification.alert(
-                                                             total.error,
-                                                             alertDismissed,
-                                                             'Video'
-                                                             ); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,elementId,$scope.createdisplayvideo.displayvideotitle,$scope.createdisplayvideo.displayvideotext,videothumbno,"put"])
-                   
-                   }
-                   }
-
-                   
-                   else{
-                   //alert('3');
                    var formData = new FormData();
                    formData.append('api_key',appKey);
-                   formData.append('id',elementId);
-                   formData.append('title',$scope.createdisplayvideo.displayvideotitle);
-                   formData.append('text',$scope.createdisplayvideo.displayvideotext);
+                   formData.append('subscriber[firstname]',$scope.data2.firstname);
+                   formData.append('subscriber[lastname]',$scope.data2.lastname);
+                   formData.append('subscriber[username]',$scope.data2.username);
+                   formData.append('subscriber[email]',$scope.data2.email);
+                   formData.append('subscriber[phone]',$scope.data2.phone);
+                   formData.append('subscriber[password]',$scope.data2.password);
+                   formData.append('subscriber[password_confirmation]',$scope.data2.confirmpassword);
                    
-                   $('#videodisplay').attr({'url':contentvideo});
-                   $('#videodisurlimg').attr({'src':contentvideothumb});
-                   $('#videodisurlimg').css({'width':'50px','height':'50px'});
-                   $('#videodisplayimg').attr({'src':contentvideothumb});
-                   $('#videodisplayimg').css({'width':'50px','height':'50px'});
-                   
-                   
-                   $http.put('http://build.myappbuilder.com/api/elements/update_video.json', formData, {
-                             transformRequest: angular.identity,
-                             headers: {'Content-Type': undefined}
-                             })
-                   
-                   .success(function(data,status, headers, config){
-                           
-                            $ionicLoading.hide();					 
-                            
-                            })
-                   .error(function(data,status, headers, config){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(data);
-                          
-                          function alertDismissed() {
-                          }
-                          
-                          navigator.notification.alert(
-                                                       total.error,
-                                                       alertDismissed,
-                                                       'Video'
-                                                       );
-                          });	
-                   }  
-                   
-                   
-                   
-                   }
-                   $scope.createvideodis = function(){
-                   
-                   if($scope.cusdisplayvideo.customdisvideoTitle){
-                   if($scope.cusdisplayvideo.customdisvideovalue){
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
+                   if(avatarimg){
                    
                    $.ajax({
                           type: "POST",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId,'title':$scope.cusdisplayvideo.customdisvideoTitle,'value':$scope.cusdisplayvideo.customdisvideovalue},
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data: formData,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
                           success:function(response){
-                          customdisvideoid = response.id;
                           
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/custom_values.json",
-                                 data:{'api_key':appKey,'element_id':elementId},
-                                 cache: false,
-                                 success:function(response){
-                                 $ionicLoading.hide();                      
-                                 $scope.disvideopage = response;                 
-                                 $state.reload();     
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                  var total = JSON.parse(error.responseText);
+                          subid=response.id;
+                          
+                          cordova.exec(function(response){
+                                      
+                                  //     alert('Successfully Created');
+                                       avatarimg='';
+                                       $ionicLoading.hide();
+                                      
+                                       
+                                       },
+                                       function(e){var total = JSON.parse(e);
+
                   function alertDismissed() {
 }
 
 navigator.notification.alert(
-    total.error,  
+     total.error,
     alertDismissed,        
-     'Video'                     
-); 
-                                 }
-                                 });
-                          $scope.cusdisplayvideo.customdisvideoTitle='';
-                          $scope.cusdisplayvideo.customdisvideovalue='';
-                          },
-                          error:function(error){
+   'Subscriber'                   
+); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["90", "90", "avatar", avatarimg, "http://build.myappbuilder.com/api/subscribers.json?", "put", {api_key:appKey,id:subid}])
+                          
+                          
+                          },error:function(error){
                           $ionicLoading.hide();
                           var total = JSON.parse(error.responseText);
                   function alertDismissed() {
@@ -17947,28 +16434,175 @@ navigator.notification.alert(
 navigator.notification.alert(
     total.error,  
     alertDismissed,        
-     'Video'                     
+     'Subscriber'                     
 ); 
                           }
                           });
+                   
                    }
-                   }else{
-                    function alertDismissed() {
-   
+                   else{
+                   
+                   $.ajax({
+                          type: "POST",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data: formData,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success:function(response){
+                      //    alert('Successfully Created');
+                          $ionicLoading.hide();
+                          },error:function(error){
+                          $ionicLoading.hide();
+                        var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
-    'Video'
-);
-                   }
+    total.error,  
+    alertDismissed,        
+     'Subscriber'                     
+); 
+                          }
+                          });
+                   
+                   
                    
                    }
+                   }
                    
-                   $scope.removevideodisCustomValue = function(id){
                    
-                   customdisvideoid = id;
+                   $ionicModal.fromTemplateUrl('my-modal1.html', {
+                                               scope: $scope,
+                                               animation: 'slide-in-right'
+                                               }).then(function(modal) {
+                                                       $scope.registerpop1 = modal;
+                                                       });
+                   
+                   $scope.editagent = function(id,avatar,fullname,email,phone,username,password,confirmpass) {
+                   
+                   subeditid=id;
+                   subavatar=avatar;
+                   subfullname=fullname;
+                   subemail=email;
+                   subphone=phone;
+                   subusername=username;
+           subpass=password;
+           subconfirmpass=confirmpass;
+           
+                   
+                   $scope.registerpop1.show();
+                   $scope.data3.email=subemail;
+                   $scope.data3.phone=subphone;
+                   $scope.data3.username=subusername;
+                   $scope.data3.password=subpass;
+                   $scope.data3.confirmpassword=subconfirmpass;
+                   
+                   var name=subfullname.split("   ");
+                   $scope.data3.firstname=name[0];
+                   $scope.data3.lastname=name[1];
+                  
+                   if(subavatar){
+                  
+                   $('#avatar1').attr('src', subavatar);
+                   $('#avatar1').css({'width':'90px','height':'90px'});
+                   }
+                   else{
+                   $('#avatar1').attr('src', 'img/add_image.png');
+                   $('#avatar1').css({'width':'90px','height':'90px'});
+                   }
+                   
+                   };
+                   
+                   $scope.removesubs1=function(){
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data:{'api_key':appKey},
+                          cache: false,
+                          success:function(response){
+                          // alert(JSON.stringify(response));
+                          $scope.subscriber = response;
+                          $ionicLoading.hide();
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                        var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Subscriber'                     
+); 
+                          }
+                          });
+                   $scope.registerpop1.hide();
+                   }
+                   
+                   
+                   $scope.avatar1 = function(){
+                   
+                   $ionicActionSheet.show({
+                                          
+                                          titleText: '<b><font size="4">Choose</font></b>',
+                                          buttons: [
+                                                    { text: 'Camera' },
+                                                    { text: 'PhotoAlbum' },
+                                                    ],
+                                          
+                                          cancelText: 'Cancel',
+                                          cancel: function() {
+                                          },
+                                          
+                                          buttonClicked: function(index) {
+                                          
+                                          if(index==0){
+                                          
+                                          navigator.camera.getPicture(onSuccess5, onFail5, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          else{
+                                          
+                                          navigator.camera.getPicture(onSuccess5, onFail5, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          }
+                                          
+                                          });
+                   
+                   };
+                   
+                   function onSuccess5(imageURI) {
+                   check=true;
+                   avatarimg1 = imageURI;
+                   $('#avatar1').attr('src', avatarimg1);
+                   $('#avatar1').css({'width':'90px','height':'90px'});
+                   //  $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
+                   
+                   }
+                   
+                   function onFail5(message) {
+                   
+                   navigator.notification.alert('Failed because: ' + message);
+                   
+                   }
+                   
+                   
+                   $scope.data3={}
+                   
+                   $scope.updatesubs=function(){
                    
                    $ionicLoading.show({
                                       content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
@@ -17978,35 +16612,131 @@ navigator.notification.alert(
                                       showDelay: 0
                                       });
                    
+                   var formData = new FormData();
+                   formData.append('api_key',appKey);
+                   formData.append('id',subeditid);
+                   formData.append('firstname',$scope.data3.firstname);
+                   formData.append('lastname',$scope.data3.lastname);
+                   formData.append('username',$scope.data3.username);
+                   formData.append('email',$scope.data3.email);
+                   formData.append('phone',$scope.data3.phone);
+                   formData.append('password',$scope.data3.password);
+                   formData.append('password_confirm',$scope.data3.confirmpassword);
+                   
+                   if(check==true){
+                   
                    $.ajax({
-                          type: "DELETE",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data: {"api_key":appKey,"id":customdisvideoid},
+                          type: "PUT",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data: formData,
                           cache: false,
+                          contentType: false,
+                          processData: false,
                           success:function(response){
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/custom_values.json",
-                                 data:{'api_key':appKey,'element_id':elementId},
-                                 cache: false,
-                                 success:function(response){
-                                 $ionicLoading.hide();
-                                 $scope.disvideopage = response;
-                                 $state.reload();       
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                var total = JSON.parse(error.responseText);
+                          //alert(JSON.stringify(response));
+                          subid1=response.id;
+                          cordova.exec(function(response){
+                                    //   alert('Successfully Updated');
+                                       $ionicLoading.hide();
+                                       },
+                                       function(e){var total = JSON.parse(e);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+     total.error,
+    alertDismissed,        
+   'Subscriber'                   
+); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["90", "90", "avatar", avatarimg1, "http://build.myappbuilder.com/api/subscribers.json?", "put", {api_key:appKey,id:subid1}])
+                          
+                          
+                          },error:function(error){
+                          $ionicLoading.hide();
+                         var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
 navigator.notification.alert(
     total.error,  
     alertDismissed,        
-     'Video'                     
+     'Subscriber'                     
 ); 
-                                 }
-                                 });              
+                          }
+                          });
+                   
+                   }
+                   else
+                   {
+                   $.ajax({
+                          type: "PUT",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data: formData,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success:function(response){
+                       //   alert('Successfully Updated');
+                          
+                          $ionicLoading.hide();
+                          },error:function(error){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Subscriber'                     
+); 
+                          }
+                          });
+                   
+                   }
+                   
+                   }
+                   
+                   
+                   });
+
+
+control.controller('sublist1Ctrl',function($scope,$state,$ionicLoading,$http, $ionicModal, $ionicActionSheet){
+                   
+                   $scope.backsublist=function(){
+                   $state.go('app1');
+                   }
+                   $scope.avatar123=function(val){
+                   if(val==null){
+                   return 'img/btn_avatar.png';
+                   }
+                   else{
+                   return val;
+                   }
+                   
+                   }
+                   
+                   $scope.nextpage = function(id,avatar,fullname,email,phone,user) {
+                   subeditid1=id;
+                   subavatar1=avatar;
+                   subfullname1=fullname;
+                   subemail1=email;
+                   subphone1=phone;
+                   subusername1=user;
+                   $state.go('viewdetails1');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data:{'api_key':appKey},
+                          cache: false,
+                          success:function(response){
+                          // alert(JSON.stringify(response));
+                          $scope.subscriber = response;
+                          $ionicLoading.hide();
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
@@ -18017,11 +16747,442 @@ navigator.notification.alert(
 navigator.notification.alert(
     total.error,  
     alertDismissed,        
-     'Video'                     
+     'Subscriber'                     
 ); 
                           }
                           });
+                   
+                   $ionicModal.fromTemplateUrl('my-modal.html', {
+                                               scope: $scope,
+                                               animation: 'slide-in-right'
+                                               }).then(function(modal) {
+                                                       $scope.registerpop = modal;
+                                                       });
+                   
+                   $scope.addsubs = function() {
+                   $('#avatar001').attr({'src':"img/add_image.png"});
+                   $scope.data2.firstname='';
+                   $scope.data2.lastname='';
+                   $scope.data2.email='';
+                   $scope.data2.username='';
+                   $scope.data2.phone='';
+                   $scope.data2.password='';
+                   $scope.data2.confirmpassword='';
+                   $scope.registerpop.show();
+                   
+                   };
+                   
+                   $scope.removesubs=function(){
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data:{'api_key':appKey},
+                          cache: false,
+                          success:function(response){
+                          // alert(JSON.stringify(response));
+                          $scope.subscriber = response;
+                          $ionicLoading.hide();
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Subscriber'                     
+); 
+                          }
+                          });
+                   $scope.registerpop.hide();
                    }
+                   
+                   $scope.avatar = function(){
+                   
+                   $ionicActionSheet.show({
+                                          
+                                          titleText: '<b><font size="4">Choose</font></b>',
+                                          buttons: [
+                                                    { text: 'Camera' },
+                                                    { text: 'PhotoAlbum' },
+                                                    ],
+                                          
+                                          cancelText: 'Cancel',
+                                          cancel: function() {
+                                          },
+                                          
+                                          buttonClicked: function(index) {
+                                          
+                                          if(index==0){
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          else{
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          }
+                                          
+                                          });
+                   
+                   };
+                   
+                   function onSuccess(imageURI) {
+                   check=true;
+                   avatarimg = imageURI;
+                   $('#avatar001').attr('src', avatarimg);
+                   $('#avatar001').css({'width':'90px','height':'90px'});
+                   //  $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
+                   
+                   }
+                   
+                   function onFail(message) {
+                   
+                   navigator.notification.alert('Failed because: ' + message);
+                   
+                   }
+                   
+                   $scope.data2={}
+                   
+                   $scope.createsubs=function(){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   var formData = new FormData();
+                   formData.append('api_key',appKey);
+                   formData.append('subscriber[firstname]',$scope.data2.firstname);
+                   formData.append('subscriber[lastname]',$scope.data2.lastname);
+                   formData.append('subscriber[username]',$scope.data2.username);
+                   formData.append('subscriber[email]',$scope.data2.email);
+                   formData.append('subscriber[phone]',$scope.data2.phone);
+                   formData.append('subscriber[password]',$scope.data2.password);
+                   formData.append('subscriber[password_confirmation]',$scope.data2.confirmpassword);
+                   
+                   if(avatarimg){
+                   
+                   $.ajax({
+                          type: "POST",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data: formData,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success:function(response){
+                          
+                          subid=response.id;
+                          
+                          cordova.exec(function(response){
+                                       
+                                  //     alert('Successfully Created');
+                                       avatarimg='';
+                                       $ionicLoading.hide();
+                                       
+                                       
+                                       },
+                                       function(e){var total = JSON.parse(e);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+     total.error,
+    alertDismissed,        
+   'Subscriber'                   
+); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["90", "90", "avatar", avatarimg, "http://build.myappbuilder.com/api/subscribers.json?", "put", {api_key:appKey,id:subid}])
+                          
+                          
+                          },error:function(error){
+                          $ionicLoading.hide();
+                        var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Subscriber'                     
+); 
+                          }
+                          });
+                   
+                   }
+                   else{
+                   
+                   $.ajax({
+                          type: "POST",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data: formData,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success:function(response){
+                        //  alert('Successfully Created');
+                          $ionicLoading.hide();
+                          },error:function(error){
+                          $ionicLoading.hide();
+                        var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Subscriber'                     
+); 
+                          }
+                          });
+                   
+                   
+                   
+                   }
+                   }
+                   
+                   
+                   $ionicModal.fromTemplateUrl('my-modal1.html', {
+                                               scope: $scope,
+                                               animation: 'slide-in-right'
+                                               }).then(function(modal) {
+                                                       $scope.registerpop1 = modal;
+                                                       });
+                   
+                   $scope.editagent = function(id,avatar,fullname,email,phone,username,password,confirmpass) {
+                   
+                   subeditid=id;
+                   subavatar=avatar;
+                   subfullname=fullname;
+                   subemail=email;
+                   subphone=phone;
+                   subusername=username;
+           subpass=password;
+           subconfirmpass=confirmpass;
+           
+                   
+                   $scope.registerpop1.show();
+                   $scope.data3.email=subemail;
+                   $scope.data3.phone=subphone;
+                   $scope.data3.username=subusername;
+                   $scope.data3.password=subpass;
+                   $scope.data3.confirmpassword=subconfirmpass;
+                   
+                   var name=subfullname.split("   ");
+                   $scope.data3.firstname=name[0];
+                   $scope.data3.lastname=name[1];
+                   
+                   if(subavatar){
+                   
+                   $('#avatar1').attr('src', subavatar);
+                   $('#avatar1').css({'width':'90px','height':'90px'});
+                   }
+                   else{
+                   $('#avatar1').attr('src', 'img/add_image.png');
+                   $('#avatar1').css({'width':'90px','height':'90px'});
+                   }
+                   
+                   };
+                   
+                   $scope.removesubs1=function(){
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data:{'api_key':appKey},
+                          cache: false,
+                          success:function(response){
+                          // alert(JSON.stringify(response));
+                          $scope.subscriber = response;
+                          $ionicLoading.hide();
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Subscriber'                     
+); 
+                          }
+                          });
+                   $scope.registerpop1.hide();
+                   }
+                   
+                   
+                   $scope.avatar1 = function(){
+                   
+                   $ionicActionSheet.show({
+                                          
+                                          titleText: '<b><font size="4">Choose</font></b>',
+                                          buttons: [
+                                                    { text: 'Camera' },
+                                                    { text: 'PhotoAlbum' },
+                                                    ],
+                                          
+                                          cancelText: 'Cancel',
+                                          cancel: function() {
+                                          },
+                                          
+                                          buttonClicked: function(index) {
+                                          
+                                          if(index==0){
+                                          
+                                          navigator.camera.getPicture(onSuccess5, onFail5, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          else{
+                                          
+                                          navigator.camera.getPicture(onSuccess5, onFail5, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          }
+                                          
+                                          });
+                   
+                   };
+                   
+                   function onSuccess5(imageURI) {
+                   check=true;
+                   avatarimg1 = imageURI;
+                   $('#avatar1').attr('src', avatarimg1);
+                   $('#avatar1').css({'width':'90px','height':'90px'});
+                   //  $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
+                   
+                   }
+                   
+                   function onFail5(message) {
+                   
+                   navigator.notification.alert('Failed because: ' + message);
+                   
+                   }
+                   
+                   
+                   $scope.data3={}
+                   
+                   $scope.updatesubs=function(){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   var formData = new FormData();
+                   formData.append('api_key',appKey);
+                   formData.append('id',subeditid);
+                   formData.append('firstname',$scope.data3.firstname);
+                   formData.append('lastname',$scope.data3.lastname);
+                   formData.append('username',$scope.data3.username);
+                   formData.append('email',$scope.data3.email);
+                   formData.append('phone',$scope.data3.phone);
+                   formData.append('password',$scope.data3.password);
+                   formData.append('password_confirm',$scope.data3.confirmpassword);
+                   
+                   if(check==true){
+                   
+                   $.ajax({
+                          type: "PUT",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data: formData,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success:function(response){
+                          //alert(JSON.stringify(response));
+                          subid1=response.id;
+                          cordova.exec(function(response){
+                                 //      alert('Successfully Updated');
+                                       $ionicLoading.hide();
+                                       },
+                                       function(e){var total = JSON.parse(e);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+   'Subscriber'                   
+); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["90", "90", "avatar", avatarimg1, "http://build.myappbuilder.com/api/subscribers.json?", "put", {api_key:appKey,id:subid1}])
+                          
+                          
+                          },error:function(error){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Subscriber'                     
+); 
+                          }
+                          });
+                   
+                   }
+                   else
+                   {
+                   $.ajax({
+                          type: "PUT",
+                          url: "http://build.myappbuilder.com/api/subscribers.json",
+                          data: formData,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success:function(response){
+                        //  alert('Successfully Updated');
+                          
+                          $ionicLoading.hide();
+                          },error:function(error){
+                          $ionicLoading.hide();
+                         var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Subscriber'                     
+); 
+                          }
+                          });
+                   
+                   }
+                   
+                   }
+                   
                    
                    });
 
@@ -18058,13 +17219,13 @@ control.controller('sublist2Ctrl',function($scope,$state,$ionicLoading,$http, $i
                           data:{'api_key':appKey},
                           cache: false,
                           success:function(response){
-                         
+                          // alert(JSON.stringify(response));
                           $scope.subscriber = response;
                           $ionicLoading.hide();
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                            var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18103,13 +17264,13 @@ navigator.notification.alert(
                           data:{'api_key':appKey},
                           cache: false,
                           success:function(response){
-                        
+                          // alert(JSON.stringify(response));
                           $scope.subscriber = response;
                           $ionicLoading.hide();
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18170,7 +17331,7 @@ navigator.notification.alert(
                    avatarimg = imageURI;
                    $('#avatar002').attr('src', avatarimg);
                    $('#avatar002').css({'width':'90px','height':'90px'});
-                  
+                   //  $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
                    
                    }
                    
@@ -18212,29 +17373,32 @@ navigator.notification.alert(
                           contentType: false,
                           processData: false,
                           success:function(response){
-                         
+                          
                           subid=response.id;
+                          
                           cordova.exec(function(response){
                                        
-                                   
+                                     //  alert('Successfully Created');
                                        avatarimg='';
                                        $ionicLoading.hide();
+                                       
+                                       
                                        },
                                        function(e){var total = JSON.parse(e);
-                                       
-                                       function alertDismissed() {
-                                       }
-                                       
-                                       navigator.notification.alert(
-                                                                   total.error,
-                                                                    alertDismissed,
-                                                                    'Subscriber'
-                                                                    ); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["90", "90", "avatar", avatarimg, "http://build.myappbuilder.com/api/subscribers.json?", "put", {api_key:appKey,id:subid,firstname:$scope.data2.firstname,lastname:$scope.data2.lastname,email:$scope.data2.email,phone:$scope.data2.phone,username:$scope.data2.username,password:$scope.data2.password,password_confirm:$scope.data2.confirmpassword}])
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+   'Subscriber'                   
+); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["90", "90", "avatar", avatarimg, "http://build.myappbuilder.com/api/subscribers.json?", "put", {api_key:appKey,id:subid}])
                           
                           
                           },error:function(error){
                           $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18257,11 +17421,11 @@ navigator.notification.alert(
                           contentType: false,
                           processData: false,
                           success:function(response){
-                     
+                      //   alert('Successfully Created');
                           $ionicLoading.hide();
                           },error:function(error){
                           $ionicLoading.hide();
-                            var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18294,9 +17458,9 @@ navigator.notification.alert(
                    subemail=email;
                    subphone=phone;
                    subusername=username;
-				   subpass=password;
-				   subconfirmpass=confirmpass;
-				   
+           subpass=password;
+           subconfirmpass=confirmpass;
+           
                    
                    $scope.registerpop1.show();
                    $scope.data3.email=subemail;
@@ -18308,7 +17472,9 @@ navigator.notification.alert(
                    var name=subfullname.split("   ");
                    $scope.data3.firstname=name[0];
                    $scope.data3.lastname=name[1];
+                   
                    if(subavatar){
+                   
                    $('#avatar1002').attr('src', subavatar);
                    $('#avatar1002').css({'width':'90px','height':'90px'});
                    }
@@ -18326,13 +17492,13 @@ navigator.notification.alert(
                           data:{'api_key':appKey},
                           cache: false,
                           success:function(response){
-                        
+                          // alert(JSON.stringify(response));
                           $scope.subscriber = response;
                           $ionicLoading.hide();
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                            var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18394,7 +17560,7 @@ navigator.notification.alert(
                    avatarimg1 = imageURI;
                    $('#avatar1002').attr('src', avatarimg1);
                    $('#avatar1002').css({'width':'90px','height':'90px'});
-                 
+                   //  $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
                    
                    }
                    
@@ -18438,27 +17604,27 @@ navigator.notification.alert(
                           contentType: false,
                           processData: false,
                           success:function(response){
-                         
+                          //alert(JSON.stringify(response));
                           subid1=response.id;
                           cordova.exec(function(response){
-                                   
+                                    //   alert('Successfully Updated');
                                        $ionicLoading.hide();
                                        },
                                        function(e){var total = JSON.parse(e);
-                                       
-                                       function alertDismissed() {
-                                       }
-                                       
-                                       navigator.notification.alert(
-                                                                    total.error,
-                                                                    alertDismissed,
-                                                                    'Subscriber'
-                                                                    ); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["90", "90", "avatar", avatarimg1, "http://build.myappbuilder.com/api/subscribers.json?", "put", {api_key:appKey,id:subid1,firstname:$scope.data3.firstname,lastname:$scope.data3.lastname,email:$scope.data3.email,phone:$scope.data3.phone,username:$scope.data2.username,password:$scope.data2.password,password_confirm:$scope.data2.confirmpassword}])
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+   total.error,
+    alertDismissed,        
+   'Subscriber'                   
+); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["90", "90", "avatar", avatarimg1, "http://build.myappbuilder.com/api/subscribers.json?", "put", {api_key:appKey,id:subid1}])
                           
                           
                           },error:function(error){
                           $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18481,12 +17647,12 @@ navigator.notification.alert(
                           contentType: false,
                           processData: false,
                           success:function(response){
-                      
+                     //     alert('Successfully Updated');
                           
                           $ionicLoading.hide();
                           },error:function(error){
                           $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18502,6 +17668,2127 @@ navigator.notification.alert(
                    
                    }
                    
+                   
+                   });
+
+
+control.controller('homeCtrl', ['$ionicPlatform', '$scope', '$rootScope', '$cordovaNetwork', '$ionicLoading', '$location', function($ionicPlatform, $scope, $rootScope, $cordovaNetwork, $ionicLoading, $location) {
+            
+                               // alert(elementrssurl);
+                                
+                         $ionicLoading.show({
+                                            template: 'Loading...'
+                                            });
+                         
+                         function initialize() {
+                      //  alert('googles init called');
+                         var feed = new google.feeds.Feed($rootScope.RSS);
+                         
+                         feed.setNumEntries(30);
+                         feed.load(function(result) {
+                                   $ionicLoading.hide();
+                                   if(!result.error) {
+                                   $rootScope.entries = result.feed.entries;
+                                  // alert('move');
+                                   $location.path('/entries');
+                                   } else {
+                                   function alertDismissed() {
+}
+
+navigator.notification.alert(
+    result.error.message,  
+    alertDismissed,        
+     'Rss Feed'                     
+); 
+                                  $location.path('chapterlist');
+                                   }
+                                   });
+                         
+                         }
+                         
+                         $ionicPlatform.ready(function() {
+                                              
+                                             //alert("Started up!!");
+                                              
+                                           /*   if(window.cordova && window.cordova.plugins.Keyboard) {
+                                              cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                                              }
+                                              if(window.StatusBar) {
+                                              window.StatusBar.styleDefault();
+                                              }*/
+                                              
+                                              if($cordovaNetwork.isOnline()) {
+                                              google.load("feeds", "1",{callback:initialize});
+                                              } else {
+                                              alert("offline, push to error");
+                                              $ionicLoading.hide();
+                                              $location.path('/offline');
+                                              
+                                              }
+                                              
+                                              });
+                                
+                                $rootScope.TITLE = "Raymond Camden's Blog";
+                                //RSS url
+                                $rootScope.RSS = elementrssurl;
+
+                         
+                         }])
+
+control.controller('entriesCtrl', ['$scope', '$rootScope', '$location', function($scope,$rootScope,$location) {
+                          // alert('EntriesCtrl called');
+                          
+                                   $scope.backprevfeed=function(){
+                                      $location.path('chapterlist');
+                                   }
+                                   
+                                   $scope.editrss=function(){
+                                   $location.path('rssdisplay');
+                                   }
+                                
+                                   
+                            if(!$rootScope.entries) $location.path('/');
+                            
+                            $rootScope.notHome = false;
+                            
+                            $scope.entries = $rootScope.entries;
+                                   
+                                   $scope.AppEditor = false;
+                                   
+                                   $scope.eyefeed = function(){
+                                   if($scope.AppEditor == false){
+                                   $scope.AppEditor = true;
+                                   }else{
+                                   $scope.AppEditor =false;
+                                   }
+                                   }
+                                   
+                                   $scope.elementrssurl = elementrssurl;
+                                   $scope.elementtext = elementtext;
+                                   
+                            }])
+
+
+control.controller('entryCtrl', ['$scope', '$rootScope', '$location', '$stateParams', function($scope, $rootScope, $location, $stateParams) {
+                        //  alert('EntryCtrl called');
+                          
+                                 $scope.backpreventry=function(){
+                                 $location.path('entries');
+                                 }
+                          
+                          if(!$rootScope.entries) $location.path('/');
+                          
+                          $rootScope.notHome = true;
+                          
+                          $scope.index = $stateParams.index;
+                          $scope.entry = $rootScope.entries[$scope.index];
+                          
+                          $scope.readEntry = function(e) {
+                          window.open(e.link, "_blank");
+                          };
+                          
+                          }]);
+
+
+control.controller('home1Ctrl', ['$ionicPlatform', '$scope', '$rootScope', '$cordovaNetwork', '$ionicLoading', '$location', function($ionicPlatform, $scope, $rootScope, $cordovaNetwork, $ionicLoading, $location) {
+                                
+                                // alert(elementrssurl);
+                                
+                                $ionicLoading.show({
+                                                   template: 'Loading...'
+                                                   });
+                                
+                                function initialize() {
+                                //  alert('googles init called');
+                                var feed = new google.feeds.Feed($rootScope.RSS);
+                                
+                                feed.setNumEntries(30);
+                                feed.load(function(result) {
+                                          $ionicLoading.hide();
+                                          if(!result.error) {
+                                          $rootScope.entries = result.feed.entries;
+                                          // alert('move');
+                                          $location.path('/entries1');
+                                          } else {
+                                        function alertDismissed() {
+}
+
+navigator.notification.alert(
+    result.error.message,  
+    alertDismissed,        
+     'Rss Feed'                     
+); 
+                                  $location.path('chapterlist1');
+                                          }
+                                          });
+                                
+                                }
+                                
+                                $ionicPlatform.ready(function() {
+                                                     
+                                                     //alert("Started up!!");
+                                                     
+                                                     /*   if(window.cordova && window.cordova.plugins.Keyboard) {
+                                                      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                                                      }
+                                                      if(window.StatusBar) {
+                                                      window.StatusBar.styleDefault();
+                                                      }*/
+                                                     
+                                                     if($cordovaNetwork.isOnline()) {
+                                                     google.load("feeds", "1",{callback:initialize});
+                                                     } else {
+                                                     alert("offline, push to error");
+                                                     $ionicLoading.hide();
+                                                     $location.path('/offline');
+                                                     
+                                                     }
+                                                     
+                                                     });
+                                
+                                $rootScope.TITLE = "Raymond Camden's Blog";
+                                //RSS url
+                                $rootScope.RSS = elementrssurl;
+                                
+                                
+                                }])
+
+control.controller('entries1Ctrl', ['$scope', '$rootScope', '$location', function($scope,$rootScope,$location) {
+                                   // alert('EntriesCtrl called');
+                                   
+                                   $scope.backprevfeed=function(){
+                                   $location.path('chapterlist1');
+                                   }
+                                    
+                                   
+                                   if(!$rootScope.entries) $location.path('/');
+                                   
+                                   $rootScope.notHome = false;
+                                   
+                                   $scope.entries = $rootScope.entries;
+                                   
+                                   $scope.AppEditor = false;
+                                   
+                                   $scope.eyefeed = function(){
+                                   if($scope.AppEditor == false){
+                                   $scope.AppEditor = true;
+                                   }else{
+                                   $scope.AppEditor =false;
+                                   }
+                                   }
+                                   
+                                   $scope.elementrssurl = elementrssurl;
+                                   $scope.elementtext = elementtext;
+                                   
+                                   }])
+
+
+control.controller('entry1Ctrl', ['$scope', '$rootScope', '$location', '$stateParams', function($scope, $rootScope, $location, $stateParams) {
+                                 //  alert('EntryCtrl called');
+                                 
+                                 $scope.backpreventry=function(){
+                                 $location.path('entries1');
+                                 }
+                                 
+                                 if(!$rootScope.entries) $location.path('/');
+                                 
+                                 $rootScope.notHome = true;
+                                 
+                                 $scope.index = $stateParams.index;
+                                 $scope.entry = $rootScope.entries[$scope.index];
+                                 
+                                 $scope.readEntry = function(e) {
+                                 window.open(e.link, "_blank");
+                                 };
+                                 
+                                 }]);
+
+
+control.controller('viewdetailsCtrl',function($scope,$state,$ionicLoading,$http, $ionicModal, $ionicActionSheet){
+                   
+                   $scope.subfullname1=subfullname1;
+                   $scope.subemail1=subemail1;
+                   $scope.subphone1=subphone1;
+                   $scope.subavatar1=subavatar1;
+                   $scope.subusername1=subusername1;
+                   
+                   $scope.backviewdetails=function(){
+                   $state.go('sublist');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(subavatar1 == null){
+                   $('#checkavatar21').attr({'src':'img/btn_avatar.png'});
+                   }
+                   
+                   });
+
+control.controller('app2Ctrl',function($scope,$state,$ionicModal,$ionicLoading,$ionicPopup,$http){
+                   
+                   if(Appwall.element_wall == '0'){
+                   $scope.elementAppWall = false;
+                   }else if(Appwall.element_wall == '1'){
+                   $scope.elementAppWall = true;
+                   }
+                   
+                   $scope.appwallgoFun = function(){
+                   $state.go('appWall2');
+                   }
+                   
+                   var chapterArray = [];
+                   for (var i = 0; i < buttonArray.length; i++) {
+                   // if((buttonArray[i].first_paragraph_type == "default")||(buttonArray[i].first_paragraph_type == null)){
+                   chapterArray.push(buttonArray[i]);
+                   // }else{
+                   //  alert("Hello : "+buttonArray[i].title)
+                   //  }
+                   
+                   }
+                   
+                   $scope.items = chapterArray;
+                   
+                   $scope.appTitle = appTitle;
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   $scope.AppEditor = false;
+                   
+                   $scope.logbuttonlist = function(){
+                   if($scope.AppEditor == false){
+                   $scope.AppEditor = true;
+                   }else{
+                   $scope.AppEditor =false;
+                   }
+                   }
+                   //$scope.appKey = appList.apps;
+                   $scope.chapterClick = function(id,title){
+                   
+                   buttonId = id;
+                   buttonTitle = title;
+                   
+                   $state.go('chapterlist2');
+                   }
+                   $scope.subs=function(){
+                   $state.go('sublist2');
+                   }
+                   
+                   $scope.editButton = function(id,title,image){
+                   
+                   buttonId = id;
+                   buttonTitle = title;
+                   chapterImage = image;
+                   
+                   $state.go('buttonlist2');
+                   }
+                   $scope.newchapterGo = function(){
+                   chapterEdit = '';
+                   $state.go('newbutton');
+                   }
+                   
+                   $scope.backbuttonlist = function(){
+                   
+                   $state.go('sample');
+                   }
+                   
+                   $scope.moveItem = function(item, fromIndex, toIndex) {
+                   //Move the item in the array
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   $scope.items.splice(fromIndex, 1);
+                   $scope.items.splice(toIndex, 0, item);
+                   var ids = $scope.items.map(function(btn){return btn.id});
+                   
+                   $http.post('http://build.myappbuilder.com/api/buttons/reorder.json', {api_key: appKey, ids: ids})
+                   .success(function(data,status,headers,config){
+                            $ionicLoading.hide();
+                            })
+                   .error(function(data,status,headers,config){
+                          var total = JSON.parse(data);
+                          function alertDismissed() {
+                          }
+                          
+                          navigator.notification.alert(
+                                                       total.error,
+                                                       alertDismissed,        
+                                                       'Button'
+                                                       ); 
+
+                          $ionicLoading.hide();
+                          })
+                   //console.log(item, fromIndex, toIndex)
+                   };
+                   
+                   $scope.deleteButton = function(id){
+                   
+                   var confirmPopup = $ionicPopup.confirm({
+                                                          title: 'Button Delete!',
+                                                          template: 'Are you sure you want to delete this Button?'
+                                                          });
+                   
+                   confirmPopup.then(function(res,event) {
+                                     
+                                     if(res) {
+                                     
+                                     $ionicLoading.show({
+                                                        content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                                        animation: 'fade-in',
+                                                        showBackdrop: true,
+                                                        maxWidth: 200,
+                                                        showDelay: 0
+                                                        });
+                                     $.ajax({
+                                            type: "DELETE",
+                                            url: "http://build.myappbuilder.com/api/buttons.json",
+                                            data: {"api_key":appKey,"id":id},
+                                            cache: false,
+                                            success:function(response){
+                                            $.ajax({
+                                                   type: "GET",
+                                                   url: "http://build.myappbuilder.com/api/buttons.json",
+                                                   data:{'api_key':appKey},
+                                                   cache: false,
+                                                   success:function(response){
+                                                   
+                                                   buttonArray= response;
+                                                   chapterArray = [];
+                                                   for (var i = 0; i < buttonArray.length; i++) {
+                                                   //  if((buttonArray[i].first_paragraph_type == "default")||(buttonArray[i].first_paragraph_type == null)){
+                                                   chapterArray.push(buttonArray[i]);
+                                                   //  alert("Hi : "+buttonArray[i].title)
+                                                   //  }else{
+                                                   // alert("Hello : "+buttonArray[i].title)
+                                                   //   }
+                                                   
+                                                   }
+                                                   $scope.items = chapterArray;
+                                                   $state.reload();
+                                                   setTimeout(function(){  $ionicLoading.hide();}, 1000);
+                                                   
+                                                   },
+                                                   error:function(error,status){
+                                                   $ionicLoading.hide();
+                                                   var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'Button'                     
+);
+                                                   }
+                                                   });
+                                            },
+                                            error:function(error,status){
+                                            $ionicLoading.hide();
+                                            var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'Button'                     
+);
+                                            }
+                                            });
+                                     } else {
+                                     
+                                     }
+                                     });
+                   
+                   }
+                   
+
+                   });
+
+control.controller('chapterlist2Ctrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicScrollDelegate){
+                   
+                   $scope.newContentGo = function(){
+                   $state.go('elements');
+                   }
+                   $scope.homechapterlist = function(){
+                   $state.go('sample');
+                   }
+                   $scope.backchapterlist = function(){
+                   $state.go('app2');
+                   }
+                   
+                   
+                   for (var i = 0; i < buttonArray.length; i++) {
+                   if(buttonId == buttonArray[i].id){
+                   elementArray = buttonArray[i].elements;
+                   // alert(JSON.stringify(buttonArray[i].elements));
+                   }
+                   }
+                   
+                   $scope.deleteContent = function(id){
+                   
+                   elementId = id;
+                   var confirmPopup = $ionicPopup.confirm({
+                                                          title: 'Element Delete!',
+                                                          template: 'Are you sure you want to delete this Element?'
+                                                          });
+                   confirmPopup.then(function(res) {
+                                     if(res) {
+                                     $ionicLoading.show({
+                                                        content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                                        animation: 'fade-in',
+                                                        showBackdrop: true,
+                                                        maxWidth: 200,
+                                                        showDelay: 0
+                                                        });
+                                     $.ajax({
+                                            type: "DELETE",
+                                            url: "http://build.myappbuilder.com/api/elements.json",
+                                            data: {"api_key":appKey,"id":elementId},
+                                            cache: false,
+                                            success:function(response){
+                                            $.ajax({
+                                                   type: "GET",
+                                                   url: "http://build.myappbuilder.com/api/buttons.json",
+                                                   data:{'api_key':appKey},
+                                                   cache: false,
+                                                   success:function(response){
+                                                   buttonArray = response;
+                                                   $ionicLoading.hide();
+                                                   // $state.go('previewChapter');
+                                                   for (var i = 0; i < buttonArray.length; i++) {
+                                                   if(buttonId == buttonArray[i].id){
+                                                   elementArray = buttonArray[i].elements;
+                                                   //  alert(JSON.stringify(buttonArray[i].elements));
+                                                   }
+                                                   }
+                                                   $scope.elementArray = elementArray;
+                                                   $state.reload();
+                                                   },
+                                                   error:function(error,status){
+                                                   $ionicLoading.hide();
+                                                  var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'Chapter'                     
+);
+                                                   }
+                                                   });
+                                            },
+                                            error:function(error,status){
+                                            $ionicLoading.hide();
+                                            var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'Chapter'                     
+);
+                                            }
+                                            });
+                                     } else {
+                                     console.log('You are not sure');
+                                     }
+                                     });
+                   }
+                   
+                   
+                   $scope.elementArray = elementArray;
+                   
+                   $scope.appTitle = appTitle;
+                   if(colour == 'undefined'){ 
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive'; 
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   $scope.buttonTitle = buttonTitle;
+                   $scope.AppEditor = false;
+                   
+                   $scope.logtextlist = function(){
+                   if($scope.AppEditor == false){
+                   $scope.AppEditor = true;
+                   }else{
+                   $scope.AppEditor =false;
+                   }
+                   }
+                   
+                   $scope.subTitClickFtn = function(id,title,type,email,text,url,rssurl,audioimg,audiourl,videoimg,videourl,tags){
+                   
+                   elementId = id;
+                   elementtype=type;
+                   elementemail = email;
+                   elementurl = url;
+                   elementtext= text;
+                   elementtitle= title;
+                   elementrssurl = rssurl;
+                   contentimg = audioimg;
+                   contentaudio = audiourl;
+                   contentvideo = videourl;
+                   contentvideothumb = videoimg;
+                   tagging=tags;
+                   
+                   for (var i = 0; i < elementArray.length; i++) {
+                   if(elementtype == "audio"){
+                   $state.go('previewaudio2');
+                   }
+                   
+                   if(elementtype == "rss_feed"){
+                   $state.go('home2');
+                   }
+                   
+                   if(elementtype == "default"){
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/elements/images.json",
+                          data:{'api_key':appKey,'id':elementId},
+                          cache: false,
+                          success:function(response){
+                          
+                          $ionicLoading.hide();
+                          previewpic = response;
+                          $state.go('previewpic2');
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                          function alertDismissed() {
+                          }
+                          
+                          navigator.notification.alert(
+                                                       total.error,
+                                                       alertDismissed,
+                                                       'Picture and Text'
+                                                       );
+                          }
+                          });
+
+             
+                   }
+                   
+                   if(elementtype == "tasks_list"){
+                   $state.go('previewtask2');
+                   }
+                   
+                   if(elementtype == "web_page"){
+                   var ref = window.open(elementurl, '_blank', 'location=yes');
+                   ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
+                   //$state.go('previewweb');
+                   }
+                   
+                   if(elementtype == "contact_form"){
+                   $state.go('previewform2');
+                   }
+                   
+                   if(elementtype == "map"){
+                   $state.go('showmap2');
+                   //$state.go('previewmap');
+                   }
+                   
+                   if(elementtype == "video"){
+                   $state.go('previewvideo2');
+                   }
+                   }
+                   }
+                   
+                   $scope.buttonAppwallgoFun = function(){
+                   $state.go('buttonAppWall2');
+                   }
+                   
+                   if(Appwall.button_wall == '0'){
+                   $scope.buttonAppWall = false;
+                   }else if(Appwall.button_wall == '1'){
+                   $scope.buttonAppWall = true;
+                   }
+                   
+                   });
+
+control.controller('previewpic2Ctrl',function($scope,$state,$ionicLoading,$http){
+                   
+                   
+                   $scope.elementTitle = elementtitle;
+                   $scope.description = elementtext;
+                   
+                   $scope.logprevtext = function(){
+                   $state.go('picdisplay2');
+                   }
+                   $scope.homeprevtext = function(){
+                   $state.go('sample');
+                   }
+                   $scope.backprevtext = function(){
+                   $state.go('chapterlist2');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   $scope.AppEditor = false;
+                   
+                   $scope.logedittext = function(){
+                   if($scope.AppEditor == false){
+                   $scope.AppEditor = true;
+                   }else{
+                   $scope.AppEditor =false;
+                   }
+                   }
+                   
+                   $scope.editpicpage = previewpic;
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.edittxtpage = response;
+                          //  alert(JSON.stringify($scope.distxtpage));
+                          $state.reload();
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'Picture and Text'                     
+);
+                          }
+                          });
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/elements/tags.json",
+                          data:{'api_key':appKey,'id':elementId},
+                          cache: false,
+                          success:function(response){
+                          var datatag1=response;
+                          console.log(response);
+                          if(response.length==0){
+                          $scope.tags='';
+                          console.log(response.length);
+                          }
+                          else{
+                          for(var i=0;i<datatag1.length;i++){
+                          
+                          if(i==0){
+                          
+                          amenities1 = datatag1[i].name;
+                          
+                          }
+                          
+                          else{
+                          
+                          amenities1 = amenities1+','+datatag1[i].name;
+                          
+                          }
+                          
+                          }
+                          
+                          $scope.tags = amenities1.split(",");
+                          $ionicLoading.hide();
+                          }
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                         var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'Picture and Text'                     
+);
+                          }
+                          });
+                   
+                   
+                   $scope.tinymceOptions = {
+                   
+                   
+                   menubar: false,
+                   theme: "modern",
+                   plugins: [
+                             "advlist autolink lists link image charmap print preview anchor",
+                             "searchreplace wordcount visualblocks visualchars code fullscreen",
+                             "insertdatetime table contextmenu ",
+                             "emoticons textcolor"
+                             ],
+                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
+                   
+                   };
+                   
+                   });
+
+
+control.controller('previewtask2Ctrl',function($scope,$state,$ionicLoading){
+                   
+                   $scope.logprevtask=function(){
+                   $state.go('taskdisplay2');
+                   }
+                   $scope.backprevtask=function(){
+                   $state.go('chapterlist2');
+                   }
+                   $scope.homeprevtask=function(){
+                   $state.go('sample');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.taskdisplaypage = response;
+                          $state.reload();
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'Task List'                     
+);
+                          }
+                          });
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/elements/tasks.json",
+                          data:{'api_key':appKey,'id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.taskdisplay = response;
+                          $state.reload();
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                         var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'Task List'                     
+);
+                          }
+                          });
+                   
+                   
+                   });
+
+
+control.controller('previewform2Ctrl',function($scope,$state,$ionicLoading){
+                   
+                   $scope.logprevform=function(){
+                   $state.go('formdisplay2');
+                   }
+                   $scope.backprevform=function(){
+                   $state.go('chapterlist2');
+                   }
+                   $scope.homeprevform=function(){
+                   $state.go('sample');
+                   }
+                   
+                   $scope.elementemail = elementemail;
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(colour == 'undefined'){ 
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive'; 
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.disformtype = response;
+                          $state.reload();      
+                          
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                        var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'Contact Form'                     
+);
+                          }
+                          });     
+                   
+                   });
+
+
+
+control.controller('previewvideo2Ctrl',function($scope,$state,$ionicLoading,$http){
+                   
+                   $scope.logprevvideo=function(){
+                   $state.go('videodisplay2');
+                   }  
+                   $scope.backprevvideo = function(){
+                   $state.go('chapterlist2');
+                   } 
+                   $scope.homeprevvideo = function(){
+                   $state.go('sample');
+                   }
+                   
+                   $scope.appTitle = appTitle;  
+                   
+                   if(colour == 'undefined'){ 
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive'; 
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.disvideopage = response;
+                          $state.reload();       
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                         var total = JSON.parse(error.responseText);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+   'Video'                     
+);
+                          }
+                          });  
+                   
+                   
+                   $scope.tinymceOptions = {
+                   
+                   
+                   menubar: false,
+                   theme: "modern",
+                   plugins: [
+                             "advlist autolink lists link image charmap print preview anchor",
+                             "searchreplace wordcount visualblocks visualchars code fullscreen",
+                             "insertdatetime table contextmenu ",
+                             "emoticons textcolor"
+                             ],
+                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
+                   
+                   };
+                   
+                   
+                   $scope.elementtitle = elementtitle;
+                   $scope.elementtext = elementtext;
+                   
+                   $('#videoprevimg').attr({'src':contentvideothumb});
+                   $('#videoprevimg').css({'width':'50px','height':'50px'});    
+                   
+                   
+                   $('#videoprevurlimg').attr({'src':'img/video.png'});
+                   $('#videoprevurlimg').css({'width':'50px','height':'50px'});
+                   
+                   console.log(contentvideo);
+                   
+                   $scope.videoclick2=function(){
+                   cordova.exec(null, null, "Echo", "echo", [contentvideo,"YES"]);
+                   }
+                   
+                   });
+
+control.controller('home2Ctrl', ['$ionicPlatform', '$scope', '$rootScope', '$cordovaNetwork', '$ionicLoading', '$location', function($ionicPlatform, $scope, $rootScope, $cordovaNetwork, $ionicLoading, $location) {
+                                
+                                // alert(elementrssurl);
+                                
+                                $ionicLoading.show({
+                                                   template: 'Loading...'
+                                                   });
+                                
+                                function initialize() {
+                                //  alert('googles init called');
+                                var feed = new google.feeds.Feed($rootScope.RSS);
+                                
+                                feed.setNumEntries(30);
+                                feed.load(function(result) {
+                                          $ionicLoading.hide();
+                                          if(!result.error) {
+                                          $rootScope.entries = result.feed.entries;
+                                          // alert('move');
+                                          $location.path('/entries2');
+                                          } else {
+                                         function alertDismissed() {
+}
+
+navigator.notification.alert(
+    result.error.message,  
+    alertDismissed,        
+   'Rss Feed'                     
+);
+                                          $location.path('chapterlist2');
+                                          }
+                                          });
+                                
+                                }
+                                
+                                $ionicPlatform.ready(function() {
+                                                     
+                                                     
+                                                     if($cordovaNetwork.isOnline()) {
+                                                     google.load("feeds", "1",{callback:initialize});
+                                                     } else {
+                                                     alert("offline, push to error");
+                                                     $ionicLoading.hide();
+                                                     $location.path('/offline');
+                                                     
+                                                     }
+                                                     
+                                                     });
+                                
+                                $rootScope.TITLE = "Raymond Camden's Blog";
+                                //RSS url
+                                $rootScope.RSS = elementrssurl;
+                                
+                                
+                                }])
+
+control.controller('entries2Ctrl', ['$scope', '$rootScope', '$location', function($scope,$rootScope,$location) {
+                                   // alert('EntriesCtrl called');
+                                   
+                                   $scope.backprevfeed=function(){
+                                   $location.path('chapterlist2');
+                                   }
+                                   
+                                   $scope.editrss=function(){
+                                   $location.path('rssdisplay2');
+                                   }
+                                   
+                                   
+                                   if(!$rootScope.entries) $location.path('/');
+                                   
+                                   $rootScope.notHome = false;
+                                   
+                                   $scope.entries = $rootScope.entries;
+                                   
+                                   $scope.AppEditor = false;
+                                   
+                                   $scope.eyefeed = function(){
+                                   if($scope.AppEditor == false){
+                                   $scope.AppEditor = true;
+                                   }else{
+                                   $scope.AppEditor =false;
+                                   }
+                                   }
+                                   
+                                   $scope.elementrssurl = elementrssurl;
+                                   $scope.elementtext = elementtext;
+                                   
+                                   }])
+
+
+control.controller('entry2Ctrl', ['$scope', '$rootScope', '$location', '$stateParams', function($scope, $rootScope, $location, $stateParams) {
+                                 //  alert('EntryCtrl called');
+                                 
+                                 $scope.backpreventry=function(){
+                                 $location.path('entries2');
+                                 }
+                                 
+                                 if(!$rootScope.entries) $location.path('/');
+                                 
+                                 $rootScope.notHome = true;
+                                 
+                                 $scope.index = $stateParams.index;
+                                 $scope.entry = $rootScope.entries[$scope.index];
+                                 
+                                 $scope.readEntry = function(e) {
+                                 window.open(e.link, "_blank");
+                                 };
+                                 
+                                 }]);
+
+control.controller('viewdetails1Ctrl',function($scope,$state,$ionicLoading,$http, $ionicModal, $ionicActionSheet){
+                   
+                   $scope.subfullname1=subfullname1;
+                   $scope.subemail1=subemail1;
+                   $scope.subphone1=subphone1;
+                   $scope.subavatar1=subavatar1;
+                   $scope.subusername1=subusername1;
+                   
+                   $scope.backviewdetails=function(){
+                   $state.go('sublist1');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(subavatar1 == null){
+                   $('#checkavatar21').attr({'src':'img/btn_avatar.png'});
+                   }
+                   
+                   });
+
+control.controller('viewdetails2Ctrl',function($scope,$state,$ionicLoading,$http, $ionicModal, $ionicActionSheet){
+                   
+                   $scope.subfullname1=subfullname1;
+                   $scope.subemail1=subemail1;
+                   $scope.subphone1=subphone1;
+                   $scope.subavatar1=subavatar1;
+                   $scope.subusername1=subusername1;
+                   
+                   $scope.backviewdetails=function(){
+                   $state.go('sublist2');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(subavatar1 == null){
+                   $('#checkavatar21').attr({'src':'img/btn_avatar.png'});
+                   }
+                   
+                   });
+
+control.controller('buttonlist2Ctrl',function($scope,$state,$ionicScrollDelegate,$ionicLoading,$ionicActionSheet){
+                   
+                   $ionicScrollDelegate.scrollTop();
+                   
+                   $scope.backbuttonlist = function(){
+                   $state.go('app2');
+                   }
+                   $scope.homebuttonlist = function(){
+                   $state.go('sample');
+                   }
+                   
+                   $scope.editbuttoncreate={}
+                   $('#editbuttonsrc').attr('src', localStorage.xxx);
+                   
+                   // alert(localStorage.xxx);
+                   $scope.appTitle = appTitle;
+                   
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   $scope.editbuttonselect = function(){
+                   
+                   $ionicActionSheet.show({
+                                          
+                                          titleText: '<b><font size="4">Choose</font></b>',
+                                          buttons: [
+                                                    { text: 'Camera' },
+                                                    { text: 'PhotoAlbum' },
+                                                    ],
+                                          
+                                          cancelText: 'Cancel',
+                                          cancel: function() {
+                                          // alert('CANCELLED');
+                                          },
+                                          
+                                          buttonClicked: function(index) {
+                                          // alert('BUTTON CLICKED', index);
+                                          
+                                          if(index==0){
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          else{
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          }
+                                          
+                                          });
+                   
+                   };
+                   
+                   function onSuccess(imageURI) {
+                   
+                   imageeditbutton = imageURI;
+                   //  imageeditbutton = localStorage.xxx;
+                   //alert(imageeditbutton);
+                   $('#editbuttonsrc').attr('src', imageeditbutton);
+                   $('#editbuttonsrc').css({'width':'50px','height':'50px'});
+                   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
+                   
+                   }
+                   
+                   function onFail(message) {
+                   
+                   navigator.notification.alert('Failed because: ' + message);
+                   
+                   }
+                   
+                   $scope.editbuttoncreate.editbuttontitle = buttonTitle;
+                   
+                   if(chapterImage){
+                   $('#editbuttonsrc').attr({'src':chapterImage});
+                   $('#editbuttonsrc').css({'width':'50px','height':'50px'});
+                   
+                   }
+                   
+                   $scope.updatebutton =function(){
+                   
+                   if(chapterImage){
+                   $('#editbuttonimage').attr({'src':chapterImage});
+                   }
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   Data1 = {api_key:appKey,id:buttonId,title:$scope.editbuttoncreate.editbuttontitle};
+                   
+                   cordova.exec(function(response){
+                                // alert(response);
+                                buttonId = response.id;
+                                buttonTitle = response.title;
+                              //  alert("Successfully Updated");
+                                $ionicLoading.hide();
+                                }, function(e){var total = JSON.parse(e);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+   'Button'                   
+);
+                                $ionicLoading.hide();
+                                var formData = new FormData();
+                                var methodData = '';
+                                
+                                methodData = 'PUT';
+                                urlData = "http://build.myappbuilder.com/api/buttons/via_url.json";
+                                formData.append('api_key',appKey);
+                                formData.append('id',buttonId);
+                                formData.append('title',$scope.editbuttoncreate.editbuttontitle);
+                                var letter = ($scope.editbuttoncreate.editbuttontitle).charAt(0).toUpperCase();
+                                
+                                formData.append('image', 'http://nuatransmedia.com/iBookImages/'+letter+'.png');
+                                
+                                
+                                $ionicLoading.show({
+                                                   content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                                   animation: 'fade-in',
+                                                   showBackdrop: true,
+                                                   maxWidth: 200,
+                                                   showDelay: 0
+                                                   });
+                                
+                                $.ajax({
+                                       type: methodData,
+                                       url: urlData,
+                                       data: formData,
+                                       cache: false,
+                                       contentType: false,
+                                       processData: false,
+                                       success:function(response){
+                                       $ionicLoading.hide();
+                                       //  alert(JSON.stringify(response));
+                                       buttonId = response.id;
+                                       buttonTitle = response.title;
+                                       // $state.go('elements');
+                                       },
+                                       error:function(error,status){
+                                       $ionicLoading.hide();
+                                       
+                                        var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Button'                     
+); 
+                                       }
+                                       });
+                                
+                                }, "ImageCompress", "imageCompress", ["57", "57", "image", imageeditbutton, "http://build.myappbuilder.com/api/buttons.json?", "put",Data1])
+                   
+                   }
+                   });
+
+control.controller('mapdisplay2Ctrl',function($scope,$state,$ionicLoading,$ionicScrollDelegate){
+                   
+                   $ionicScrollDelegate.scrollTop();
+                   
+                   if(Appwall.element_wall == '0'){
+                   $scope.elementAppWall = false;
+                   }else if(Appwall.element_wall == '1'){
+                   $scope.elementAppWall = true;
+                   }
+                   
+                   $scope.elementAppwallgoFun=function(){
+                   $state.go('elementAppWall2');
+                   }
+                   $scope.backdismap=function(){
+                   $state.go('showmap2');
+                   }
+                   $scope.homedismap=function(){
+                   $state.go('sample');
+                   }
+                   $scope.dismap={}
+                   $scope.createdisplaymap={}
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/elements/addresses.json",
+                          data:{'api_key':appKey,'id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.addressess = response;
+                          $state.reload();
+                          
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                          }
+                          });
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.dismappage = response;
+                          $state.reload();
+                          
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                          }
+                          });
+                   
+                   $scope.adddisAddress = function(){
+                   
+                   if($scope.createdisplaymap.title){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "POST",
+                          url: "http://build.myappbuilder.com/api/elements/addresses.json",
+                          data:{'api_key':appKey,'id':elementId,'address':$scope.createdisplaymap.title},
+                          success:function(response){
+                          // alert(JSON.stringify(response));
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/elements/addresses.json",
+                                 data:{'api_key':appKey,'id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.addressess = response;
+                                 $scope.createdisplaymap.title='';
+                                 $state.reload();
+                                 
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                 var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                                 }
+                                 });
+                          },
+                          error:function(error){
+                          $ionicLoading.hide();
+                           var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                          }
+                          });
+                   }
+                   else{
+                   function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter The Address',  // message
+    alertDismissed,         // callback
+    'Map and Location'
+); 
+                   }
+                   
+                   }
+                   
+                   $scope.updatedisplayAddress = function(id,updateaddresss){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   var formData = new FormData();
+                   formData.append('api_key',appKey);
+                   formData.append('element_id',elementId);
+                   formData.append('id',id);
+                   formData.append('address',updateaddresss);
+                   
+                   $.ajax({
+                          type: "PUT",
+                          url: "http://build.myappbuilder.com/api/elements/addresses.json",
+                          data:formData,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success:function(response){
+                      //    alert('successfully Updated');
+                          $ionicLoading.hide();
+                          
+                          
+                          },error:function(error){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                          }
+                          });
+                   }
+                   $scope.deletedisplayAddress = function(id){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   if((($scope.addressess).length)==1)
+                   {
+                   $ionicLoading.hide();
+                   function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'You Cannot delete this address',  // message
+    alertDismissed,         // callback
+    'Map and Location'
+);      
+                   }
+                   else
+                   {
+                   
+                   $.ajax({
+                          type: "DELETE",
+                          url: "http://build.myappbuilder.com/api/elements/addresses/"+id+".json",
+                          data: {'api_key':appKey,'id':elementId},
+                          cache: false,
+                          success:function(response){
+                          //alert(JSON.stringify(response));
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/elements/addresses.json",
+                                 data:{'api_key':appKey,'id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.addressess = response;
+                                 $state.reload();
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                 var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                                 }
+                                 });
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                         var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                          }
+                          });
+                   }
+                   }
+                   
+                   $scope.mapdiscustom = function(){
+                   
+                   if($scope.dismap.discustommaptitle){
+                   if($scope.dismap.discustommapvalue){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "POST",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId,'title':$scope.dismap.discustommaptitle,'value':$scope.dismap.discustommapvalue},
+                          success:function(response){
+                          customdismapid = response.id;
+                          
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.dismappage = response;
+                                 $state.reload();
+                                 
+                                 
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                                 }
+                                 });
+                          $scope.dismap.discustommaptitle='';
+                          $scope.dismap.discustommapvalue='';
+                          },
+                          error:function(error){
+                          $ionicLoading.hide();
+                         var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                          }
+                          });
+                   }
+                   }else{
+                   function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
+    'Map and Location'
+);
+                   }
+                   
+                   }
+                   
+                   $scope.removedismapCustomValue = function(id){
+                   
+                   customdismapid = id;
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "DELETE",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data: {"api_key":appKey,"id":customdismapid},
+                          cache: false,
+                          success:function(response){
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.dismappage = response;
+                                 $state.reload();
+                                 
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                                 }
+                                 });
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Map and Location'                     
+); 
+                          }
+                          });
+                   }
+                   
+                   });
+
+control.controller('formdisplay2Ctrl',function($scope,$state,$ionicLoading,$ionicScrollDelegate){
+                   
+                   $ionicScrollDelegate.scrollTop();
+                   
+                   if(Appwall.element_wall == '0'){
+                   $scope.elementAppWall = false;
+                   }else if(Appwall.element_wall == '1'){
+                   $scope.elementAppWall = true;
+                   }
+                   
+                   $scope.elementAppwallgoFun=function(){
+                   $state.go('elementAppWall2');
+                   }
+                   $scope.backdisform=function(){
+                   $state.go('previewform2');
+                   }
+                   $scope.homedisform=function(){
+                   $state.go('sample');
+                   }
+                   
+                   $scope.formdis={}
+                   $scope.displayform={}
+                   
+                   $scope.formdis.disemail = elementemail;
+                   $scope.appTitle = appTitle;
+                   
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.disformtype = response;
+                          $state.reload();
+                          
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Contact Form'                     
+); 
+                          }
+                          });
+                   
+                   $scope.updatedisform = function(){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   var formData = new FormData();
+                   formData.append('api_key',appKey);
+                   formData.append('id',elementId);
+                   formData.append('email_to_send_to',$scope.formdis.disemail);
+                   
+                   if(($scope.formdis.disemail)!=elementemail){
+                   
+                   $.ajax({
+                          type: "PUT",
+                          url: "http://build.myappbuilder.com/api/elements/update_contact_form.json",
+                          data: formData,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success:function(response){
+                       //   alert('successfully Updated');
+                          $ionicLoading.hide();
+                          
+                          
+                          },error:function(error){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Contact Form'                     
+); 
+                          }
+                          });
+                   }
+                   else
+                   {
+                   $ionicLoading.hide();
+                   }
+                   
+                   }
+                   
+                   $scope.createdisformcustom = function(){
+                   
+                   if($scope.displayform.customdisTitle){
+                   if($scope.displayform.customdisvalue){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "POST",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId,'title':$scope.displayform.customdisTitle,'value':$scope.displayform.customdisvalue},
+                          success:function(response){
+                          customedisformid = response.id;
+                          
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.disformtype = response;
+                                 $state.reload();
+                                 
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Contact Form'                     
+); 
+                                 }
+                                 });
+                          $scope.displayform.customdisTitle='';
+                          $scope.displayform.customdisvalue='';
+                          },
+                          error:function(error){
+                          $ionicLoading.hide();
+                         var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Contact Form'                     
+); 
+                          }
+                          });
+                   }
+                   }else{
+                  function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
+    'Contact Form'
+);
+                   }
+                   
+                   }
+                   
+                   $scope.removeformdisCustomValue = function(id){
+                   
+                   customedisformid = id;
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "DELETE",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data: {"api_key":appKey,"id":customedisformid},
+                          cache: false,
+                          success:function(response){
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.disformtype = response;
+                                 $state.reload();
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                 var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Contact Form'                     
+); 
+                                 }
+                                 });
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                           var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Contact Form'                     
+); 
+                          }
+                          });
+                   }
                    
                    });
 
@@ -18651,7 +19938,7 @@ navigator.notification.alert(
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18664,13 +19951,13 @@ navigator.notification.alert(
                           });
                    }else
                    {
-                   function alertDismissed() {
-   
+                  function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter  The Title',
-    alertDismissed,
+    'Enter  The Title',  // message
+    alertDismissed,         // callback
     'Task List'
 );
                    }
@@ -18693,7 +19980,7 @@ navigator.notification.alert(
                           data: {"api_key":appKey,'id':elementId},
                           cache: false,
                           success:function(response){
-                          
+                          //        alert(JSON.stringify(response));
                           $ionicLoading.hide();
                           $.ajax({
                                  type: "GET",
@@ -18721,7 +20008,7 @@ navigator.notification.alert(
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
- var total = JSON.parse(error.responseText);
+                         var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18759,7 +20046,7 @@ navigator.notification.alert(
                           contentType: false,
                           processData: false,
                           success:function(response){
-                       
+                       //   alert('successfully Updated');
                           $ionicLoading.hide();
                           
                           },
@@ -18824,11 +20111,10 @@ navigator.notification.alert(
                                  });
                           $scope.discustask.customtaskdistitle='';
                           $scope.discustask.customtaskdisvalue='';
-                          
                           },
                           error:function(error){
                           $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18841,15 +20127,16 @@ navigator.notification.alert(
                           });
                    }
                    }else{
-                     function alertDismissed() {
-   
+                    function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
     'Task List'
 );
+
                    }
                    
                    }
@@ -18884,7 +20171,7 @@ navigator.notification.alert(
                                  },
                                  error:function(error,status){
                                  $ionicLoading.hide();
-                               var total = JSON.parse(error.responseText);
+                                 var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18898,7 +20185,7 @@ navigator.notification.alert(
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                        var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -18937,9 +20224,9 @@ control.controller('rssdisplay2Ctrl',function($scope,$state,$ionicLoading,$ionic
                    $scope.discusrss={}
                    $scope.createrssdis={}
                    
-                   $scope.appTitle = appTitle;	
+                   $scope.appTitle = appTitle;
                    
-                   if(colour == 'undefined'){	
+                   if(colour == 'undefined'){
                    $scope.bar_color = 'bar-positive';
                    }
                    else
@@ -18948,7 +20235,7 @@ control.controller('rssdisplay2Ctrl',function($scope,$state,$ionicLoading,$ionic
                    }
                    
                    if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive'; 
+                   $scope.bar_button_color ='button-positive';
                    }
                    else
                    {
@@ -18977,7 +20264,7 @@ control.controller('rssdisplay2Ctrl',function($scope,$state,$ionicLoading,$ionic
                                       showDelay: 0
                                       });
                    
-                   if((($scope.createrssdis.disrssname)==elementtitle) && (($scope.createrssdis.disrssdesc)==elementtext) && (($scope.createrssdis.disrssurl)==elementrssurl)){  
+                   if((($scope.createrssdis.disrssname)==elementtitle) && (($scope.createrssdis.disrssdesc)==elementtext) && (($scope.createrssdis.disrssurl)==elementrssurl)){
                    $ionicLoading.hide();
                    }
                    else{
@@ -18996,13 +20283,13 @@ control.controller('rssdisplay2Ctrl',function($scope,$state,$ionicLoading,$ionic
                           contentType: false,
                           processData: false,
                           success:function(response){
-                     
+                       //   alert('successfully Updated');
                           $ionicLoading.hide();
                           
                           
                           },error:function(error){
                           $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
+                          var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -19043,7 +20330,7 @@ navigator.notification.alert(
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                        var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -19087,7 +20374,7 @@ navigator.notification.alert(
                                  },
                                  error:function(error,status){
                                  $ionicLoading.hide();
-                               var total = JSON.parse(error.responseText);
+                                   var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -19097,13 +20384,13 @@ navigator.notification.alert(
      'Rss Feed'                     
 ); 
                                  }
-                                 });
+                                 }); 
                           $scope.discusrss.cusdisrsstitle='';
-                          $scope.discusrss.cusdisrssvalue='';
+                          $scope.discusrss.cusdisrssvalue='';             
                           },
                           error:function(error){
                           $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                            var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -19116,13 +20403,13 @@ navigator.notification.alert(
                           });
                    }
                    }else{
-                   function alertDismissed() {
-  
+                    function alertDismissed() {
+    // do something
 }
 
 navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
     'Rss Feed'
 ); 
                    }
@@ -19159,600 +20446,6 @@ navigator.notification.alert(
                                  },
                                  error:function(error,status){
                                  $ionicLoading.hide();
-                              var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Rss Feed'                     
-); 
-                                 }
-                                 });              
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Rss Feed'                     
-); 
-                          }
-                          });
-                   }
-                   
-                   });
-
-control.controller('formdisplay2Ctrl',function($scope,$state,$ionicLoading,$ionicScrollDelegate){
-                   
-                   $ionicScrollDelegate.scrollTop();
-                   
-                   if(Appwall.element_wall == '0'){
-                   $scope.elementAppWall = false;
-                   }else if(Appwall.element_wall == '1'){
-                   $scope.elementAppWall = true;
-                   }
-                   
-                   $scope.elementAppwallgoFun=function(){
-                   $state.go('elementAppWall2');
-                   }
-                   $scope.backdisform=function(){
-                   $state.go('previewform2');
-                   }
-                   $scope.homedisform=function(){
-                   $state.go('sample');
-                   }
-                   
-                   $scope.formdis={}
-                   $scope.displayform={}
-                   
-                   $scope.formdis.disemail = elementemail;
-                   $scope.appTitle = appTitle;
-                   
-                   if(colour == 'undefined'){
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId},
-                          cache: false,
-                          success:function(response){
-                          $ionicLoading.hide();
-                          $scope.disformtype = response;
-                          $state.reload();
-                          
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Contact Form'                     
-); 
-                          }
-                          });
-                   
-                   $scope.updatedisform = function(){
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   var formData = new FormData();
-                   formData.append('api_key',appKey);
-                   formData.append('id',elementId);
-                   formData.append('email_to_send_to',$scope.formdis.disemail);
-                   
-                   if(($scope.formdis.disemail)!=elementemail){
-                   
-                   $.ajax({
-                          type: "PUT",
-                          url: "http://build.myappbuilder.com/api/elements/update_contact_form.json",
-                          data: formData,
-                          cache: false,
-                          contentType: false,
-                          processData: false,
-                          success:function(response){
-                    
-                          $ionicLoading.hide();
-                          
-                          
-                          },error:function(error){
-                          $ionicLoading.hide();
-                        var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Contact Form'                     
-); 
-                          }
-                          });
-                   }
-                   else
-                   {
-                   $ionicLoading.hide();
-                   }
-                   
-                   }
-                   
-                   $scope.createdisformcustom = function(){
-                   
-                   if($scope.displayform.customdisTitle){
-                   if($scope.displayform.customdisvalue){
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   $.ajax({
-                          type: "POST",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId,'title':$scope.displayform.customdisTitle,'value':$scope.displayform.customdisvalue},
-                          success:function(response){
-                          customedisformid = response.id;
-                          
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/custom_values.json",
-                                 data:{'api_key':appKey,'element_id':elementId},
-                                 cache: false,
-                                 success:function(response){
-                                 $ionicLoading.hide();
-                                 $scope.disformtype = response;
-                                 $state.reload();
-                                 
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                 var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Contact Form'                     
-); 
-                                 }
-                                 });
-                          $scope.displayform.customdisTitle='';
-                          $scope.displayform.customdisvalue='';
-                          },
-                          error:function(error){
-                          $ionicLoading.hide();
-                       var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Contact Form'                     
-); 
-                          }
-                          });
-                   }
-                   }else{
-                   function alertDismissed() {
-   
-}
-
-navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
-    'Contact Form'
-);
-                   }
-                   
-                   }
-                   
-                   $scope.removeformdisCustomValue = function(id){
-                   
-                   customedisformid = id;
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   $.ajax({
-                          type: "DELETE",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data: {"api_key":appKey,"id":customedisformid},
-                          cache: false,
-                          success:function(response){
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/custom_values.json",
-                                 data:{'api_key':appKey,'element_id':elementId},
-                                 cache: false,
-                                 success:function(response){
-                                 $ionicLoading.hide();
-                                 $scope.disformtype = response;						 
-                                 $state.reload();     
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Contact Form'                     
-); 
-                                 }
-                                 });              
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                         var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Contact Form'                     
-); 
-                          }
-                          });
-                   }
-                   
-                   });
-
-control.controller('mapdisplay2Ctrl',function($scope,$state,$ionicLoading,$ionicScrollDelegate){
-                   
-                   $ionicScrollDelegate.scrollTop();
-                   
-                   if(Appwall.element_wall == '0'){
-                   $scope.elementAppWall = false;
-                   }else if(Appwall.element_wall == '1'){
-                   $scope.elementAppWall = true;
-                   }
-                   
-                   $scope.elementAppwallgoFun=function(){
-                   $state.go('elementAppWall2');
-                   }
-                   $scope.backdismap=function(){
-                   $state.go('showmap2');
-                   }
-                   $scope.homedismap=function(){
-                   $state.go('sample');
-                   }
-                   $scope.dismap={}
-                   $scope.createdisplaymap={}
-                   
-                   $scope.appTitle = appTitle;
-                   
-                   if(colour == 'undefined'){
-                   $scope.bar_color = 'bar-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_color = 'bar-'+colour;
-                   }
-                   
-                   if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
-                   }
-                   else
-                   {
-                   $scope.bar_button_color ='button-'+buttoncolour;
-                   }
-                   
-                   if(button == 'undefined'){
-                   $scope.button_color = 'button-positive';
-                   }
-                   else
-                   {
-                   $scope.button_color='button-'+button;
-                   }
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/elements/addresses.json",
-                          data:{'api_key':appKey,'id':elementId},
-                          cache: false,
-                          success:function(response){
-                          $ionicLoading.hide();
-                          $scope.addressess = response;
-                          $state.reload();
-                          
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Map and Location'                     
-); 
-                          }
-                          });
-                   
-                   $.ajax({
-                          type: "GET",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId},
-                          cache: false,
-                          success:function(response){
-                          $ionicLoading.hide();
-                          $scope.dismappage = response;
-                          $state.reload();
-                          
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Map and Location'                     
-); 
-                          }
-                          });
-                   
-                   $scope.adddisAddress = function(){
-                   
-                   if($scope.createdisplaymap.title){
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   $.ajax({
-                          type: "POST",
-                          url: "http://build.myappbuilder.com/api/elements/addresses.json",
-                          data:{'api_key':appKey,'id':elementId,'address':$scope.createdisplaymap.title},
-                          success:function(response){
-                         
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/elements/addresses.json",
-                                 data:{'api_key':appKey,'id':elementId},
-                                 cache: false,
-                                 success:function(response){
-                                 $ionicLoading.hide();
-                                 $scope.addressess = response;
-                                 $scope.createdisplaymap.title='';
-                                 $state.reload();
-                                 
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                   var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Map and Location'                     
-); 
-                                 }
-                                 });
-                          },
-                          error:function(error){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Map and Location'                     
-); 
-                          }
-                          });
-                   }
-                   else{
-                    function alertDismissed() {
-   
-}
-
-navigator.notification.alert(
-    'Enter The Address',
-    alertDismissed,
-    'Map and Location'
-); 
-                   }
-                   
-                   }
-                   
-                   $scope.updatedisplayAddress = function(id,updateaddresss){
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   var formData = new FormData();
-                   formData.append('api_key',appKey);
-                   formData.append('element_id',elementId);
-                   formData.append('id',id);
-                   formData.append('address',updateaddresss);
-                   
-                   $.ajax({
-                          type: "PUT",
-                          url: "http://build.myappbuilder.com/api/elements/addresses.json",
-                          data:formData,
-                          cache: false,
-                          contentType: false,
-                          processData: false,
-                          success:function(response){
-                       
-                          $ionicLoading.hide();
-                          
-                          
-                          },error:function(error){
-                          $ionicLoading.hide();
-                           var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Map and Location'                     
-); 
-                          }
-                          });
-                   }
-                   $scope.deletedisplayAddress = function(id){
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                  
-                   $.ajax({
-                          type: "DELETE",
-                          url: "http://build.myappbuilder.com/api/elements/addresses/"+id+".json",
-                          data: {'api_key':appKey,'id':elementId},
-                          cache: false,
-                          success:function(response){
-                         
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/elements/addresses.json",
-                                 data:{'api_key':appKey,'id':elementId},
-                                 cache: false,
-                                 success:function(response){
-                                 $ionicLoading.hide();
-                                 $scope.addressess = response;
-                                 $state.reload();
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                   var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Map and Location'                     
-); 
-                                 }
-                                 });
-                          },
-                          error:function(error,status){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Map and Location'                     
-); 
-                          }
-                          });
-                
-                   }
-                   
-                   
-                   $scope.mapdiscustom = function(){
-                   
-                   if($scope.dismap.discustommaptitle){
-                   if($scope.dismap.discustommapvalue){
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   $.ajax({
-                          type: "POST",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data:{'api_key':appKey,'element_id':elementId,'title':$scope.dismap.discustommaptitle,'value':$scope.dismap.discustommapvalue},
-                          success:function(response){
-                          customdismapid = response.id;
-                          
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/custom_values.json",
-                                 data:{'api_key':appKey,'element_id':elementId},
-                                 cache: false,
-                                 success:function(response){
-                                 $ionicLoading.hide();                        
-                                 $scope.dismappage = response;
-                                 $state.reload();   
-                                 
-                                 
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
                                   var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
@@ -19760,94 +20453,21 @@ navigator.notification.alert(
 navigator.notification.alert(
     total.error,  
     alertDismissed,        
-     'Map and Location'                     
-); 
-                                 }
-                                 });
-                          $scope.dismap.discustommaptitle='';
-                          $scope.dismap.discustommapvalue='';
-                          },
-                          error:function(error){
-                          $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Map and Location'                     
-); 
-                          }
-                          });
-                   }
-                   }else{
-                   function alertDismissed() {
-   
-}
-
-navigator.notification.alert(
-    'Enter Title And Value',
-    alertDismissed,
-    'Map and Location'
-);
-                   }
-                   
-                   }
-                   
-                   $scope.removedismapCustomValue = function(id){
-                   
-                   customdismapid = id;
-                   
-                   $ionicLoading.show({
-                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                      animation: 'fade-in',
-                                      showBackdrop: true,
-                                      maxWidth: 200,
-                                      showDelay: 0
-                                      });
-                   
-                   $.ajax({
-                          type: "DELETE",
-                          url: "http://build.myappbuilder.com/api/custom_values.json",
-                          data: {"api_key":appKey,"id":customdismapid},
-                          cache: false,
-                          success:function(response){
-                          $.ajax({
-                                 type: "GET",
-                                 url: "http://build.myappbuilder.com/api/custom_values.json",
-                                 data:{'api_key':appKey,'element_id':elementId},
-                                 cache: false,
-                                 success:function(response){
-                                 $ionicLoading.hide();
-                                 $scope.dismappage = response;
-                                 $state.reload();   	  
-                                 
-                                 },
-                                 error:function(error,status){
-                                 $ionicLoading.hide();
-                                 var total = JSON.parse(error.responseText);
-                  function alertDismissed() {
-}
-
-navigator.notification.alert(
-    total.error,  
-    alertDismissed,        
-     'Map and Location'                     
+     'Rss Feed'                     
 ); 
                                  }
                                  });              
                           },
                           error:function(error,status){
                           $ionicLoading.hide();
-                          var total = JSON.parse(error.responseText);
+                           var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
 navigator.notification.alert(
     total.error,  
     alertDismissed,        
-     'Map and Location'                     
+     'Rss Feed'                     
 ); 
                           }
                           });
@@ -19855,24 +20475,66 @@ navigator.notification.alert(
                    
                    });
 
-control.controller('buttonlist2Ctrl',function($scope,$state,$ionicScrollDelegate,$ionicLoading,$ionicActionSheet){
+
+control.controller('picdisplay2Ctrl',function($scope,$state,$ionicScrollDelegate,$ionicActionSheet,$ionicLoading,$ionicPopup,$ionicModal){
                    
                    $ionicScrollDelegate.scrollTop();
                    
-                   $scope.backbuttonlist = function(){
-                   $state.go('app2');
+                   if(Appwall.element_wall == '0'){
+                   $scope.elementAppWall = false;
+                   }else if(Appwall.element_wall == '1'){
+                   $scope.elementAppWall = true;
                    }
-                   $scope.homebuttonlist = function(){
+                   
+                   $scope.elementAppwallgoFun=function(){
+                   $state.go('elementAppWall2');
+                   }
+                   $scope.backdispic=function(){
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/elements/images.json",
+                          data:{'api_key':appKey,'id':elementId},
+                          cache: false,
+                          success:function(response){
+                          
+                          $ionicLoading.hide();
+                          previewpic = response;
+                          $state.go('previewpic2');
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                          function alertDismissed() {
+                          }
+                          
+                          navigator.notification.alert(
+                                                       total.error,
+                                                       alertDismissed,
+                                                       'Picture and Text'
+                                                       );
+                          }
+                          });
+
+            
+                   }
+                   
+                   $scope.homedispic=function(){
                    $state.go('sample');
                    }
                    
-                   $scope.editbuttoncreate={}
-                   $('#editbuttonsrc').attr('src', localStorage.xxx);
                    
-                  
-                   $scope.appTitle = appTitle;
+                   $scope.textCreatedis = {}
+                   $scope.dispic={}
+                   $scope.contenteditCreate={}
                    
-                   if(colour == 'undefined'){
+                   $scope.contenteditCreate.elementeditTag = tagging;
+                   $scope.textCreatedis.distitle=elementtitle;
+                   $scope.textCreatedis.distext=elementtext;
+                   
+                   $scope.appTitle = appTitle;  
+                   
+                   if(colour == 'undefined'){ 
                    $scope.bar_color = 'bar-positive';
                    }
                    else
@@ -19881,7 +20543,7 @@ control.controller('buttonlist2Ctrl',function($scope,$state,$ionicScrollDelegate
                    }
                    
                    if(buttoncolour == 'undefined'){
-                   $scope.bar_button_color ='button-positive';
+                   $scope.bar_button_color ='button-positive'; 
                    }
                    else
                    {
@@ -19896,7 +20558,129 @@ control.controller('buttonlist2Ctrl',function($scope,$state,$ionicScrollDelegate
                    $scope.button_color='button-'+button;
                    }
                    
-                   $scope.editbuttonselect = function(){
+                   $scope.AppEditor = false;
+                   
+                   $scope.logedittext = function(){
+                   if($scope.AppEditor == false){
+                   $scope.AppEditor = true;
+                   }else{
+                   $scope.AppEditor =false;
+                   }
+                   }
+                   $scope.tinymceOptions = {
+                   
+                   
+                   menubar: false,
+                   theme: "modern",
+                   plugins: [
+                             "advlist autolink lists link image charmap print preview anchor",
+                             "searchreplace wordcount visualblocks visualchars code fullscreen",
+                             "insertdatetime table contextmenu ",
+                             "emoticons textcolor"
+                             ],
+                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
+                   
+                   };
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/elements/images.json",
+                          data:{'api_key':appKey,'id':elementId},
+                          cache: false,
+                          success:function(response){
+                          
+                          $ionicLoading.hide();
+                          $scope.dispicpage = response;
+                          $state.reload();       
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                            var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Picture and Text'                     
+); 
+                          }
+                          });         
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.distxtpage = response;
+                          //  alert(JSON.stringify($scope.distxtpage));
+                          $state.reload();                                          
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                           var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Picture and Text'                     
+); 
+                          }
+                          });              
+                   
+                   $scope.updatedistext = function(){            
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   var formData = new FormData();
+                   formData.append('api_key',appKey);
+                   formData.append('id',elementId);       
+                   formData.append('title',$scope.textCreatedis.distitle);
+                   formData.append('text',$scope.textCreatedis.distext);
+                   
+                   if((($scope.textCreatedis.distitle)!=elementtitle) || (($scope.textCreatedis.distext)!=elementtext)){  
+                   
+                   $.ajax({
+                          type: "PUT",
+                          url: "http://build.myappbuilder.com/api/elements/update_default.json",
+                          data: formData,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success:function(response){
+                       //   alert('successfully Updated');
+                          $ionicLoading.hide();                
+                          },error:function(error){
+                          $ionicLoading.hide();
+                           var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Picture and Text'                     
+); 
+                          }
+                          });   
+                   }
+                   else
+                   {
+                   $ionicLoading.hide();  
+                   }
+                   }
+                   
+                   $scope.picdisplayselect = function(){
                    
                    $ionicActionSheet.show({
                                           
@@ -19908,11 +20692,420 @@ control.controller('buttonlist2Ctrl',function($scope,$state,$ionicScrollDelegate
                                           
                                           cancelText: 'Cancel',
                                           cancel: function() {
-                                          
+                                          // alert('CANCELLED');
                                           },
                                           
                                           buttonClicked: function(index) {
-                                         
+                                          // alert('BUTTON CLICKED', index);
+                                          
+                                          if(index==0){
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.CAMERA,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }
+                                          
+                                          else{
+                                          
+                                          navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+                                                                      
+                                                                      destinationType: Camera.DestinationType.FILE_URI,sourceType : Camera.PictureSourceType.PHOTOLIBRARY,saveToPhotoAlbum: false,correctOrientation:true});
+                                          
+                                          return true;
+                                          
+                                          }                                
+                                          
+                                          }
+                                          
+                                          });
+                   
+                   };
+                   
+                   function onSuccess(imageURI) {
+                   
+                   imagepicdis = imageURI;
+                   //alert(imagepicdis);
+                   $('#dispictext').attr('src', imagepicdis); 
+                   $('#dispictext').css({'width':'50px','height':'50px'});
+                   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
+                   
+                   }
+                   
+                   function onFail(message) {
+                   
+                   navigator.notification.alert('Failed because: ' + message);
+                   
+                   } 
+                   $scope.uploaddisplay = function(){                 
+                   
+                   $('#dispictext').attr({'src':"img/no_image.png"});
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   cordova.exec(function(response){
+                                var result3 = response;
+                                
+                                picdiscustom =result3.id;
+                                imagepicdis='';
+                                $.ajax({
+                                       type: "GET",
+                                       url: "http://build.myappbuilder.com/api/elements/images.json",
+                                       data:{'api_key':appKey,'id':elementId},
+                                       cache: false,
+                                       success:function(response){               
+                                       $ionicLoading.hide();
+                                       $scope.dispicpage = response;                 
+                                       $state.reload();                            
+                                       },
+                                       error:function(error,status){
+                                       $ionicLoading.hide();
+                                        var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Picture and Text'                     
+); 
+                                       }
+                                       });              
+                                },
+                                function(e){var total = JSON.parse(e);
+
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,
+    alertDismissed,        
+   'Picture and Text'                   
+); $ionicLoading.hide();}, "ImageCompress", "imageCompress", ["300", "280", "image", imagepicdis, "http://build.myappbuilder.com/api/elements/images.json?", "post", {api_key:appKey,id:elementId}])
+                   }
+                   
+                   $scope.removepicdisCustom = function(id){
+                   
+                   picdiscustom = id;
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "DELETE",
+                          url: "http://build.myappbuilder.com/api/elements/images.json",
+                          data: {"api_key":appKey,"id":picdiscustom,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/elements/images.json",
+                                 data:{'api_key':appKey,'id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.dispicpage = response;                 
+                                 $state.reload();                                         
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                 var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Picture and Text'                     
+); 
+                                 }
+                                 });             
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                            var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Picture and Text'                     
+); 
+                          }
+                          });
+                   
+                   }
+                   $scope.AppEditor = false;
+                   
+                   $scope.createpicdis = function(){
+                   
+                   if($scope.dispic.customdisTitle){
+                   if($scope.dispic.customedisvalue){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "POST",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId,'title':$scope.dispic.customdisTitle,'value':$scope.dispic.customedisvalue},
+                          success:function(response){
+                          customdisid = response.id;
+                          
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.distxtpage = response;
+                                 //  alert(JSON.stringify($scope.distxtpage));
+                                 $state.reload();                            
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                  var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Picture and Text'                     
+); 
+                                 }
+                                 });  
+                          $scope.dispic.customdisTitle='';
+                          $scope.dispic.customedisvalue='';            
+                          },
+                          error:function(error){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Picture and Text'                     
+); 
+                          }
+                          });
+                   }
+                   }else{
+                 function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
+    'Picture and Text'
+);
+                   }  
+                   }
+                   
+                   $scope.ok = function(){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   var datatag=$scope.contenteditCreate.elementeditTag;
+                   if(datatag==''){
+                   amenities='';
+                   console.log(datatag);
+                   }
+                   
+                   else{
+                   for(var i=0;i<datatag.length;i++){
+                   
+                   if(i==0){
+                   
+                   amenities = datatag[i].text;
+                   
+                   }
+                   
+                   else{
+                   
+                   amenities = amenities+','+datatag[i].text;
+                   
+                   }
+                   
+                   }}
+                   
+                   $.ajax({
+                          type: "PUT",
+                          url: "http://build.myappbuilder.com/api/elements/tags.json",
+                          data:{'api_key':appKey,'element_id':elementId,'value':amenities},
+                          cache: false,
+                          success:function(response){
+                       //   alert('Successfully Updated');
+                          $ionicLoading.hide();                        
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Picture and Text'                     
+); 
+                          }
+                          });             
+                   
+                   }
+                   
+                   
+                   
+                   $scope.removedistxtCustomValue = function(id){
+                   
+                   customdisid = id;
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "DELETE",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data: {"api_key":appKey,"id":customdisid},
+                          cache: false,
+                          success:function(response){
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.distxtpage = response;
+                                 //   alert(JSON.stringify($scope.distxtpage));
+                                 $state.reload();                            
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                 var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Picture and Text'                     
+); 
+                                 }
+                                 });              
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                           var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Picture and Text'                     
+); 
+                          }
+                          });
+                   }
+                   
+                   });
+
+control.controller('videodisplay2Ctrl',function($scope,$state,$ionicScrollDelegate,$ionicLoading,$http,$ionicActionSheet){
+                   
+                   $ionicScrollDelegate.scrollTop();
+                   
+                   if(Appwall.element_wall == '0'){
+                   $scope.elementAppWall = false;
+                   }else if(Appwall.element_wall == '1'){
+                   $scope.elementAppWall = true;
+                   }
+                   
+                   $scope.elementAppwallgoFun=function(){
+                   $state.go('elementAppWall2');
+                   }
+                   function readURL26(input) {
+                   if (input.files && input.files[0]) {
+                   var reader = new FileReader();
+                   
+                   reader.onload = function (e) {
+                   $('#videodisurlimg').attr({'src':"img/btn_video.png"});
+                   $('#videodisurlimg').css({'width':'50px','height':'50px'});
+                   $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
+                   // $('.file-input-wrapper > .btn-file-input').css('background-image', 'url('+e.target.result+')');
+                   }
+                   
+                   reader.readAsDataURL(input.files[0]);
+                   }
+                   }
+                   
+                   $("#videodisplay").change(function(){
+                                             check=true;
+                                             
+                                             readURL26(this);
+                                             });
+                   
+                   if(contentvideothumb){
+                   $('#videodisplayimg').attr({'src':contentvideothumb});
+                   $('#videodisplayimg').css({'width':'50px','height':'50px'});
+                   }
+                   if(contentvideo){
+                   $('#videodisplay').attr({'url':contentvideo});
+                   $('#videodisurlimg').attr({'src':contentvideothumb});
+                   $('#videodisurlimg').css({'width':'50px','height':'50px'});
+                   }
+                   
+                   $scope.disvideoselect = function(){
+                   
+                   $ionicActionSheet.show({
+                                          
+                                          titleText: '<b><font size="4">Choose</font></b>',
+                                          buttons: [
+                                                    { text: 'Camera' },
+                                                    { text: 'PhotoAlbum' },
+                                                    ],
+                                          
+                                          cancelText: 'Cancel',
+                                          cancel: function() {
+                                          // alert('CANCELLED');
+                                          },
+                                          
+                                          buttonClicked: function(index) {
+                                          // alert('BUTTON CLICKED', index);
                                           
                                           if(index==0){
                                           
@@ -19941,12 +21134,11 @@ control.controller('buttonlist2Ctrl',function($scope,$state,$ionicScrollDelegate
                    };
                    
                    function onSuccess(imageURI) {
-                   
-                   imageeditbutton = imageURI;
-                  
-                   $('#editbuttonsrc').attr('src', imageeditbutton);
-                   $('#editbuttonsrc').css({'width':'50px','height':'50px'});
-                   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
+                   check1=true;
+                   imagedisvideo = imageURI;
+                   $('#videodisplayimg').attr('src', imagedisvideo);
+                   $('#videodisplayimg').css({'width':'50px','height':'50px'});
+                   //   $('.file-input-wrapper5 > .btn-file-input5').css('background-image', 'url('+imageURI+')');
                    
                    }
                    
@@ -19956,19 +21148,96 @@ control.controller('buttonlist2Ctrl',function($scope,$state,$ionicScrollDelegate
                    
                    }
                    
-                   $scope.editbuttoncreate.editbuttontitle = buttonTitle;
-                   
-                   if(chapterImage){
-                   $('#editbuttonsrc').attr({'src':chapterImage});
-                   $('#editbuttonsrc').css({'width':'50px','height':'50px'});
-                   
+                   $scope.backdisplayvideo = function(){
+                   $state.go('previewvideo2');
+                   }
+                   $scope.homedisplayvideo = function(){
+                   $state.go('sample');
                    }
                    
-                   $scope.updatebutton =function(){
+                   $scope.appTitle = appTitle;
                    
-                   if(chapterImage){
-                   $('#editbuttonimage').attr({'src':chapterImage});    
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
                    }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId},
+                          cache: false,
+                          success:function(response){
+                          $ionicLoading.hide();
+                          $scope.disvideopage = response;
+                          $state.reload();
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                           var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Video'                     
+); 
+                          }
+                          });
+                   
+                   $scope.createdisplayvideo={}
+                   $scope.cusdisplayvideo={}
+                   
+                   $scope.tinymceOptions = {
+                   
+                   
+                   menubar: false,
+                   theme: "modern",
+                   plugins: [
+                             "advlist autolink lists link image charmap print preview anchor",
+                             "searchreplace wordcount visualblocks visualchars code fullscreen",
+                             "insertdatetime table contextmenu ",
+                             "emoticons textcolor"
+                             ],
+                   toolbar1: "insertfile undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | alignleft aligncenter alignright alignjustify forecolor backcolor"
+                   
+                   };
+                   
+                   
+                   $scope.createdisplayvideo.displayvideotitle = elementtitle;
+                   $scope.createdisplayvideo.displayvideotext = elementtext;
+                   
+                   if(contentvideothumb){
+                   $('#videodisplayimg').attr({'src':contentvideothumb});
+                   $('#videodisplayimg').css({'width':'50px','height':'50px'});
+                   }
+                   if(contentvideo){
+                   $('#videodisplay').attr({'url':contentvideo});
+                   $('#videodisurlimg').attr({'src':contentvideothumb});
+                   $('#videodisurlimg').css({'width':'50px','height':'50px'});
+                   }
+                   $scope.updatevideodisplay = function(){
                    
                    $ionicLoading.show({
                                       content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
@@ -19978,78 +21247,543 @@ control.controller('buttonlist2Ctrl',function($scope,$state,$ionicScrollDelegate
                                       showDelay: 0
                                       });
                    
-                   Data1 = {api_key:appKey,id:buttonId,title:$scope.editbuttoncreate.editbuttontitle};
+                   if(check ==true) {
                    
+                   if((($("#videodisplay").get(0).files[0].size) / 1024 / 1024) <= 10){
+                   
+                   if((($scope.createdisplayvideo.displayvideotitle)!=elementtitle) || (($scope.createdisplayvideo.displayvideotext)!=elementtext) && (($scope.createdisplayvideo.displayvideotitle)==elementtitle) || (($scope.createdisplayvideo.displayvideotext)==elementtext) && (check1==true)){
                    cordova.exec(function(response){
-                               
-                                buttonId = response.id;
-                                buttonTitle = response.title;  
-                              
-                                $ionicLoading.hide();  
+                                //alert('1');
+                                //   alert("Successfully Updated");
+                                $ionicLoading.hide();
                                 }, function(e){var total = JSON.parse(e);
                                 
                                 function alertDismissed() {
                                 }
                                 
                                 navigator.notification.alert(
-                                                            total.error,
+                                                             total.error,
                                                              alertDismissed,
-                                                             'Button'
-                                                             );
+                                                             'Video'
+                                                             ); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,elementId,$scope.createdisplayvideo.displayvideotitle,$scope.createdisplayvideo.displayvideotext,$('input[name="disvideo"]').val(),imagedisvideo,"put"])
+                   
+                   }
+                   else{
+                   
+                   cordova.exec(function(response){
+                                //alert('2');
+                                //     alert("Successfully Updated");
                                 $ionicLoading.hide();
-                                var formData = new FormData();
-                                var methodData = '';
+                                },
+                                function(e){var total = JSON.parse(e);
                                 
-                                methodData = 'PUT';
-                                urlData = "http://build.myappbuilder.com/api/buttons/via_url.json";
-                                formData.append('api_key',appKey);
-                                formData.append('id',buttonId);
-                                formData.append('title',$scope.editbuttoncreate.editbuttontitle);
-                                var letter = ($scope.editbuttoncreate.editbuttontitle).charAt(0).toUpperCase();
+                                function alertDismissed() {
+                                }
                                 
-                                formData.append('image', 'http://nuatransmedia.com/iBookImages/'+letter+'.png');
-                                
-                                
-                                $ionicLoading.show({
-                                                   content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
-                                                   animation: 'fade-in',
-                                                   showBackdrop: true,
-                                                   maxWidth: 200,
-                                                   showDelay: 0
-                                                   });
-                                
-                                $.ajax({
-                                       type: methodData,
-                                       url: urlData,
-                                       data: formData,
-                                       cache: false,
-                                       contentType: false,
-                                       processData: false,
-                                       success:function(response){
-                                       $ionicLoading.hide();
-                                      
-                                       buttonId = response.id;
-                                       buttonTitle = response.title;
-                                       
-                                       },
-                                       error:function(error,status){
-                                       $ionicLoading.hide();
-                                       
-                                     var total = JSON.parse(error.responseText);
+                                navigator.notification.alert(
+                                                             total.error,
+                                                             alertDismissed,
+                                                             'Video'
+                                                             ); $ionicLoading.hide();}, "Thumbnail", "thumbnail",[appKey,elementId,$scope.createdisplayvideo.displayvideotitle,$scope.createdisplayvideo.displayvideotext,$('input[name="disvideo"]').val(),videothumbno,"put"])
+                   
+                   }
+                   }
+                   else{
+                   var alertPopup = $ionicPopup.alert({
+                                                      title: 'MAB',
+                                                      template: 'Please choose Video File below 10MB!'
+                                                      });
+                   alertPopup.then(function(res) {
+                                   //console.log('Thank you for not eating my delicious ice cream cone');
+                                   });
+                   }
+                   }
+                   
+                   
+                   else{
+                   //alert('3');
+                   var formData = new FormData();
+                   formData.append('api_key',appKey);
+                   formData.append('id',elementId);
+                   formData.append('title',$scope.createdisplayvideo.displayvideotitle);
+                   formData.append('text',$scope.createdisplayvideo.displayvideotext);
+                   
+                   $('#videodisplay').attr({'url':contentvideo});
+                   $('#videodisurlimg').attr({'src':contentvideothumb});
+                   $('#videodisurlimg').css({'width':'50px','height':'50px'});
+                   $('#videodisplayimg').attr({'src':contentvideothumb});
+                   $('#videodisplayimg').css({'width':'50px','height':'50px'});
+                   
+                   
+                   $http.put('http://build.myappbuilder.com/api/elements/update_video.json', formData, {
+                             transformRequest: angular.identity,
+                             headers: {'Content-Type': undefined}
+                             })
+                   
+                   .success(function(data,status, headers, config){
+                            //alert(JSON.stringify(data));
+                            //     alert("Successfully Updated");
+                            $ionicLoading.hide();          
+                            
+                            })
+                   .error(function(data,status, headers, config){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(data);
+                          
+                          function alertDismissed() {
+                          }
+                          
+                          navigator.notification.alert(
+                                                       total.error,
+                                                       alertDismissed,        
+                                                       'Video'                   
+                                                       );
+                          }); 
+                   }  
+                   
+                   
+                   
+                   }
+                   $scope.createvideodis = function(){
+                   
+                   if($scope.cusdisplayvideo.customdisvideoTitle){
+                   if($scope.cusdisplayvideo.customdisvideovalue){
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "POST",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data:{'api_key':appKey,'element_id':elementId,'title':$scope.cusdisplayvideo.customdisvideoTitle,'value':$scope.cusdisplayvideo.customdisvideovalue},
+                          success:function(response){
+                          customdisvideoid = response.id;
+                          
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.disvideopage = response;
+                                 $state.reload();
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                 var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
 navigator.notification.alert(
     total.error,  
     alertDismissed,        
-     'Button'                     
+     'Video'                     
 ); 
-                                       }
-                                       });
-                                
-                                }, "ImageCompress", "imageCompress", ["57", "57", "image", imageeditbutton, "http://build.myappbuilder.com/api/buttons.json?", "put",Data1])
+                                 }
+                                 });
+                          $scope.cusdisplayvideo.customdisvideoTitle='';
+                          $scope.cusdisplayvideo.customdisvideovalue='';
+                          },
+                          error:function(error){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Video'                     
+); 
+                          }
+                          });
+                   }
+                   }else{
+                 function alertDismissed() {
+    // do something
+}
+
+navigator.notification.alert(
+    'Enter Title And Value',  // message
+    alertDismissed,         // callback
+    'Video'
+);
+                   }
                    
                    }
+                   
+                   $scope.removevideodisCustomValue = function(id){
+                   
+                   customdisvideoid = id;
+                   
+                   $ionicLoading.show({
+                                      content: '<i class="icon ion-loading-a"></i>&nbsp;Please Wait..',
+                                      animation: 'fade-in',
+                                      showBackdrop: true,
+                                      maxWidth: 200,
+                                      showDelay: 0
+                                      });
+                   
+                   $.ajax({
+                          type: "DELETE",
+                          url: "http://build.myappbuilder.com/api/custom_values.json",
+                          data: {"api_key":appKey,"id":customdisvideoid},
+                          cache: false,
+                          success:function(response){
+                          $.ajax({
+                                 type: "GET",
+                                 url: "http://build.myappbuilder.com/api/custom_values.json",
+                                 data:{'api_key':appKey,'element_id':elementId},
+                                 cache: false,
+                                 success:function(response){
+                                 $ionicLoading.hide();
+                                 $scope.disvideopage = response;
+                                 $state.reload();
+                                 },
+                                 error:function(error,status){
+                                 $ionicLoading.hide();
+                                var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Video'                     
+); 
+                                 }
+                                 });
+                          },
+                          error:function(error,status){
+                          $ionicLoading.hide();
+                          var total = JSON.parse(error.responseText);
+                  function alertDismissed() {
+}
+
+navigator.notification.alert(
+    total.error,  
+    alertDismissed,        
+     'Video'                     
+); 
+                          }
+                          });
+                   }
+                   
+                   });
+
+control.controller("appWall2Ctrl",function($scope,$state, $ionicLoading,$http,$ionicPopup){
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   
+                   var button_wall = '';
+                   var element_wall = '';
+                   
+                   $scope.homeappwall = function(){
+                   $state.go('sample');
+                   }
+                   
+                   $scope.backappwall = function(){
+                   $state.go('app2');
+                   }
+                   
+                   
+                   $scope.checkBox = [];
+                   if((Appwall.button_wall == "0")&&(Appwall.element_wall == "0")){
+                   $scope.checkBox.button = false;
+                   $scope.checkBox.element = false;
+                   }else if(Appwall.button_wall == "0"){
+                   $scope.checkBox.button = false;
+                   $scope.checkBox.element = true;
+                   }else if(Appwall.element_wall == "0"){
+                   $scope.checkBox.button = true;
+                   $scope.checkBox.element = false;
+                   }else{
+                   $scope.checkBox.button = true;
+                   $scope.checkBox.element = true;
+                   }
+                   
+                   $scope.appwallSettings = function(){
+                   var myPopup = $ionicPopup.show({
+                                                  template: '<div class="card"><div class="item item-checkbox"><label class="checkbox" ><input type="checkbox" ng-model="checkBox.button" value=""></label>Each Chapter Can Have a Unique Wall </div><div class="item item-checkbox"><label class="checkbox" ><input type="checkbox" ng-model="checkBox.element" value=""></label>Each Content Can Have a Unique Wall  </div></div><div style="width:100%;"><div style="width:50%;float:left;"><div style="width:50%;" class="button button-clear" ng-click="popupClose();"><img src="img/btn_cancel.png" style="width:100%;height:auto;"/></div></div><div style="width:50%;float:left;" ><div style="width:50%;float:right;" class="button button-clear " ng-click="popoupSave();"><img src="img/save.png" style="width:100%;height:auto;"/></div></div></div>',
+                                                  title: 'AppWall Setting',
+                                                  subTitle: $scope.appTitle,
+                                                  scope: $scope,
+                                                  
+                                                  });
+                   
+                   $scope.popupClose=function() {
+                   // alert('Tapped!', $scope.checkBox.element+" : "+$scope.checkBox.button);
+                   // alert('Tapped!', $scope.checkBox.element+" : "+$scope.checkBox.button);
+                   myPopup.close();
+                   }
+                   
+                   $scope.popoupSave = function(){
+                   if(($scope.checkBox.button != false) && ($scope.checkBox.element != false)){
+                   button_wall = "1";
+                   element_wall = "1";
+                   }else if($scope.checkBox.button != false){
+                   button_wall = "1";
+                   element_wall = "0";
+                   }else if($scope.checkBox.element != false){
+                   button_wall = "0";
+                   element_wall = "1";
+                   }else{
+                   button_wall = "0";
+                   element_wall = "0";
+                   }
+                   
+                   $ionicLoading.show({template: '<i class="icon ion-loading-a"></i>&nbsp;Please wait...'});
+                   $http.post('http://build.myappbuilder.com/api/app_wall_settings.json',{api_key: appKey,button_wall:button_wall,element_wall:element_wall})
+                   .success(function(data,status,headers,config){
+                            //$ionicLoading.hide();
+                            //alert(JSON.stringify(data));
+                            //Appwall = data;
+                            $.ajax({url:'http://build.myappbuilder.com/api/app_wall_settings.json', type:"GET",data:{'api_key':appKey},
+                                   success:function(response){
+                                   //  alert(JSON.stringify(response))
+                                   Appwall = response;
+                                   $ionicLoading.hide();
+                                   myPopup.close();
+                                   },
+                                   error:function(){
+                                   $ionicLoading.hide();
+                                   myPopup.close();
+                                   }
+                                   });
+                            
+                            })
+                   .error(function(data,status,headers,config){
+                          $ionicLoading.hide();
+                          alert(JSON.stringify(data));
+                          myPopup.close();
+                          })
+                   
+                   }
+                   
+                   }
+                   
+                   $scope.messages = "";
+                   $scope.messages.data="";
+                   window.wizSpinner.show(options);
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/messages.json",
+                          data:{'api_key':appKey},
+                          cache: false,
+                          success:function(response){
+                          //  alert(JSON.stringify(response));
+                          window.wizSpinner.hide();
+                          messages = response;
+                          appWallPostFun();
+                          },
+                          error:function(error,status){
+                          window.wizSpinner.hide();
+                          $ionicLoading.hide();
+                          var error = JSON.parse(error.responseText);
+                          if(error.error == "Unauthorized"){
+                          function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Please Login',  
+    alertDismissed,        
+   'Messages'                     
+);
+                          }else {
+                         function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Login Error!',  
+    alertDismissed,        
+   'Messages'                     
+);
+                          }
+                          }
+                          });
+                   
+                   });
+
+control.controller('buttonAppWall2Ctrl',function($scope,$state,$ionicLoading){
+                   
+                   $scope.backbuttonAppwall = function(){
+                   $state.go('chapterlist2');
+                   }
+                   
+                   $scope.homebuttonAppwall = function(){
+                   $state.go('sample');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   messages = '';
+                   window.wizSpinner.show(options);
+                   
+                   
+                   $.ajax({
+                          type: "GET",
+                          url: "http://build.myappbuilder.com/api/messages.json",
+                          data:{'api_key':appKey,'button_id':buttonId},
+                          cache: false,
+                          success:function(response){
+                          window.wizSpinner.hide();
+                          messages = response;
+                          ButtonAppWallPostFun();
+                          },
+                          error:function(error,status){
+                          window.wizSpinner.hide();
+                          var error = JSON.parse(error.responseText);
+                          // alert(JSON.stringify(error));
+                          if(error.error == "Unauthorized"){
+                         function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Please Login',  
+    alertDismissed,        
+   'Messages'                     
+);
+                          }else {
+                        function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Login Error!',  
+    alertDismissed,        
+   'Messages'                     
+);
+                          }
+                          }
+                          });
+                   
+                   });
+
+control.controller('elementAppWall2Ctrl',function($scope,$state,$ionicLoading,$ionicPopup,$ionicModal,$ionicScrollDelegate){
+                   
+                   $scope.backelementAppwall = function(){
+                   $state.go('chapterlist2');
+                   }
+                   
+                   $scope.homeelementAppwall = function(){
+                   $state.go('sample');
+                   }
+                   
+                   $scope.appTitle = appTitle;
+                   
+                   if(colour == 'undefined'){
+                   $scope.bar_color = 'bar-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_color = 'bar-'+colour;
+                   }
+                   
+                   if(buttoncolour == 'undefined'){
+                   $scope.bar_button_color ='button-positive';
+                   }
+                   else
+                   {
+                   $scope.bar_button_color ='button-'+buttoncolour;
+                   }
+                   
+                   if(button == 'undefined'){
+                   $scope.button_color = 'button-positive';
+                   }
+                   else
+                   {
+                   $scope.button_color='button-'+button;
+                   }
+                   
+                   messages = '';
+                   window.wizSpinner.show(options);
+                   $.ajax({url:'http://build.myappbuilder.com/api/messages.json',type:"GET",data:{"api_key":appKey,"element_id":elementId},
+                          success:function(response){
+                          //alert(JSON.stringify(response));
+                          window.wizSpinner.hide();
+                          messages = response;
+                          ElementAppWallPostFun();
+                          },
+                          error:function(error,status){
+                          window.wizSpinner.hide();
+                          var error = JSON.parse(error.responseText);
+                          if(error.error == "Unauthorized"){
+                          function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Please Login',  
+    alertDismissed,        
+   'Messages'                     
+);
+                          }else {
+                        function alertDismissed() {
+}
+
+navigator.notification.alert(
+    'Login Error!',  
+    alertDismissed,        
+   'Messages'                     
+);
+                          }
+                          }
+                          });
+                   
                    });
 
 control.controller('editnewapp1Ctrl',function($scope,$state,$ionicLoading,$ionicScrollDelegate,$ionicPopup){     
@@ -20084,7 +21818,7 @@ $scope.button_color='button-'+button;
 
 
 $scope.editappcre = {}
-
+ 
  $scope.editappcre.editfloaturl = editfloat1;
  
 if(editfloat == 'true')
@@ -20113,13 +21847,13 @@ $scope.createnewapp11 = function(){
           url: "http://build.myappbuilder.com/api/book_custom_fields.json",
           data:{'api_key':appKey,'id':editfloatid,'title':'Floating Social Icons','value':$scope.editappcre.editcustomvalue},
           success:function(response){            
-              
-              $ionicLoading.hide();
-              $state.go('editsocial');
+             //alert(JSON.stringify(response));    
+              $ionicLoading.hide(); 
+               $state.go('editsocial');   
             },
           error:function(error){
             $ionicLoading.hide();
-            var total = JSON.parse(error.responseText);
+           var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -20136,13 +21870,13 @@ navigator.notification.alert(
           url: "http://build.myappbuilder.com/api/book_custom_fields.json",
           data:{'api_key':appKey,'id':editfloatid1,'title':'Url','value':$scope.editappcre.editfloaturl},
           success:function(response){
-             
+             //  alert(JSON.stringify(response)); 
               $ionicLoading.hide();
               $state.go('editsocial');
             },
           error:function(error){
             $ionicLoading.hide();
-           var total = JSON.parse(error.responseText);
+            var total = JSON.parse(error.responseText);
                   function alertDismissed() {
 }
 
@@ -20165,4 +21899,3 @@ $scope.backnewapp1 = function(){
 
 
 });
-

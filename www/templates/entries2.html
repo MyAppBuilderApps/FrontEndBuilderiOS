@@ -1,17 +1,16 @@
-<ion-view >
-   <ion-header-bar  class="bar bar-header bar-positive">
+<ion-view>
+<div  class="bar bar-header bar-positive">
     
     <button class="button button-positive icon ion-ios7-arrow-back" ng-click="backprevfeed();"></button>
     <h1 class="title" style="padding:0% 21% 0% 5%;">RSS FEEDS</h1>
     <button class="button button-positive icon ion-eye" ng-click="eyefeed();"></button>
 
-  </ion-header-bar>
+</div>
 
 
 	<ion-content class="padding">
- <div style="margin-top:10%;" ng-hide="AppEditor">
-
-	<ion-list class="list list-inset">
+ <div style="margin-top:20%;" ng-hide="AppEditor">
+		<ion-list class="list list-inset">
 
 			<ion-item ng-repeat="entry in entries" href="#/entry2/{{$index}}">
 				{{entry.title}}
@@ -20,7 +19,7 @@
    </div>
             <div ng-show="AppEditor">
 
-            <div style="margin-top:18%;" ng-show="AppEditor">
+            <div style="margin-top:25%;" ng-show="AppEditor">
         
             <div class="row">
                  <div style="width:85%;"></div>
@@ -47,12 +46,13 @@
 
 	</ion-content>
 	
-    <p class="pos_fixed">
-    
-    <button class="button-clear" onClick="sharePhoto2()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396343749_facebook_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
-    <button class="button-clear" onClick="sharePhoto1()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396344405_twitter_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
-    
-    <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail.png" alt="" style="width:32px;height:32px;"/></button>
-    </p>
+
+<p class="pos_fixed">
+
+<button class="button-clear" onClick="sharePhoto2()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396343749_facebook_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
+
+<button class="button-clear" onClick="sharePhoto1()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396344405_twitter_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
+<button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail.png" alt="" style="width:32px;height:32px;"/></button>
+</p>
 
 </ion-view>

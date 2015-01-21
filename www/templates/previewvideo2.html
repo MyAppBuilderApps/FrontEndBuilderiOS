@@ -9,28 +9,41 @@
 		</div>
 		
  </div>
+ 
+ <br/>
+ <div class="bar bar-subheader" style="margin-top:1%;">
+		 <div style="margin-left:5%;font-size:16px;" class="doubleline">
+				{{elementtitle}}
+	      </div>
+	</div>
          
 
   <ion-content > 
 
    <div style="padding:40% 0% 0% 0%;">
-  
-  <div class="list card">
-      
-      <div class="item item-avatar">
-          <img src="{{contentvideothumb}}">
-              <h2>{{elementtitle}}</h2>
-              
-              </div>
-      
-      <div class="item item-body">
-          <img src="img/play.png" ng-style="{ 'background-image': 'url(' + contentvideoframe + ')' }" style="padding-left:0px;padding-right:0px; background-size: cover; background-repeat: no-repeat; background-position: center center;" ng-click="videoclick2();"/>
-          <p ng-bind-html="elementtext"></p>
-          
-      </div>
-      
-  </div>
-	 
+
+
+       <div class="list list-inset">
+        
+		   <div class="item item-text-wrap" ng-bind-html="elementtext" style="padding:8px 2px 8px 2px;">
+	        </div>  
+	        
+	   </div>
+	        	
+	    <label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:70%;"><span class="input-label">Video upload</span></div> 
+            <div style="width:30%;"><img id="videoprevurlimg" style="width:50px;heigth:50px;" src="img/no_video.png" alt="your image" ng-click="videoclick2();"/></div>               
+		  </div>    
+       </label> 
+       
+	<label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:70%;"><span class="input-label">Video thumbnail upload</span></div>          
+            <div style="width:30%;"><img id="videoprevimg" style="width:50px;heigth:50px;" src="img/no_image.png" alt="your image" /></div>
+		  </div>    
+       </label> 	  	  
+	  
 			<div class="item item-divider">
 				Custom values
 			</div>
@@ -46,19 +59,18 @@
        </div>
 	</div>
  </ion-content>
-
-<p class="pos_fixed">
-
-<button class="button-clear" onClick="sharePhoto2()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396343749_facebook_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
-<button class="button-clear" onClick="sharePhoto1()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396344405_twitter_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
-
-<button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail.png" alt="" style="width:32px;height:32px;"/></button>
-</p>
-
+  
+  <p class="pos_fixed">
+  
+  <button class="button-clear" onClick="sharePhoto2()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396343749_facebook_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
+  
+  <button class="button-clear" onClick="sharePhoto1()"><img src="http://kopepasah.com.s3.amazonaws.com/assets/codepen.io/1396344405_twitter_circle_color.png" alt="" style="width:32px;height:32px;"/></button>
+  <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail.png" alt="" style="width:32px;height:32px;"/></button>
+  </p>
 
 
 </ion-view>
 
 
-
+      
     

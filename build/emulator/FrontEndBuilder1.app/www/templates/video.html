@@ -1,0 +1,52 @@
+<ion-view>
+  <ion-header-bar class="bar bar-header" ng-class="bar_color">
+
+ <button class="button" style="width:38px;height:23px;" ng-click="navvideo();" ng-class="bar_button_color"><img src="img/list_add.png" /></button>
+	   <h1 class="title" > {{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homevideo();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+			<button class="button icon ion-chevron-left" ng-click="backvideo();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </ion-header-bar>
+ 
+ <div class="bar bar-subheader">
+	<h2 class="title">New Video</h2>
+ </div>
+
+ <ion-content > 
+  <div style="padding:25% 0% 0% 0%;">
+  
+    <label class="item item-input" style="padding:5px 0px 5px 0px;">
+		  <label class="item item-input" style="width:100%;">
+             <input type="text" id="videotitle" ng-model="videocreate.title" placeholder="Type Video Title">
+		  </label>
+    </label>
+ 
+    <label class="item item-input" style="padding:5px 0px 5px 0px;">
+		  <label class="item item-input" style="width:100%;">
+             <input type="text" id="videodesc" ng-model="videocreate.desc" placeholder="Type Video Description">
+		  </label>
+    </label>
+	   
+       <label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:50%;"><span class="input-label">Video upload</span></div>          
+            <div style="width:20%;"><img id="videoimg" style="width:50px;heigth:50px;" src="img/no_video.png" alt="your image" /></div>
+		    <div style="width:30%;"><input type="file" name="video" id="video" accept="video/mp4,video/x-m4v,video/*;capture=camcorder" style="width:100%;"/></div>
+		  </div>    
+       </label> 
+       
+	<label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:50%;"><span class="input-label">Video thumbnail upload</span></div>          
+            <div style="width:20%;"><img id="videothumbimg" style="width:50px;heigth:50px;" src="img/no_image.png" alt="your image" /></div>
+		    <div style="width:30%;"><button id="videothumb" ng-click="videoselect();">Choose</button></div> 
+		  </div>    
+       </label> 
+           
+   <button style="margin-top:12%;" ng-class="button_color" class="button button-full" ng-click="createvideo();" >Create</button>
+
+</div>
+   </ion-content>
+</ion-view>

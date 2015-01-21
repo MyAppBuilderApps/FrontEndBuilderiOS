@@ -1,0 +1,64 @@
+<ion-view>
+ <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+
+	  <button class="button icon ion-chevron-left" ng-click="backprevvideo();" ng-class="bar_button_color"></button>
+	   <h1 class="title">{{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homeprevvideo();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+            <button class="button icon ion-edit" ng-click="logprevvideo();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </ion-header-bar>
+ 
+    <div class="bar bar-subheader">
+		 <div style="margin-left:45%;width:20%;">
+				{{elementtitle}}
+	      </div>
+	</div>
+         
+
+  <ion-content > 
+
+   <div style="padding:20% 0% 0% 0%;">
+  
+       <div class="list list-inset">
+        
+		   <div class="item item-text-wrap" ng-bind-html="elementtext" style="padding:8px 2px 8px 2px;">
+	        </div>  
+	        
+	   </div>
+	        	
+	    <label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:70%;"><span class="input-label">Video upload</span></div> 
+            <div style="width:30%;"><img id="videoprevurlimg" style="width:50px;heigth:50px;" src="img/no_video.png" alt="your image" /></div>               
+		  </div>    
+       </label> 
+       
+	<label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:70%;"><span class="input-label">Video thumbnail upload</span></div>          
+            <div style="width:30%;"><img id="videoprevimg" style="width:50px;heigth:50px;" src="img/no_image.png" alt="your image" /></div>
+		  </div>    
+       </label> 	  	  
+	  
+			<div class="item item-divider">
+				Custom values
+			</div>
+			<ul class="list" >          
+				<li ng-repeat="item in disvideopage" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+                    </div>						 
+	           </li>   
+            </ul>
+            	
+       </div>
+	</div>
+ </ion-content>
+</ion-view>
+
+
+      
+    

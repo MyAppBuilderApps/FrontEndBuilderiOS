@@ -1,0 +1,61 @@
+<ion-view>
+  <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+	  
+         <button class="button icon ion-chevron-left" ng-click="backnewapp1();" ng-class="bar_button_color"></button>
+      <h1 class="title" > {{appTitle}}</h1>
+	 <button class="button icon ion-home" ng-click="homeapp1();" ng-class="bar_button_color"></button>
+	 
+ </ion-header-bar>
+   <ion-content > 
+   
+    <div class="card" style="padding:32px 0px 0px 0px;">
+		<div class="item item-divider">
+		      Custom values
+        </div>
+     <ul class="list" >          
+	<li ng-repeat="item in custompage" type="item-text-wrap" >				    
+		 <div class="item item-button-right">
+				  <h2>{{item.key}}</h2>
+				  <p>{{item.value}}	</p>
+          <button class="button button-clear button-assertive" ng-click="removeBookCustomValue(item.id)"><i class="icon ion-close-round"></i></button>
+         </div>			
+			 
+	</li>   
+  </ul>
+      <label class="item item-input" style="padding:5px 0px 5px 0px;">
+		  <span  class="input-label" style="width:20%;">Title</span>
+		  <label class="item item-input" style="width:80%;">
+			  <input type="text" id="title" name="title" placeholder="Type Title" ng-model="appcre.customTitle" >
+		  </label>
+       </label>
+       
+       <label class="item item-input" style="padding:5px 0px 5px 0px;">
+		  <span  class="input-label" style="width:20%;">Value</span>
+		  <label class="item item-input" style="width:80%;">
+			   <input type="text" id="value" name="value" placeholder="Value" ng-model="appcre.customvalue" >
+		  </label>
+       </label>
+	
+       <button class="button button-full" ng-class="button_color" ng-click="createnewapp1();" >Create</button>
+      
+          <div class="row">
+			 <div style="width:55%;"></div>
+             <div style="width:20%;"></div>
+             <div style="width:25%;"><button class="button ion-arrow-right-a" ng-class="button_color" ng-click="nextpage();">Skip</button></div>             
+		  </div>
+
+<br/>
+<br/>
+<br/><br/>
+<br/>
+<br/><br/>
+<br/>
+<br/>
+<br/><br/><br/><br/><br/><br/><br/>
+   </div>
+   
+ </ion-content>
+</ion-view>
+
+    
+

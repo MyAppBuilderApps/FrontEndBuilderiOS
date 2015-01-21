@@ -1,0 +1,52 @@
+<ion-view>
+	
+ <ion-header-bar  class="bar bar-header bar-positive">
+	 
+	   <button class="button button-clear" ng-click="logout();"><i class="icon ion-log-out"style="width:22px;height:22px;"></i></button>
+         <h1 class="title" style="font-size:20px;">Apps</h1>
+	     <div class="buttons">
+			<button class="button button-clear" ng-click="newapps();" ><i class="icon ion-plus-circled" style="width:22px;height:22px;"></i></button>
+			<button class="button button-clear" ng-click="editapps();"><i class="icon ion-edit" style="width:22px;height:22px;"></i></button>
+		</div>
+		
+ </ion-header-bar>
+   
+ <ion-content  >  
+   <div style="padding:8% 0% 0% 0%;">
+    <ion-list ng-hide="AppEditor">
+        
+        <ion-item ng-repeat="item in appKey" type="item-text-wrap" class="item item-avatar-left" style="color:white;" ng-click="listViewClickFtn(item.api_key,item.title,item.description,item.app_image);">      
+
+   <img src="{{item.app_image}}" >
+          <h2 style="color:black;">{{item.title}}</h2>
+
+          <ion-option-button class="button button-calm button-outline" ng-click="editApp(item.api_key)" >
+            <!--<img src="img/edit.png" style="width:35px;margin-top:50%;" />--><i class="icon ion-edit" style="margin-top:50%;"></i>
+          </ion-option-button>
+          
+          <ion-option-button class="button button-assertive button-outline" ng-click="deleteApp(item.api_key,item)" >
+            <!--<img src="img/close.png" style="width:35px;margin-top:50%;"/>--><i class="icon ion-trash-a" style="margin-top:50%;"></i>
+          </ion-option-button>
+        </ion-item>
+
+    </ion-list>  
+  
+    <ul class="list" ng-show="AppEditor">
+        
+        <li ng-repeat="item in appKey" type="item-text-wrap" class="item item-avatar-left item-button-right" style="color:white;" >
+   
+   <img src="{{item.app_image}}" >
+          <h2 style="color:black;">{{item.title}}</h2>
+         
+          <div class="buttons" >
+                <button class="button button-assertive button-outline" ng-click="deleteApp(item.api_key,item)"><i class="icon ion-trash-a"></i></button>
+                <button class="button  button-calm button-outline" ng-click="editApp(item.api_key,item.title,item.description,item.app_image)"><i class="icon ion-edit"></i></button>
+          </div>
+        </li>
+
+    </ul>
+   </div> 
+  </ion-content>
+ 
+</ion-view>
+

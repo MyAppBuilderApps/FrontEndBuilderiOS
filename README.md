@@ -24,11 +24,11 @@ MAB FrontEndBuilder shows user Apps in list that functions like a UITableView an
 
 ###  **_App Controller_**  ##########
 
- 1) www folder
+  www folder
 
-i) index.html
+i) index.html, templates(folder)
 
-ii) js/index.js
+ii) js/app.js
 
 iii) js/controller.js
 
@@ -66,7 +66,7 @@ Code:
 
 ######## **_Sign in_** #############
 
-Login controller inside the index.js
+Login controller inside the controller.js
 
 API For User Sign In: **http://build.myappbuilder.com/api/login.json**
 
@@ -106,7 +106,9 @@ appkeyResult = response;
 
 });
 
-### **_Retrieve data from MAB server_** #####
+## **_View Apps_** #############
+
+ list view controller lists all the app under FrontEndBuilder
 
 API For User retrive Apps: [**http://build.myappbuilder.com/api/users.json**](http://build.myappbuilder.com/api/users.json)
 
@@ -137,6 +139,12 @@ code:
     }
 
 });
+
+List of Apps is then filtered by App Type and App Keys under this root App.
+
+Root App Key is maintained in key.txt file in **www/** folder.
+
+Creator of the Root app can only be able to login as admin.
 
 **** **Create Apps in MAB *******************
 
@@ -170,7 +178,73 @@ $scope.appcreate.gridAppTitle,
 
 });
 
-For Edit and Delete Apps use PUT and DELETE method
+App Type and Apps under this root App are maintained as custom value for each app on creating an app -
+
+API Used: **http://build.myappbuilder.com/api/book_custom_fields.json**
+
+Code:
+
+ var booktype = new FormData();
+
+            booktype.append('api_key',appKey);
+
+            booktype.append('title',"AppType");
+
+            booktype.append('value','FrontEndBuilder');
+
+            
+
+            $http.post('http://build.myappbuilder.com/api/book_custom_fields.json', booktype, {
+
+                       transformRequest: angular.identity,
+
+                       headers: {'Content-Type': undefined}
+
+                       }).
+
+            success(function(data, status, headers, config) {
+
+                    
+
+                    }).
+
+            error(function(data, status, headers, config) {
+
+                  
+
+                  });
+
+            
+
+            var booktype1 = new FormData();
+
+            booktype1.append('api_key',defaultkey);
+
+            booktype1.append('title',"keys");
+
+            booktype1.append('value',appKey);
+
+            $http.post('http://build.myappbuilder.com/api/book_custom_fields.json', booktype1, {
+
+                       transformRequest: angular.identity,
+
+                       headers: {'Content-Type': undefined}
+
+                       }).
+
+            success(function(data, status, headers, config) {
+
+                    
+
+                    }).
+
+            error(function(data, status, headers, config) {
+
+                  
+
+                  });
+
+For edit and delete function use **PUT** and **DELETE** methods.
 
 ****** **Floating Social Icons and URL Creation** **********
 
@@ -320,6 +394,8 @@ function(response){              
 
  }, "ImageCompress", "imageCompress", ["57", "57", "image", image, "http://build.myappbuilder.com/api/buttons.json?", "post", {api_key:appKey,title:$scope.buttoncreate.title}])
 
+This cordova plugin is used to compress the selected image to desired width and height.
+
 API For User to Create Buttons(Image is not selected):
 
  **http://build.myappbuilder.com/api/buttons/via_url.json**
@@ -457,6 +533,32 @@ $.ajax({
    }
 
 });
+
+**Upload Tags ** 
+
+API Used: **http://build.myappbuilder.com/api/elements/tags.json**
+
+   $.ajax({
+
+             type: "POST",
+
+             url: "http://build.myappbuilder.com/api/elements/tags.json",
+
+             data:{'api_key':appKey,'id':elementId,'tags':amenities},
+
+             cache: false,
+
+             success:function(response){
+
+             },
+
+             error:function(error,status){
+
+           
+
+             }
+
+     });
 
 **2)Video Creation**
 

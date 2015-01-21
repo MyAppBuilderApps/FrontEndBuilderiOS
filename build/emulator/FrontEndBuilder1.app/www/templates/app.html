@@ -1,0 +1,60 @@
+<ion-view>
+ <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+
+   <button class="button icon ion-chevron-left" ng-click="backbuttonlist();" ng-class="bar_button_color"></button>
+	   <h1 class="title" >  {{appTitle}}</h1>
+	 <button class="button icon ion-edit" ng-click="logbuttonlist();" ng-class="bar_button_color"></button>
+ </ion-header-bar>
+ 
+  <div class="bar bar-subheader">
+	<h2 class="title">Buttons List</h2>
+ </div>
+	<ion-content >
+      <div style="padding:17% 0% 0% 0%;">
+
+        <ion-list ng-show='AppEditor' show-reorder='AppEditor' show-delete="AppEditor" >
+          <div class="item item-divider item-button-right" align="center">
+             <h2>{{appTitle}}</h2>
+          </div>
+          <ion-item  ng-repeat="item in items | filter:position" class="item-avatar item-button-right" >
+            <img ng-src="{{item.image}}">
+   
+            <h2 ng-click="editButton(item.id,item.title,item.image);">{{item.title}}</h2>
+            <ion-delete-button class="ion-trash-a" ng-click='deleteButton(item.id)'></ion-delete-button>
+            <ion-reorder-button on-reorder="moveItem(item, $fromIndex, $toIndex)">
+              <i class="icon " ><img src="img/btn_drag.png" style="width:30px;height:30px;"/></i> 
+            </ion-reorder-button>
+          
+          </ion-item>
+        </ion-list>
+        
+        <div class="row" ng-show="AppEditor">
+          <div style="width:45%;"></div>
+             <div style="width:15%;"></div>
+             <div style="width:40%;">
+            <button class="button" ng-click="newchapterGo();" ng-class="button_color">+New Button</button>
+          </div>
+        </div> 
+
+
+        <ion-list ng-hide="AppEditor">
+            <div class="item item-divider item-button-right" align="center" >
+             <h2>{{appTitle}}</h2>             
+              <button class="button button-assertive button-clear" ng-click="appwallgoFun();"><i class="icon"><img src="img/coments.png" style="width:25px;height:25px;"/></i></button>
+            </div>
+            <li ng-repeat="item in items" type="item-text-wrap" class="item item-avatar item-button-right" ng-click="chapterClick(item.id,item.title);">
+            
+              <img src="{{item.image}}" >
+              <h2 style="color:black;">{{item.title}}</h2>
+
+            </li>
+        </ion-list>
+        
+
+      </div>
+
+
+	</ion-content>
+    
+</ion-view>
+

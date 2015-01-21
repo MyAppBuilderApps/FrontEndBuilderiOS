@@ -1,0 +1,97 @@
+<ion-view>
+ <ion-header-bar  class="bar bar-header" ng-class="bar_color">
+
+	 <button class="button" ng-click="navedittext();" style="width:38px;height:23px;" ng-class="bar_button_color"><img src="img/list_add.png" /></button>
+	   <h1 class="title" > {{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homeedittext();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+			<button class="button icon ion-chevron-left" ng-click="backedittext();" ng-class="bar_button_color"></button>
+		</div>
+		
+ </ion-header-bar>
+ 
+    <div class="bar bar-subheader">
+	<div class="row">
+		<div style="width:40%;"></div>
+		<div style="width:60%;">
+		   <input type="text" style="color:black;" id="editpicTitle" ng-model="textCreateedit.edittitle">
+        </div>
+	</div>
+	</div>
+         
+
+  <ion-content > 
+
+   <div style="padding:20% 0% 0% 0%;">
+      
+		    <div class="item item-text-wrap" style="padding:4px 0px 4px 0px;">
+				<textarea style="height:30%;" ng-model="textCreateedit.edittext" ui-tinymce="tinymceOptions" >{{description}}</textarea>        
+				<input type="file" id="imageSelect2" ng-hide="true" />
+	        </div>  	
+      
+       <button style="margin-top:4%;" ng-class="button_color" class="button button-full" ng-click="updatetext();" >Update</button>
+ 
+ 
+  <ul class="list" >          
+			<li ng-repeat="item in editpicpage" type="item-text-wrap" >				    
+				<div class="item item-button-right">
+					<img ng-src="{{item.url}}" style="width:50px;height:50px;">
+					<button class="button button-clear button-assertive" ng-click="removepicCustom(item.id)"><i class="icon ion-close-round"></i></button>
+				</div>			
+			 
+			</li>   
+		</ul>
+			
+				<div class="row" style="padding:1px 7px 0px 0px;">
+				 <div style="width:55%;"><span class="input-label">New Image</span></div>          
+				 <div style="width:20%;"><img id="editpictext" style="width:50px;heigth:50px;" src="img/no_image.png" alt="your image" /></div>
+				 <div style="width:25%;"><button id="textedit" ng-click="piceditselect();">Choose</button></div> 
+		
+			</div>   
+		  
+			<button class="button button-full" ng-class="button_color" ng-click="upload();" >Upload</button>
+					
+			<div class="item item-divider">
+				Custom values
+			</div>
+			<ul class="list" >          
+				<li ng-repeat="item in edittxtpage" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+						  <button class="button button-clear button-assertive" ng-click="removetxtCustomValue(item.id)"><i class="icon ion-close-round"></i></button>
+                    </div>						 
+	           </li>   
+            </ul>
+            
+			  <label class="item item-input" style="padding:5px 0px 5px 0px;">
+				  <span  class="input-label" style="width:20%;">Title</span>
+				  <label class="item item-input" style="width:80%;">
+					  <input type="text" id="edittitle"  placeholder="Type Title" ng-model="editpic.customeditTitle" >
+				  </label>
+			   </label>
+       
+			   <label class="item item-input" style="padding:5px 0px 5px 0px;">
+				  <span  class="input-label" style="width:20%;">Value</span>
+				  <label class="item item-input" style="width:80%;">
+					   <input type="text" id="edivalue"  placeholder="Value" ng-model="editpic.customeditvalue" >
+				  </label>
+			   </label>
+	
+		<button class="button button-full" ng-class="button_color" ng-click="createpicedit();" >Create</button>
+<br/>
+<br/>
+<br/><br/>
+<br/>
+<br/><br/>
+<br/>
+<br/>
+<br/><br/><br/><br/><br/><br/><br/>
+
+	</div>
+ </ion-content>
+</ion-view>
+
+
+      
+    

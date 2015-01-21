@@ -22,9 +22,14 @@
                     <script type="text/javascript" src="js/keyboard.js"></script>
                     <script type="text/javascript" src="js/ng-tags-input.js"></script>
                     <script type="text/javascript" src="js/controller.js"></script>
+                    <script type="text/javascript" src="js/sanitize.js"></script>
+                    <script type="text/javascript" src="js/checklist-model.js"></script>
+                    
                     <script type="text/javascript" src="js/brightness.js"></script>
                     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
                     <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=false&language=en"></script>
+                    
+                    </script>
                     <script src="js/jquery-1.10.2.min.js"></script>
                     <style>
                         
@@ -42,14 +47,13 @@
                             text-overflow: ellipsis;
                             width: 82%;
                         }
-                    
                     .doubleline {
                         display: -webkit-box;
                         -webkit-line-clamp: 2; /* number of lines to show */
                         -webkit-box-orient: vertical;
                         word-wrap: break-word !important;white-space: normal !important;
                         font-size: 14px;
-                        margin: 0 10px;
+                        margin: 0 25px;
                         line-height: 1.5em;
                         height: 3em;
                         overflow: hidden;
@@ -57,25 +61,24 @@
                         text-overflow: ellipsis;
                         width: 82%;
                     }
-                    
                     .pos_fixed {
                         position: fixed;
                         bottom:0px;
                         
                         margin-left:25%;
-                        margin-right:25%;
+
+                        margin-right: 25%;
                         color: red;
                     }
                     
                         </style>
                     <script>
-                    
-                    
-                        </script>
-                    
+                    </script>
                     
                     </head>
     <body ng-app="myappbuilder" animation="slide-left-right">
-        <ion-nav-view></ion-nav-view>   
+        <ion-nav-view></ion-nav-view>
+        
     </body>
+    
 </html>

@@ -7,17 +7,18 @@
     
     <br/>
     <div class="bar bar-subheader" style="margin-top:1%;">
-        <h2 class="title" style="font-size:16px;">Buttons List</h2>
+        <h2 class="title">Buttons List</h2>
+        <button class="button button-balanced" style="height:32px;" ng-click="subs();">Subscriber</button>
     </div>
 	<ion-content >
-        <div style="padding:39% 0% 0% 0%;">
+        <div style="padding:37% 0% 0% 0%;">
 
         <ion-list ng-show='AppEditor' show-reorder='AppEditor' show-delete="AppEditor" >
           <div class="item item-divider item-button-right" align="center">
              <h2>{{appTitle}}</h2>
              
             </div>
-          <ion-item ng-repeat="item in items | filter:position" class="item-avatar item-button-right" >
+          <ion-item  ng-repeat="item in items | filter:position" class="item-avatar item-button-right" >
 
             <img ng-src="{{item.image}}" >
    

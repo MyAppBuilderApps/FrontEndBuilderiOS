@@ -20,36 +20,38 @@
 
   <ion-content > 
 
-   <div style="padding:39% 0% 0% 0%;">
-       <p>
-       <button class="button-clear" onClick="sharePhoto2()"><img src="img/ic_fb.png" alt="" style="width:32px;height:32px;"/></button>
-       <button class="button-clear" onClick="sharePhoto1()"><img src="img/ic_twitter.png" alt="" style="width:32px;height:32px;"/></button>
-       <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail1.png" alt="" style="width:32px;height:32px;"/></button>
-       </p>
+   <div style="padding:40% 0% 0% 0%;">
+      
+      <p>
+      <button class="button-clear" onClick="sharePhoto2()"><img src="img/ic_fb.png" alt="" style="width:32px;height:32px;"/></button>
+      <button class="button-clear" onClick="sharePhoto1()"><img src="img/ic_twitter.png" alt="" style="width:32px;height:32px;"/></button>
+      <button class="button-clear" onClick="sharePhoto();"><img src="img/ic_mail1.png" alt="" style="width:32px;height:32px;"/></button>
+      </p>
+
+
 
 		   <div class="item item-text-wrap" ng-bind-html="description" style="padding:8px 2px 8px 2px;">
 	        </div>    	
       
+      <ul class="list" >
+          
+          
+          <ion-slide-box on-slide-changed="slideChanged(index)" style="padding:2% 0 0 0">
+              
+              <ion-slide ng-repeat="item in editpicpage" style="padding:0">
+                  
+                  <img src={{item.url}} width="100%"/>
+                  
+                  
+              </ion-slide>
+              
+              
+          </ion-slide-box>
+          
+          <ul>
+              
+    
   
-  <ul class="list" >
-      
-      
-      <ion-slide-box on-slide-changed="slideChanged(index)" style="padding:2% 0 0 0">
-          
-          <ion-slide ng-repeat="item in editpicpage" style="padding:0">
-              
-              <img src={{item.url}} width="100%"/>
-              
-              
-          </ion-slide>
-          
-  
-      </ion-slide-box>
-      
- <ul>
-          
-          
-          
   <br/>
   <label ng-repeat="tag in tags" >
       <button class="button button-positive" style="margin-left:2%;">{{tag}}</button>

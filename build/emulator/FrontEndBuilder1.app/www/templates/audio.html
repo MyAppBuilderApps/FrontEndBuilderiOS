@@ -1,0 +1,51 @@
+<ion-view>
+  <ion-header-bar class="bar bar-header" ng-class="bar_color">
+
+ <button class="button" style="width:38px;height:23px;" ng-click="navaudio();" ng-class="bar_button_color"><img src="img/list_add.png"/></button>
+	   <h1 class="title" > {{appTitle}}</h1>
+	    <div class="buttons">
+			<button class="button icon ion-home" ng-click="homeaudio();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+			<button class="button icon ion-chevron-left" ng-click="backaudio();" ng-class="bar_button_color"></button>
+  </div>
+  
+ </ion-header-bar>
+ <div class="bar bar-subheader">
+	<h2 class="title">New Audio</h2>
+ </div>
+
+ <ion-content > 
+  <div style="padding:25% 0% 0% 0%;">
+  
+    <label class="item item-input" style="padding:5px 0px 5px 0px;">
+		  <label class="item item-input" style="width:100%;">
+             <input type="text" id="audiotitle" ng-model="audiocreate.title" placeholder="Type Audio Title">
+		  </label>
+    </label>
+ 
+    <label class="item item-input" style="padding:5px 0px 5px 0px;">
+		  <label class="item item-input" style="width:100%;">
+             <input type="text" id="audiodesc" ng-model="audiocreate.desc" placeholder="Type Audio Description">
+		  </label>
+    </label>
+	   
+       <label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:50%;"><span class="input-label">Audio upload</span></div> 
+            <div style="width:20%;"><img id="audiourlimg" style="width:50px;heigth:50px;" src="img/no_audio.png" alt="your image" /></div>                        
+		    <div style="width:30%;"><input type="file" name="audio" accept="audio/*" id="audio" style="width:100%;"/></div> 
+		  </div>    
+       </label> 
+       
+	<label class="item item-input">
+		  <div class="row" style="padding:1px 0px 0px 0px;" >
+            <div style="width:50%;"><span class="input-label">Audio thumbnail upload</span></div>          
+            <div style="width:20%;"><img id="audioimg" style="width:50px;heigth:50px;" src="img/no_image.png" alt="your image" /></div>
+		    <div style="width:30%;"><input type="file" name="audio_thumb" id="audiothumb" style="width:100%;"/></div> 
+		  </div>    
+       </label> 
+           
+   <button style="margin-top:12%;" ng-class="button_color" class="button button-full" ng-click="createaudio();" >Create</button>
+
+</div>
+   </ion-content>
+</ion-view>

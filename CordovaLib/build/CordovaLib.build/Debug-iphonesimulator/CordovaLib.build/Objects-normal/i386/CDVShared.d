@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/nuatransmedia/nandhini\ 18-11/FrontEndBuilder/platforms/ios/CordovaLib/Classes/CDVShared.m \
-  /Users/nuatransmedia/nandhini\ 18-11/FrontEndBuilder/platforms/ios/CordovaLib/Classes/CDVShared.h
+  /Users/nuatransmedia/Desktop/FrontEndBuilder1/platforms/ios/CordovaLib/Classes/CDVShared.m \
+  /Users/nuatransmedia/Desktop/FrontEndBuilder1/platforms/ios/CordovaLib/Classes/CDVShared.h

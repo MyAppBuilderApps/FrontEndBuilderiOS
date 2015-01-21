@@ -1,0 +1,43 @@
+<ion-view>
+ <ion-header-bar  class="bar bar-header bar-positive" ng-class="bar_color">
+
+	 <button class="button icon ion-chevron-left" ng-click="backprevform();" ng-class="bar_button_color"></button>
+	   <h1 class="title">{{appTitle}}</h1>
+	  
+			<button class="button icon ion-home" ng-click="homeprevform();" ng-class="bar_button_color"></button>&nbsp;&nbsp;
+           
+ </ion-header-bar>
+ 
+<div class="bar bar-subheader">
+	<h2 class="title">Contact Form</h2>
+</div>
+         
+
+  <ion-content > 
+
+   <div style="padding:18% 0% 0% 0%;">
+  
+       <div class="list list-inset">
+          <label class="item item-input" style="padding:7px 2px 7px 2px;">
+           {{elementemail}}
+          </label>
+       </div>  
+       	  
+   <div class="card" >
+			<div class="item item-divider">
+				Custom values
+			</div>
+			<ul class="list" >          
+				<li ng-repeat="item in disformtype" type="item-text-wrap" >				    
+					<div class="item item-button-right">
+						  <h2>{{item.title}}</h2>
+						  <p>{{item.value}}	</p>
+                    </div>						 
+	           </li>   
+            </ul>
+            
+	   </div>
+
+</div>
+ </ion-content>
+</ion-view>
